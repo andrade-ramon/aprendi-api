@@ -1,11 +1,12 @@
 .DS_Store
-/bin
-/lib
-.classpath
-.gradle/
-.project
-.settings/
-build/
+/profisse/bin
+/profissa/lib
+/profissa/.classpath
+/.gradle/
+/profissa/.gradle/
+/profissa/.project
+/profissa/.settings/
+/profissa/build/
 
 # Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
 !gradle-wrapper.jar
