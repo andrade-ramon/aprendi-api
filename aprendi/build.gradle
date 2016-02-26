@@ -2,15 +2,15 @@ apply plugin: 'eclipse'
 apply plugin: 'spring-boot'
 apply plugin: 'application'
 
-mainClassName = 'com.profissa.ProfissaApplication'
+mainClassName = 'com.aprendi.AprendiApplication'
 version = version
-group = 'com.profissa'
+group = 'com.aprendi'
 
 compileJava.options.encoding = 'UTF-8'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-archivesBaseName = 'profissa'
+archivesBaseName = 'aprendi'
 
 sourceSets {
     main {
