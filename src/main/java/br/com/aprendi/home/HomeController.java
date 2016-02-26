@@ -1,4 +1,4 @@
-package com.profissa.home;
+package br.com.aprendi.home;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

@@ -2,9 +2,9 @@ apply plugin: 'eclipse'
 apply plugin: 'spring-boot'
 apply plugin: 'application'
 
-mainClassName = 'com.aprendi.AprendiApplication'
+mainClassName = 'br.com.aprendi.AprendiApplication'
 version = version
-group = 'com.aprendi'
+group = 'br.com.aprendi'
 
 compileJava.options.encoding = 'UTF-8'
 sourceCompatibility = 1.8
