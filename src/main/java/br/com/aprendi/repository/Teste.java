@@ -1,22 +1,25 @@
-package br.com.aprendi.home;
+package br.com.aprendi.repository;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
+@Table(name="teste")
 public class Teste {
+	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+	@GeneratedValue
+	private Long id;
+
 	private String firstName;
 
 	public Teste(String firstName) {
 		this.firstName = firstName;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 

@@ -5,14 +5,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.aprendi.repository.Teste;
+import br.com.aprendi.repository.TesteRepo;
+
 @RestController
 public class HomeController {
+
 	@Autowired
-    TesteRepo repo;
-	
-	
-	@RequestMapping(path="/home", method=RequestMethod.GET)
+	private TesteRepo repository;
+
+	@RequestMapping(path = "/home", method = RequestMethod.GET)
 	public void home() {
-		repo.save(new Teste("nome"));
+		repository.save(new Teste("nome"));
 	}
 }
