@@ -1,4 +1,4 @@
-package br.com.aprendi.repository;
+package com.hades.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

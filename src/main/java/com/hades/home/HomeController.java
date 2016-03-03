@@ -1,12 +1,12 @@
-package br.com.aprendi.home;
+package com.hades.home;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.aprendi.repository.Teste;
-import br.com.aprendi.repository.TesteRepo;
+import com.hades.repository.Teste;
+import com.hades.repository.TesteRepo;
 
 @RestController
 public class HomeController {
@@ -15,7 +15,9 @@ public class HomeController {
 	private TesteRepo repository;
 
 	@RequestMapping(path = "/home", method = RequestMethod.GET)
-	public void home() {
-		repository.save(new Teste("nome"));
+	public Teste home() {
+		Teste teste = new Teste("teste");
+		repository.save(teste);
+		return teste;
 	}
 }
