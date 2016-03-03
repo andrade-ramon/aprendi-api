@@ -1,4 +1,4 @@
-package br.com.aprendi.configuration;
+package com.hades.configuration;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

@@ -1,12 +1,12 @@
-package br.com.aprendi;
+package com.hades;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.PropertySource;
 
 @SpringBootApplication
-public class AprendiApplication {
+public class HadesApplication {
 	public static void main(String[] args) {
-		SpringApplication.run(AprendiApplication.class, args);
+		SpringApplication.run(HadesApplication.class, args);
 	}
 }

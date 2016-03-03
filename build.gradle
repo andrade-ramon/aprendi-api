@@ -2,15 +2,15 @@ apply plugin: 'eclipse'
 apply plugin: 'spring-boot'
 apply plugin: 'application'
 
-mainClassName = 'br.com.aprendi.AprendiApplication'
+mainClassName = 'com.hades.HadesApplication'
 version = version
-group = 'br.com.aprendi'
+group = 'com.hades'
 
 compileJava.options.encoding = 'UTF-8'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-archivesBaseName = 'aprendi'
+archivesBaseName = 'hades'
 
 sourceSets {
     main {

@@ -1,4 +1,4 @@
-package br.com.aprendi.configuration;
+package com.hades.configuration;
 
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;

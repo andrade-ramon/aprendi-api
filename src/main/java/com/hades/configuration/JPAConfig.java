@@ -1,7 +1,8 @@
-package br.com.aprendi.configuration;
+package com.hades.configuration;
 
 import java.util.Properties;
 
+import javax.annotation.Resource;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
@@ -17,11 +18,15 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages = { "br.com.aprendi.repository" })
+@EnableJpaRepositories(basePackages = { "com.hades.repository" })
 class JPAConfig {
+	private static final String ENTITYMANAGER_PACKAGES_TO_SCAN = "com.hades.repository";
+
+	@Resource
+	Environment env;
 
 	@Bean
-	DataSource dataSource(Environment env) {
+	DataSource dataSource() {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		dataSource.setDriverClassName(env.getRequiredProperty("db.driver"));
 		dataSource.setUrl(env.getRequiredProperty("db.url"));
@@ -36,7 +41,7 @@ class JPAConfig {
 		LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
 		entityManagerFactoryBean.setDataSource(dataSource);
 		entityManagerFactoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-		entityManagerFactoryBean.setPackagesToScan("br.com.aprendi.repository");
+		entityManagerFactoryBean.setPackagesToScan(ENTITYMANAGER_PACKAGES_TO_SCAN);
 
 		Properties properties = new Properties();
 		properties.put("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
