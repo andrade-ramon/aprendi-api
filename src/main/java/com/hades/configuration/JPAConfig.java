@@ -2,6 +2,7 @@ package com.hades.configuration;
 
 import java.util.Properties;
 
+import javax.annotation.Resource;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
@@ -22,9 +23,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 class JPAConfig {
 	private static final String ENTITYMANAGER_PACKAGES_TO_SCAN = "com.hades.repository";
 
-	@Autowired
+	@Resource
 	private Environment env;
-
+	
 	@Bean
 	DataSource dataSource() {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -37,7 +38,7 @@ class JPAConfig {
 	}
 
 	@Bean
-	LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource, Environment env) {
+	LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
 		LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
 		entityManagerFactoryBean.setDataSource(dataSource);
 		entityManagerFactoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
