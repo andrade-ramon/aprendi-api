@@ -58,4 +58,7 @@ dependencies {
     compile 'org.springframework:spring-webmvc'
     compile 'org.apache.tomcat.embed:tomcat-embed-jasper'
 	compile 'mysql:mysql-connector-java'
+	compile 'org.springframework.security:spring-security-web'
+	compile 'org.springframework.security:spring-security-config'
+	compile 'io.jsonwebtoken:jjwt:0.6.0'
 }

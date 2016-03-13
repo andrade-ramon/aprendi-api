@@ -19,13 +19,13 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages = { "com.hades.repository" })
+@EnableJpaRepositories(basePackages = { "com.hades" })
 class JPAConfig {
-	private static final String ENTITYMANAGER_PACKAGES_TO_SCAN = "com.hades.repository";
+	private static final String ENTITYMANAGER_PACKAGES_TO_SCAN = "com.hades";
 
 	@Resource
 	private Environment env;
-	
+
 	@Bean
 	DataSource dataSource() {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
