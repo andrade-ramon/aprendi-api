@@ -5,7 +5,7 @@ import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomi
 import org.springframework.stereotype.Component;
 
 @Component
-class ServletContainerConfig implements EmbeddedServletContainerCustomizer {
+class ServletContainerConfiguration implements EmbeddedServletContainerCustomizer {
 
 	@Override
 	public void customize(ConfigurableEmbeddedServletContainer container) {

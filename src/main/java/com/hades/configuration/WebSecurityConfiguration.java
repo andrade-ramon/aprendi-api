@@ -1,7 +1,6 @@
 package com.hades.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -10,35 +9,26 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.hades.configuration.security.TokenAuthenticationService;
 import com.hades.filter.StatelessAuthenticationFilter;
-import com.hades.user.auth.UserDAO;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true)
-class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
-	@Value("${jwt.secret}")
-	private String SECRET;
+class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Autowired
-	private UserDAO userDAO;
-
-	WebSecurityConfig() {
+	private TokenAuthenticationService tokenService;
+	
+	WebSecurityConfiguration() {
 		super(true);
 	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		TokenAuthenticationService tokenService = new TokenAuthenticationService(SECRET, userDAO);
-
-		http
-			.anonymous()
+		http.anonymous()
 			.and().authorizeRequests()
 			.antMatchers("/").permitAll()
 			.antMatchers("/login").permitAll()
 			.anyRequest().authenticated()
-			.and().addFilterBefore(new StatelessAuthenticationFilter(tokenService),
-						UsernamePasswordAuthenticationFilter.class)	
-;
+			.and().addFilterBefore(new StatelessAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
 	}
 
 }

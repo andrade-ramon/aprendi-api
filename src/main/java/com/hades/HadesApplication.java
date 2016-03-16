@@ -9,4 +9,3 @@ public class HadesApplication {
 		SpringApplication.run(HadesApplication.class, args);
 	}
 }
-

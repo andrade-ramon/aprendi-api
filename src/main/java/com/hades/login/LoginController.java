@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hades.configuration.security.TokenHandler;
+import com.hades.configuration.security.TokenAuthenticationService;
 import com.hades.user.UserView;
 import com.hades.user.auth.User;
 import com.hades.user.auth.UserDAO;
@@ -21,12 +21,15 @@ public class LoginController {
 	
 	@Autowired
 	private UserDAO userDAO;
+
+	@Autowired
+	private TokenAuthenticationService tokenService;
 	
 	@RequestMapping(path = "/login",method = POST)
 	public UserView logar(@RequestParam(name = "email", required = true) String email, @RequestParam(name = "password", required = true) String password) {
-		User user = userDAO.find(email, password);
-		TokenHandler tokenHandler = new TokenHandler(SECRET, userDAO);
-		tokenHandler.createTokenFor(user);
+		User user = userDAO.findBy(email, password);
+		
+		tokenService.createTokenFor(user);
 		
 		return new UserView(user);
 	}

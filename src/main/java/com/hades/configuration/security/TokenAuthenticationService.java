@@ -2,23 +2,21 @@ package com.hades.configuration.security;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Service;
 
 import com.hades.user.auth.User;
 import com.hades.user.auth.UserAuthentication;
-import com.hades.user.auth.UserDAO;
 
+@Service
 public class TokenAuthenticationService {
 
 	private static final String AUTH_HEADER_NAME = "Authorization";
 	private static final String BEARER_VALUE = "Bearer ";
 
-	private final TokenHandler tokenHandler;
-
-	public TokenAuthenticationService(String secret, UserDAO userRepository) {
-		tokenHandler = new TokenHandler(secret, userRepository);
-
-	}
+	@Autowired
+	private TokenHandler tokenHandler;
 
 	public Authentication getAuthentication(HttpServletRequest request) {
 		String header = request.getHeader(AUTH_HEADER_NAME);
@@ -32,5 +30,11 @@ public class TokenAuthenticationService {
 		final User user = tokenHandler.parseUserFromToken(jwtToken);
 
 		return new UserAuthentication(user);
+	}
+
+	public void createTokenFor(User user) {
+		String token = tokenHandler.createTokenFor(user);
+		
+		user.setToken(token);
 	}
 }

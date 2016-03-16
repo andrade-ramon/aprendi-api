@@ -1,28 +1,30 @@
 package com.hades.configuration.security;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 import com.hades.user.auth.User;
 import com.hades.user.auth.UserDAO;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
-public class TokenHandler {
+@Component
+class TokenHandler {
 
-	private final String secret;
-	private UserDAO userDAO;
+	@Value("${jwt.secret}")
+	private String secret;
+	
+	@Autowired
+	private UserDAO repository;
 
-	public TokenHandler(String secret, UserDAO repository) {
-		this.secret = secret;
-		this.userDAO = repository;
-	}
-
-	public void createTokenFor(User user) {
-		final String token = Jwts.builder()
+	public String createTokenFor(User user) {
+		return Jwts.builder()
 						.setSubject(user.getUsername())
 						.signWith(SignatureAlgorithm.HS256, secret)
 						.compact();
-		user.setToken(token);
 	}
 
 	public User parseUserFromToken(String jwtToken) {
@@ -32,6 +34,6 @@ public class TokenHandler {
 									.getBody()
 									.getSubject();
 		
-		return userDAO.loadUserByUsername(username);
+		return repository.findBy(username);
 	}
 }
