@@ -25,6 +25,7 @@ public class StatelessAuthenticationFilter extends GenericFilterBean{
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest httpRequest =  (HttpServletRequest) request;
+		
 		Authentication authentication = tokenService.getAuthentication(httpRequest);
 		
 		SecurityContextHolder.getContext().setAuthentication(authentication);

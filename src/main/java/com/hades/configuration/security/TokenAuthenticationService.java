@@ -20,9 +20,8 @@ public class TokenAuthenticationService {
 
 	public Authentication getAuthentication(HttpServletRequest request) {
 		String header = request.getHeader(AUTH_HEADER_NAME);
+		
 		if (header == null || !header.startsWith(BEARER_VALUE)) {
-			// throw new RuntimeException("No JWT token found in request
-			// headers");
 			return null;
 		}
 
