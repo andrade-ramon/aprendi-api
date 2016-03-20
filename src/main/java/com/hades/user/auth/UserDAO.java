@@ -1,11 +1,12 @@
 package com.hades.user.auth;
 
+import java.util.List;
+import java.util.Optional;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
 
@@ -19,16 +20,27 @@ public class UserDAO {
 		manager.persist(user);
 	}
 
-	public User findBy(String email, String password) {
-		return manager.createQuery("select u from " +  User.class.getSimpleName() + " u where u.email = :email and u.password = :password", User.class)
-						.setParameter("email", email)
-						.setParameter("password", password)
-						.getSingleResult();
+	public Optional<User> findBy(String email, String password) {
+		List<User> resultList = manager
+				.createQuery("select u from " + User.class.getSimpleName()
+						+ " u where u.email = :email and u.password = :password", User.class)
+				.setParameter("email", email).setParameter("password", password)
+				.getResultList();
+		if (resultList.isEmpty()) {
+			return Optional.empty();
+		}
+		return Optional.ofNullable(resultList.get(0));
 	}
 
-	public User findBy(String login) throws UsernameNotFoundException {
-		return manager.createQuery("select u from " +  User.class.getSimpleName() + " u where u.email = :email", User.class)
-						.setParameter("email", login)
-						.getSingleResult();
+	public Optional<User> findBy(String login) {
+		List<User> resultList = manager
+			.createQuery("select u from " + User.class.getSimpleName() + 
+					" u where u.email = :email", User.class)
+			.setParameter("email", login)
+			.getResultList();
+		if(resultList.isEmpty()){
+			return Optional.empty();
+		}
+		return Optional.ofNullable(resultList.get(0));
 	}
 }

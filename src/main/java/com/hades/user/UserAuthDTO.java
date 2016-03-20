@@ -2,12 +2,12 @@ package com.hades.user;
 
 import com.hades.user.auth.User;
 
-public class UserView {
+public class UserAuthDTO {
 	private Long id;
 	private String email;
 	private String token;
 
-	public UserView(User user) {
+	public UserAuthDTO(User user) {
 		this.id = user.getId();
 		this.email = user.getEmail();
 		this.token = user.getToken();
