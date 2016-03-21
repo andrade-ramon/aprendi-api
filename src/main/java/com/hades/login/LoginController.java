@@ -6,8 +6,8 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hades.configuration.security.TokenAuthenticationService;
@@ -29,10 +29,8 @@ public class LoginController {
 	private TokenAuthenticationService tokenService;
 
 	@RequestMapping(path = "/login", method = POST)
-	public UserAuthDTO login(@RequestParam(name = "email", required = true) String email,
-			@RequestParam(name = "password", required = true) String password) {
-		Optional<User> user = userDAO.findBy(email, password);
-		
+	public UserAuthDTO login(@RequestBody User userToAuthenticate) {
+		Optional<User> user = userDAO.findBy(userToAuthenticate.getEmail(), userToAuthenticate.getPassword());
 		if (user.isPresent()) {
 			tokenService.createTokenFor(user.get());
 			UserAuthDTO userAuthDTO = new UserAuthDTO(user.get());
