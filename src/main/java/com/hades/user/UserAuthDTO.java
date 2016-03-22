@@ -3,6 +3,7 @@ package com.hades.user;
 import com.hades.user.auth.User;
 
 public class UserAuthDTO {
+
 	private Long id;
 	private String email;
 	private String token;
