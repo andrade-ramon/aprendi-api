@@ -1,6 +1,7 @@
 package com.hades.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -31,9 +32,11 @@ class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.authenticationEntryPoint(authenticationEntryPoint)	
 			.and().anonymous()
 			.and().authorizeRequests()
+			.antMatchers(HttpMethod.OPTIONS).permitAll()
 			.antMatchers("/", "/login").permitAll()
 			.anyRequest().authenticated()
 			.and().addFilterBefore(new StatelessAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
+			//.addFilter(FilterQuePreencheOResponseComOsParanaues)
 	}
 
 }
