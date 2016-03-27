@@ -36,7 +36,6 @@ class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.antMatchers("/", "/login").permitAll()
 			.anyRequest().authenticated()
 			.and().addFilterBefore(new StatelessAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
-			//.addFilter(FilterQuePreencheOResponseComOsParanaues)
 	}
 
 }

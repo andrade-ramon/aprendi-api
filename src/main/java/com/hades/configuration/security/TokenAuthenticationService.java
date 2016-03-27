@@ -15,6 +15,7 @@ import com.hades.user.auth.User;
 import com.hades.user.auth.UserAuthentication;
 
 import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureException;
 
 @Service
 public class TokenAuthenticationService {
@@ -31,15 +32,14 @@ public class TokenAuthenticationService {
 		if (jwtToken == null || "".equals(jwtToken)) {
 			return null;
 		}
-		Optional<User> user = Optional.empty();
-
+		
 		try {
-			user = tokenHandler.parseUserFromToken(jwtToken);
+			Optional<User> user = tokenHandler.parseUserFromToken(jwtToken);
 
 			if (user.isPresent()) {
 				return new UserAuthentication(user.get());
 			}
-		} catch (MalformedJwtException e) {
+		} catch (MalformedJwtException | SignatureException e) {
 			LOGGER.info("Invalid Token: {}", jwtToken);
 		}
 		
