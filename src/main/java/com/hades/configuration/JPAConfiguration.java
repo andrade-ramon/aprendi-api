@@ -6,7 +6,6 @@ import javax.annotation.Resource;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -19,13 +18,13 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages = { "com.hades.repository" })
-class JPAConfig {
-	private static final String ENTITYMANAGER_PACKAGES_TO_SCAN = "com.hades.repository";
+@EnableJpaRepositories(basePackages = { "com.hades" })
+class JPAConfiguration {
+	private static final String ENTITYMANAGER_PACKAGES_TO_SCAN = "com.hades";
 
 	@Resource
 	private Environment env;
-	
+
 	@Bean
 	DataSource dataSource() {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();

@@ -1,23 +1,20 @@
 package com.hades.home;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
-import com.hades.repository.Teste;
-import com.hades.repository.TesteRepo;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class HomeController {
 
-	@Autowired
-	private TesteRepo repository;
+	@RequestMapping(path = "/admin", method = GET)
+	public String closed() {
+		return "Ok";
+	}
 
-	@RequestMapping(path = "/home", method = RequestMethod.GET)
-	public Teste home() {
-		Teste teste = new Teste("teste");
-		repository.save(teste);
-		return teste;
+	@RequestMapping(path = "/", method = GET)
+	public String home() {
+		return "home";
 	}
 }

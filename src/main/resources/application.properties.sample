@@ -4,3 +4,5 @@ db.password=
 db.driver=com.mysql.jdbc.Driver
 
 hibernate.show_sql=false
+
+jwt.secret=
