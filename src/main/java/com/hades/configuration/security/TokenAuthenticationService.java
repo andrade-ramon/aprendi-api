@@ -11,8 +11,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import com.hades.user.auth.User;
-import com.hades.user.auth.UserAuthentication;
+import com.hades.login.LoginAuthentication;
+import com.hades.login.LoginInfo;
+
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureException;
 
 @Service
 public class TokenAuthenticationService {
@@ -30,23 +33,25 @@ public class TokenAuthenticationService {
 			return null;
 		}
 		
-		Optional<User> user = tokenHandler.parseUserFromToken(jwtToken);
+		try {
+			Optional<LoginInfo> loginInfo = tokenHandler.parseUserFromToken(jwtToken);
 
-		if (user.isPresent()) {
-			return new UserAuthentication(user.get());
-		} else {
+			if (loginInfo.isPresent()) {
+				return new LoginAuthentication(loginInfo.get());
+			}
+		} catch (MalformedJwtException | SignatureException e) {
 			LOGGER.info("Invalid Token: {}", jwtToken);
 		}
 		
 		return null;
 	}
 
-	public void createTokenFor(User user) {
-		String token = tokenHandler.createTokenFor(user);
-		user.setToken(token);
+	public void createTokenFor(LoginInfo loginInfo) {
+		String token = tokenHandler.createTokenFor(loginInfo);
+		loginInfo.setToken(token);
 	}
 	
-	public Optional<User> getUserFromToken(String token) {
+	public Optional<LoginInfo> getUserFromToken(String token) {
 		return tokenHandler.parseUserFromToken(token);
 	}
 }

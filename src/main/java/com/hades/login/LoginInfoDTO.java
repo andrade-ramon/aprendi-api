@@ -1,16 +1,14 @@
-package com.hades.user;
+package com.hades.login;
 
-import com.hades.user.auth.User;
-
-public class UserAuthDTO {
+public class LoginInfoDTO {
 
 	private Long id;
-	private String email;
+	private String login;
 	private String token;
 
-	public UserAuthDTO(User user) {
+	public LoginInfoDTO(LoginInfo user) {
 		this.id = user.getId();
-		this.email = user.getEmail();
+		this.login = user.getLogin();
 		this.token = user.getToken();
 	}
 
@@ -18,8 +16,8 @@ public class UserAuthDTO {
 		return id;
 	}
 
-	public String getEmail() {
-		return email;
+	public String getLogin() {
+		return login;
 	}
 
 	public String getToken() {
@@ -30,8 +28,8 @@ public class UserAuthDTO {
 		this.id = id;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setLogin(String login) {
+		this.login = login;
 	}
 
 	public void setToken(String token) {

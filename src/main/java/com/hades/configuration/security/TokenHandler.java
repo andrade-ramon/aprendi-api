@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.hades.user.auth.User;
-import com.hades.user.auth.UserDAO;
+import com.hades.login.LoginInfo;
+import com.hades.login.LoginInfoDAO;
 
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -19,19 +19,20 @@ class TokenHandler {
 	private String secret;
 
 	@Autowired
-	private UserDAO repository;
+	private LoginInfoDAO repository;
 
-	public String createTokenFor(User user) {
-		return Jwts.builder().setSubject(user.getUsername()).signWith(SignatureAlgorithm.HS256, secret).compact();
+	public String createTokenFor(LoginInfo user) {
+		return Jwts.builder().setSubject(user.getLogin()).signWith(SignatureAlgorithm.HS256, secret).compact();
 	}
 
-	public Optional<User> parseUserFromToken(String jwtToken) {
+	public Optional<LoginInfo> parseUserFromToken(String jwtToken) {
 		String username = "";
 		try {
 			username = Jwts.parser().setSigningKey(secret).parseClaimsJws(jwtToken).getBody().getSubject();
 		} catch (JwtException | IllegalArgumentException e) {
 			return Optional.empty();
 		}
+		
 		return repository.findBy(username);
 	}
 }

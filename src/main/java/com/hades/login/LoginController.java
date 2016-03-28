@@ -12,27 +12,27 @@ import org.springframework.web.bind.annotation.RestController;
 import com.hades.annotation.PermitEndpoint;
 import com.hades.configuration.security.TokenAuthenticationService;
 import com.hades.exceptions.LoginFailureException;
-import com.hades.user.UserAuthDTO;
-import com.hades.user.auth.User;
-import com.hades.user.auth.UserDAO;
 
 @RestController
 public class LoginController {
 
 	@Autowired
-	private UserDAO userDAO;
+	private LoginInfoDAO loginInfoDAO;
 
 	@Autowired
 	private TokenAuthenticationService tokenService;
 
 	@PermitEndpoint
 	@RequestMapping(path = "/login", method = POST)
-	public UserAuthDTO login(@RequestBody User userToAuthenticate) {
-		Optional<User> user = userDAO.findBy(userToAuthenticate.getEmail(), userToAuthenticate.getPassword());
-		if (user.isPresent()) {
-			tokenService.createTokenFor(user.get());
-			UserAuthDTO userAuthDTO = new UserAuthDTO(user.get());
-			return userAuthDTO;
+	public LoginInfoDTO login(@RequestBody LoginInfo loginInfoToAuthenticate) {
+
+		Optional<LoginInfo> loginInfo = loginInfoDAO.findBy(loginInfoToAuthenticate.getLogin(),
+				loginInfoToAuthenticate.getPassword());
+
+		if (loginInfo.isPresent()) {
+			tokenService.createTokenFor(loginInfo.get());
+			LoginInfoDTO loginInfoDTO = new LoginInfoDTO(loginInfo.get());
+			return loginInfoDTO;
 		}
 
 		throw new LoginFailureException();

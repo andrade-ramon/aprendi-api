@@ -1,21 +1,20 @@
-package com.hades.user.auth;
+package com.hades.login;
 
 import java.util.Collection;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
-public class UserAuthentication implements Authentication{
+public class LoginAuthentication implements Authentication{
 
 	private static final long serialVersionUID = 1L;
 	private String username;
 	private String password;
 	private boolean authentication = true;
 
-	
-	public UserAuthentication(User user) {
-		this.username = user.getEmail();
-		this.password = user.getPassword();
+	public LoginAuthentication(LoginInfo loginInfo) {
+		this.username = loginInfo.getLogin();
+		this.password = loginInfo.getPassword();
 	}
 
 	@Override
