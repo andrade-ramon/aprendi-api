@@ -1,8 +1,12 @@
 package com.hades.configuration;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+
+import com.hades.interceptor.StatelessAuthenticationInterceptor;
 
 @Configuration
 class WebConfiguration extends WebMvcConfigurerAdapter {
@@ -11,5 +15,14 @@ class WebConfiguration extends WebMvcConfigurerAdapter {
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**");
 	}
-
+	
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+	    registry.addInterceptor(permitedEndpointInterceptor());
+	} 
+	
+	@Bean
+	public StatelessAuthenticationInterceptor permitedEndpointInterceptor() {
+	    return new StatelessAuthenticationInterceptor();
+	}
 }
