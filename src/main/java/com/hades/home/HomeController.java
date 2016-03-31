@@ -7,20 +7,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hades.annotation.PermitEndpoint;
-import com.hades.login.LoggedUser;
+import com.hades.login.LoggedUserManager;
 
 @RestController
 public class HomeController {
 	
 	@Autowired
-	private LoggedUser loggedUser;
+	private LoggedUserManager loggedUser;
 	
 	@RequestMapping(path = "/admin", method = GET)
 	public String closed() {
-		if (loggedUser.getUser().isPresent()) {
-			return loggedUser.getUser().get().getEmail();
-		}
-		return null;
+		return loggedUser.getUser().getEmail();
 	}
 
 	@PermitEndpoint
