@@ -1,3 +1,8 @@
+server.ssl.key-store=hades.key
+server.ssl.key-store-password= 
+server.ssl.keyStoreType=PKCS12
+server.ssl.keyAlias=hades-ssl-key
+
 db.url=jdbc:mysql://localhost:3306/tcc
 db.username=root
 db.password=
