@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Repository;
 
@@ -40,5 +41,11 @@ public class LoginInfoDAO {
 			return Optional.empty();
 		}
 		return Optional.ofNullable(resultList.get(0));
+	}
+	
+	@Transactional
+	public void persist(LoginInfo loginInfo){
+		manager.persist(loginInfo);
+		manager.flush();
 	}
 }

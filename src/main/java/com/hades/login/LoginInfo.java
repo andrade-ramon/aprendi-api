@@ -1,21 +1,20 @@
 package com.hades.login;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "login_info")
 public class LoginInfo {
 
 	private static final long serialVersionUID = 1L;
-
 	@Id
-	@GeneratedValue
-	private Long id;
+	@NotNull
 	private String login;
+	@NotNull
 	private String password;
 
 	@Transient
@@ -25,18 +24,14 @@ public class LoginInfo {
 	public LoginInfo() {
 	}
 
-	public LoginInfo(Long id, String login, String password) {
-		this.id = id;
+	public LoginInfo(String login, String password, String token) {
 		this.login = login;
 		this.password = password;
+		this.token = token;
 	}
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
-	}
-
-	public Long getId() {
-		return id;
 	}
 
 	public String getLogin() {
@@ -49,10 +44,6 @@ public class LoginInfo {
 
 	public String getToken() {
 		return token;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public void setLogin(String login) {
