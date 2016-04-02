@@ -9,8 +9,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "login_info")
 public class LoginInfo {
-
-	private static final long serialVersionUID = 1L;
+	
 	@Id
 	@NotNull
 	private String login;
@@ -24,14 +23,9 @@ public class LoginInfo {
 	public LoginInfo() {
 	}
 
-	public LoginInfo(String login, String password, String token) {
+	public LoginInfo(String login, String password) {
 		this.login = login;
-		this.password = password;
-		this.token = token;
-	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+		this.password = password;		
 	}
 
 	public String getLogin() {

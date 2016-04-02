@@ -1,11 +1,6 @@
 package com.hades.user;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import com.hades.login.LoginInfo;
@@ -20,64 +15,14 @@ public class UserDAO implements UserRepository {
 	@Autowired
 	private LoginInfoDAO loginInfoDAO;
 
-	public LoginInfo createUserAndLoginFor(UserDTO userDTO) {
-		LoginInfo loginInfo = new LoginInfo(userDTO.getEmail(), userDTO.getPassword(), null);
-		loginInfoDAO.persist(loginInfo);
+	public LoginInfo createUserFrom(UserDTO userDTO) {
+		LoginInfo loginInfo = new LoginInfo(userDTO.getEmail(), userDTO.getPassword());
+		loginInfoDAO.create(loginInfo);
 		
-		User user = new User(null, userDTO.getName(), userDTO.getEmail());
-		saveAndFlush(user);
+		User user = new User(userDTO.getName(), userDTO.getEmail());
+		save(user);
 		
 		return loginInfo;
-	}
-
-	@Override
-	public List<User> findAll() {
-		return userRepository.findAll();
-	}
-
-	@Override
-	public List<User> findAll(Sort sort) {
-		return userRepository.findAll(sort);
-	}
-
-	@Override
-	public List<User> findAll(Iterable<Long> ids) {
-		return userRepository.findAll(ids);
-	}
-
-	@Override
-	public <S extends User> List<S> save(Iterable<S> entities) {
-		return userRepository.save(entities);
-	}
-
-	@Override
-	public void flush() {
-		userRepository.flush();
-	}
-
-	@Override
-	public <S extends User> S saveAndFlush(S entity) {
-		return userRepository.saveAndFlush(entity);
-	}
-
-	@Override
-	public void deleteInBatch(Iterable<User> entities) {
-		userRepository.deleteInBatch(entities);
-	}
-
-	@Override
-	public void deleteAllInBatch() {
-		userRepository.deleteAllInBatch();
-	}
-
-	@Override
-	public User getOne(Long id) {
-		return userRepository.getOne(id);
-	}
-
-	@Override
-	public Page<User> findAll(Pageable pageable) {
-		return userRepository.findAll(pageable);
 	}
 
 	@Override
@@ -118,5 +63,20 @@ public class UserDAO implements UserRepository {
 	@Override
 	public void deleteAll() {
 		userRepository.deleteAll();
+	}
+
+	@Override
+	public <S extends User> Iterable<S> save(Iterable<S> entities) {
+		return userRepository.save(entities);
+	}
+
+	@Override
+	public Iterable<User> findAll() {
+		return userRepository.findAll();
+	}
+
+	@Override
+	public Iterable<User> findAll(Iterable<Long> ids) {
+		return userRepository.findAll(ids);
 	}
 }

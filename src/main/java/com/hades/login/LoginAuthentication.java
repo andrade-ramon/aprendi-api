@@ -8,23 +8,22 @@ import org.springframework.security.core.GrantedAuthority;
 public class LoginAuthentication implements Authentication{
 
 	private static final long serialVersionUID = 1L;
-	private String username;
-	private String password;
+	private LoginInfo loginInfo;
+	
 	private boolean authentication = true;
 
 	public LoginAuthentication(LoginInfo loginInfo) {
-		this.username = loginInfo.getLogin();
-		this.password = loginInfo.getPassword();
+		this.loginInfo = loginInfo;
 	}
 
 	@Override
 	public String getName() {
-		return username;
+		return this.loginInfo.getLogin();
 	}
 	
 	@Override
 	public Object getCredentials() {
-		return this.password;
+		return this.loginInfo.getPassword();
 	}
 
 	@Override

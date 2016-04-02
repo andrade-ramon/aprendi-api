@@ -21,18 +21,18 @@ class TokenHandler {
 	@Autowired
 	private LoginInfoDAO repository;
 
-	public String createTokenFor(LoginInfo user) {
-		return Jwts.builder().setSubject(user.getLogin()).signWith(SignatureAlgorithm.HS256, secret).compact();
+	public String createTokenFor(LoginInfo loginInfo) {
+		return Jwts.builder().setSubject(loginInfo.getLogin()).signWith(SignatureAlgorithm.HS256, secret).compact();
 	}
 
 	public Optional<LoginInfo> parseUserFromToken(String jwtToken) {
-		String username = "";
+		String login = "";
 		try {
-			username = Jwts.parser().setSigningKey(secret).parseClaimsJws(jwtToken).getBody().getSubject();
+			login = Jwts.parser().setSigningKey(secret).parseClaimsJws(jwtToken).getBody().getSubject();
 		} catch (JwtException | IllegalArgumentException e) {
 			return Optional.empty();
 		}
 		
-		return repository.findBy(username);
+		return repository.findBy(login);
 	}
 }

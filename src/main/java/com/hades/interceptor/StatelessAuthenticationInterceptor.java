@@ -23,22 +23,27 @@ public class StatelessAuthenticationInterceptor extends HandlerInterceptorAdapte
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-		HandlerMethod handlerMethod = (HandlerMethod) handler;
-		boolean permitRequest = handlerMethod.getMethod().isAnnotationPresent(PermitEndpoint.class);
-		if (permitRequest) {
-			return true;
-		}
-
-		Authentication authentication = tokenService.getAuthentication(request);
-		if (authentication == null) {
-			response.setStatus(UNAUTHORIZED.value());
-			return false;
-		}
-		SecurityContextHolder.getContext().setAuthentication(authentication);
 		
 		response.addHeader("Access-Control-Allow-Origin", "*");
 		response.addHeader("Access-Control-Allow-Headers", "Authorization");
 		response.addHeader("Access-Control-Allow-Headers", "Content-Type");
+		
+		if (handler instanceof HandlerMethod) {		
+			HandlerMethod handlerMethod = (HandlerMethod) handler;
+			boolean permitRequest = handlerMethod.getMethod().isAnnotationPresent(PermitEndpoint.class);
+			
+			if (permitRequest) {
+				return true;
+			}
+	
+			Authentication authentication = tokenService.getAuthentication(request);
+			if (authentication == null) {
+				response.setStatus(UNAUTHORIZED.value());
+				return false;
+			}
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+		}
+		
 		return true;
 	}
 }

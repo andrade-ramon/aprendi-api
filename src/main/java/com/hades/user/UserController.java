@@ -25,9 +25,9 @@ public class UserController {
 	@PermitEndpoint
 	@RequestMapping(path = "/register", method = POST)
 	public ResponseEntity<LoginInfoDTO> register(@RequestBody UserDTO userDTO) {
-		LoginInfo loginInfo = userDAO.createUserAndLoginFor(userDTO);
+		LoginInfo loginInfo = userDAO.createUserFrom(userDTO);
 		tokenService.createTokenFor(loginInfo);
-		
+
 		LoginInfoDTO loginInfoDTO = new LoginInfoDTO(loginInfo);
 		return new ResponseEntity<LoginInfoDTO>(loginInfoDTO, HttpStatus.CREATED);
 	}
