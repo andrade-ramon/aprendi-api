@@ -14,9 +14,6 @@ import org.springframework.stereotype.Service;
 import com.hades.user.auth.User;
 import com.hades.user.auth.UserAuthentication;
 
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.SignatureException;
-
 @Service
 public class TokenAuthenticationService {
 
@@ -33,13 +30,11 @@ public class TokenAuthenticationService {
 			return null;
 		}
 		
-		try {
-			Optional<User> user = tokenHandler.parseUserFromToken(jwtToken);
+		Optional<User> user = tokenHandler.parseUserFromToken(jwtToken);
 
-			if (user.isPresent()) {
-				return new UserAuthentication(user.get());
-			}
-		} catch (MalformedJwtException | SignatureException e) {
+		if (user.isPresent()) {
+			return new UserAuthentication(user.get());
+		} else {
 			LOGGER.info("Invalid Token: {}", jwtToken);
 		}
 		
@@ -49,5 +44,9 @@ public class TokenAuthenticationService {
 	public void createTokenFor(User user) {
 		String token = tokenHandler.createTokenFor(user);
 		user.setToken(token);
+	}
+	
+	public Optional<User> getUserFromToken(String token) {
+		return tokenHandler.parseUserFromToken(token);
 	}
 }

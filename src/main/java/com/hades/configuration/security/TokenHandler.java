@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import com.hades.user.auth.User;
 import com.hades.user.auth.UserDAO;
 
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -25,7 +26,12 @@ class TokenHandler {
 	}
 
 	public Optional<User> parseUserFromToken(String jwtToken) {
-		String username = Jwts.parser().setSigningKey(secret).parseClaimsJws(jwtToken).getBody().getSubject();
+		String username = "";
+		try {
+			username = Jwts.parser().setSigningKey(secret).parseClaimsJws(jwtToken).getBody().getSubject();
+		} catch (JwtException | IllegalArgumentException e) {
+			return Optional.empty();
+		}
 		return repository.findBy(username);
 	}
 }
