@@ -63,4 +63,11 @@ dependencies {
 	compile 'org.springframework.security:spring-security-web'
 	compile 'org.springframework.security:spring-security-config'
 	compile 'io.jsonwebtoken:jjwt:0.6.0'
+	compile 'org.springframework.boot:spring-boot-devtools'
+}
+
+task(runDebug, dependsOn: 'classes', type: JavaExec) {
+    main = 'com.hades.HadesApplication'
+    classpath = sourceSets.main.runtimeClasspath
+    jvmArgs = ["-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=9999"]
 }
