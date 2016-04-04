@@ -4,6 +4,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +26,7 @@ public class LoginController {
 
 	@PermitEndpoint
 	@RequestMapping(path = "/login", method = POST)
-	public LoginInfoDTO login(@RequestBody LoginInfo loginInfoToAuthenticate) {
+	public LoginInfoDTO login(@RequestBody @Valid LoginInfo loginInfoToAuthenticate) {
 
 		Optional<LoginInfo> loginInfo = loginInfoDAO.findBy(loginInfoToAuthenticate.getLogin(),
 				loginInfoToAuthenticate.getPassword());

@@ -1,8 +1,19 @@
 package com.hades.user;
 
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
+
 public class UserDTO {
+	@NotEmpty(message = "Preencha seu nome")
 	private String name;
+
+	@Email(message = "Email inválido")
+	@NotEmpty(message = "Email inválido")
 	private String email;
+
+	@NotEmpty(message = "Preencha o campo senha")
+	@Length(min = 4, message = "Digite uma senha com 4 caracteres ou mais")
 	private String password;
 
 	public UserDTO() {

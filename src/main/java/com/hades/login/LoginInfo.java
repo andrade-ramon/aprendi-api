@@ -4,16 +4,17 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 @Table(name = "login_info")
 public class LoginInfo {
-	
+
 	@Id
-	@NotNull
+	@NotEmpty(message = "Informe seu login")
 	private String login;
-	@NotNull
+	@NotEmpty(message = "Informe sua senha")
 	private String password;
 
 	@Transient
@@ -25,7 +26,7 @@ public class LoginInfo {
 
 	public LoginInfo(String login, String password) {
 		this.login = login;
-		this.password = password;		
+		this.password = password;
 	}
 
 	public String getLogin() {

@@ -16,26 +16,26 @@ import com.hades.annotation.PermitEndpoint;
 import com.hades.configuration.security.TokenAuthenticationService;
 
 @Component
-public class StatelessAuthenticationInterceptor extends HandlerInterceptorAdapter{
+public class StatelessAuthenticationInterceptor extends HandlerInterceptorAdapter {
 
 	@Autowired
 	private TokenAuthenticationService tokenService;
 
 	@Override
-	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+			throws Exception {
 		
-		response.addHeader("Access-Control-Allow-Origin", "*");
-		response.addHeader("Access-Control-Allow-Headers", "Authorization");
-		response.addHeader("Access-Control-Allow-Headers", "Content-Type");
-		
-		if (handler instanceof HandlerMethod) {		
+		prepareResponse(response);
+
+		if (handler instanceof HandlerMethod) {
 			HandlerMethod handlerMethod = (HandlerMethod) handler;
 			boolean permitRequest = handlerMethod.getMethod().isAnnotationPresent(PermitEndpoint.class);
-			
-			if (permitRequest) {
+			boolean isErrorPath = "/error".equals(request.getServletPath());
+
+			if (permitRequest | isErrorPath) {
 				return true;
 			}
-	
+
 			Authentication authentication = tokenService.getAuthentication(request);
 			if (authentication == null) {
 				response.setStatus(UNAUTHORIZED.value());
@@ -43,7 +43,18 @@ public class StatelessAuthenticationInterceptor extends HandlerInterceptorAdapte
 			}
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 		}
-		
+
 		return true;
+	}
+
+	private void prepareResponse(HttpServletResponse response) {
+		if (response.getHeader("Access-Control-Allow-Origin") == null) {
+			response.addHeader("Access-Control-Allow-Origin", "*");
+		}
+
+		if (response.getHeader("Access-Control-Allow-Headers") == null) {
+			response.addHeader("Access-Control-Allow-Headers", "Authorization");
+			response.addHeader("Access-Control-Allow-Headers", "Content-Type");
+		}
 	}
 }

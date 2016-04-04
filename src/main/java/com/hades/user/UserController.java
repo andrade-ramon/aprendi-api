@@ -2,6 +2,8 @@ package com.hades.user;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +26,7 @@ public class UserController {
 
 	@PermitEndpoint
 	@RequestMapping(path = "/register", method = POST)
-	public ResponseEntity<LoginInfoDTO> register(@RequestBody UserDTO userDTO) {
+	public ResponseEntity<LoginInfoDTO> register(@Valid @RequestBody UserDTO userDTO) {
 		LoginInfo loginInfo = userDAO.createUserFrom(userDTO);
 		tokenService.createTokenFor(loginInfo);
 
