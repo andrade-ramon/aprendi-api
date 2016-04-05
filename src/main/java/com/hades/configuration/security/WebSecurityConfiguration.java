@@ -1,4 +1,4 @@
-package com.hades.configuration;
+package com.hades.configuration.security;
 
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

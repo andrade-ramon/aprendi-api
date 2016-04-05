@@ -17,7 +17,7 @@ public class HomeController {
 	
 	@RequestMapping(path = "/admin", method = GET)
 	public String closed() {
-		return loggedUser.getUser().getEmail();
+		return loggedUser.getLoginInfo().getLogin();
 	}
 
 	@PermitEndpoint

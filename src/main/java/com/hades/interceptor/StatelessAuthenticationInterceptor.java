@@ -16,29 +16,45 @@ import com.hades.annotation.PermitEndpoint;
 import com.hades.configuration.security.TokenAuthenticationService;
 
 @Component
-public class StatelessAuthenticationInterceptor extends HandlerInterceptorAdapter{
+public class StatelessAuthenticationInterceptor extends HandlerInterceptorAdapter {
 
 	@Autowired
 	private TokenAuthenticationService tokenService;
 
 	@Override
-	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-		HandlerMethod handlerMethod = (HandlerMethod) handler;
-		boolean permitRequest = handlerMethod.getMethod().isAnnotationPresent(PermitEndpoint.class);
-		if (permitRequest) {
-			return true;
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+			throws Exception {
+		
+		prepareResponse(response);
+
+		if (handler instanceof HandlerMethod) {
+			HandlerMethod handlerMethod = (HandlerMethod) handler;
+			boolean permitRequest = handlerMethod.getMethod().isAnnotationPresent(PermitEndpoint.class);
+			boolean isErrorPath = "/error".equals(request.getServletPath());
+
+			if (permitRequest | isErrorPath) {
+				return true;
+			}
+
+			Authentication authentication = tokenService.getAuthentication(request);
+			if (authentication == null) {
+				response.setStatus(UNAUTHORIZED.value());
+				return false;
+			}
+			SecurityContextHolder.getContext().setAuthentication(authentication);
 		}
 
-		Authentication authentication = tokenService.getAuthentication(request);
-		if (authentication == null) {
-			response.setStatus(UNAUTHORIZED.value());
-			return false;
-		}
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-		
-		response.addHeader("Access-Control-Allow-Origin", "*");
-		response.addHeader("Access-Control-Allow-Headers", "Authorization");
-		response.addHeader("Access-Control-Allow-Headers", "Content-Type");
 		return true;
+	}
+
+	private void prepareResponse(HttpServletResponse response) {
+		if (response.getHeader("Access-Control-Allow-Origin") == null) {
+			response.addHeader("Access-Control-Allow-Origin", "*");
+		}
+
+		if (response.getHeader("Access-Control-Allow-Headers") == null) {
+			response.addHeader("Access-Control-Allow-Headers", "Authorization");
+			response.addHeader("Access-Control-Allow-Headers", "Content-Type");
+		}
 	}
 }
