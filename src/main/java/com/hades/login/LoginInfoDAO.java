@@ -1,12 +1,15 @@
 package com.hades.login;
 
-import java.util.List;
+import static org.hibernate.criterion.Restrictions.eq;
+
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
+import org.hibernate.Criteria;
+import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -15,26 +18,14 @@ public class LoginInfoDAO {
 	@PersistenceContext
 	private EntityManager manager;
 
-	public Optional<LoginInfo> findBy(String login, String password) {
-		List<LoginInfo> resultList = manager
-				.createQuery("select u from " + LoginInfo.class.getSimpleName()
-						+ " u where u.login = :login and u.password = :password", LoginInfo.class)
-				.setParameter("login", login).setParameter("password", password).getResultList();
-		if (resultList.isEmpty()) {
-			return Optional.empty();
-		}
-		return Optional.of(resultList.get(0));
-	}
-
 	public Optional<LoginInfo> findBy(String login) {
-		List<LoginInfo> resultList = manager
-				.createQuery("select u from " + LoginInfo.class.getSimpleName() + " u where u.login = :login",
-						LoginInfo.class)
-				.setParameter("login", login).getResultList();
-		if (resultList.isEmpty()) {
-			return Optional.empty();
-		}
-		return Optional.of(resultList.get(0));
+		Criteria criteria = manager.unwrap(Session.class).createCriteria(LoginInfo.class);
+		LoginInfo loginInfo = (LoginInfo) criteria
+						.add(eq("login", login))
+						.setMaxResults(1)
+						.uniqueResult();
+
+		return Optional.ofNullable(loginInfo);
 	}
 
 	@Transactional
