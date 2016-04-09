@@ -1,16 +1,14 @@
 package com.hades.user;
 
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hades.annotation.Post;
 import com.hades.annotation.PermitEndpoint;
 import com.hades.configuration.security.TokenAuthenticationService;
 import com.hades.login.LoginInfo;
@@ -18,6 +16,7 @@ import com.hades.login.LoginInfoDTO;
 
 @RestController
 public class UserController {
+
 	@Autowired
 	private UserDAO userDAO;
 
@@ -25,7 +24,7 @@ public class UserController {
 	private TokenAuthenticationService tokenService;
 
 	@PermitEndpoint
-	@RequestMapping(path = "/register", method = POST)
+	@Post("/register")
 	public ResponseEntity<LoginInfoDTO> register(@Valid @RequestBody UserDTO userDTO) {
 		LoginInfo loginInfo = userDAO.createUserFrom(userDTO);
 		tokenService.createTokenFor(loginInfo);

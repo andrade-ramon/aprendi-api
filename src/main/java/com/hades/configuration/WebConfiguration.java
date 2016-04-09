@@ -18,11 +18,11 @@ class WebConfiguration extends WebMvcConfigurerAdapter {
 	
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-	    registry.addInterceptor(permitedEndpointInterceptor());
+	    registry.addInterceptor(StatelessAuthenticationInterceptor());
 	} 
 	
 	@Bean
-	public StatelessAuthenticationInterceptor permitedEndpointInterceptor() {
+	public StatelessAuthenticationInterceptor StatelessAuthenticationInterceptor() {
 	    return new StatelessAuthenticationInterceptor();
 	}
 }

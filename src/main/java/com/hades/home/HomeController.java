@@ -1,11 +1,9 @@
 package com.hades.home;
 
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hades.annotation.Get;
 import com.hades.annotation.PermitEndpoint;
 import com.hades.login.LoggedUserManager;
 
@@ -15,13 +13,13 @@ public class HomeController {
 	@Autowired
 	private LoggedUserManager loggedUser;
 	
-	@RequestMapping(path = "/admin", method = GET)
+	@Get("/admin")
 	public String closed() {
 		return loggedUser.getLoginInfo().getLogin();
 	}
 
 	@PermitEndpoint
-	@RequestMapping(path = "/", method = GET)
+	@Get("/")
 	public String home() {
 		return "home";
 	}
