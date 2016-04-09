@@ -7,6 +7,7 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,13 +29,16 @@ public class LoginController {
 	@RequestMapping(path = "/login", method = POST)
 	public LoginInfoDTO login(@RequestBody @Valid LoginInfo loginInfoToAuthenticate) {
 
-		Optional<LoginInfo> loginInfo = loginInfoDAO.findBy(loginInfoToAuthenticate.getLogin(),
-				loginInfoToAuthenticate.getPassword());
+		Optional<LoginInfo> optionalLoginInfo = loginInfoDAO.findBy(loginInfoToAuthenticate.getLogin());
 
-		if (loginInfo.isPresent()) {
-			tokenService.createTokenFor(loginInfo.get());
-			LoginInfoDTO loginInfoDTO = new LoginInfoDTO(loginInfo.get());
-			return loginInfoDTO;
+		if (optionalLoginInfo.isPresent()) {
+			LoginInfo loginInfo = optionalLoginInfo.get();
+
+			if (BCrypt.checkpw(loginInfoToAuthenticate.getPassword(), loginInfo.getPassword())) {
+				tokenService.createTokenFor(loginInfo);
+				LoginInfoDTO loginInfoDTO = new LoginInfoDTO(loginInfo);
+				return loginInfoDTO;
+			}
 		}
 
 		throw new LoginFailureException();
