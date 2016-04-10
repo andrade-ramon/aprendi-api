@@ -4,38 +4,42 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
 
-@Entity(name = "administrator")
+import com.hades.login.LoginOrigin;
+
+@Entity
+@Table(name = "admin")
 public class Admin {
 	@Id
 	@GeneratedValue
 	private Long id;
-	@NotNull
+
+	@NotBlank
 	private String name;
-	@NotNull
-	@Column(unique=true)
+
+	@NotBlank
+	@Column(unique = true)
 	@Email
 	private String email;
-	
-	@Deprecated 
-	public Admin(){
+
+	@Transient
+	private LoginOrigin loginOrigin;
+
+	@Deprecated // Hibernate eyes only
+	public Admin() {
 	}
-	
-	public Admin(String name, String email){
+
+	public Admin(String name, String email, LoginOrigin loginOrigin) {
 		this.name = name;
 		this.email = email;
+		this.loginOrigin = loginOrigin;
 	}
-	
-	public Admin(Long id, String name, String email) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.email = email;
-	}
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -58,5 +62,13 @@ public class Admin {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public LoginOrigin getLoginOrigin() {
+		return loginOrigin;
+	}
+
+	public void setLoginOrigin(LoginOrigin loginOrigin) {
+		this.loginOrigin = loginOrigin;
 	}
 }

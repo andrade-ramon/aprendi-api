@@ -18,6 +18,7 @@ public class LoginInfoDAO {
 	@PersistenceContext
 	private EntityManager manager;
 
+	@Transactional //FIXME
 	public Optional<LoginInfo> findBy(String login) {
 		Criteria criteria = manager.unwrap(Session.class).createCriteria(LoginInfo.class);
 		LoginInfo loginInfo = (LoginInfo) criteria

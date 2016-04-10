@@ -10,21 +10,19 @@ import com.hades.admin.AdminDTO;
 import com.hades.admin.AdminRepository;
 
 @Repository
-public class AdminDAO implements AdminRepository{
+public class AdminDAO implements AdminRepository {
 
 	@Autowired
 	private AdminRepository adminRepository;
-	
+
 	@Autowired
 	private LoginInfoDAO loginInfoDAO;
 
-	public LoginInfo createAdminFrom(AdminDTO adminDTO) {
+	public LoginInfo createFrom(AdminDTO adminDTO) {
 		LoginInfo loginInfo = new LoginInfo(adminDTO.getEmail(), adminDTO.getPassword(), adminDTO.getLoginOrigin());
 		loginInfoDAO.create(loginInfo);
-		
-		Admin admin = new Admin(adminDTO.getName(), adminDTO.getEmail());
+		Admin admin = new Admin(adminDTO.getName(), adminDTO.getEmail(), adminDTO.getLoginOrigin());
 		save(admin);
-		
 		return loginInfo;
 	}
 
