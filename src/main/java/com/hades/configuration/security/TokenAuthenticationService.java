@@ -1,5 +1,7 @@
 package com.hades.configuration.security;
 
+import static org.springframework.util.StringUtils.isEmpty;
+
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,14 +17,18 @@ import com.hades.login.LoginInfo;
 @Service
 public class TokenAuthenticationService {
 
-	@Autowired
 	private TokenHandler tokenHandler;
+
+	@Autowired
+	public TokenAuthenticationService(TokenHandler tokenHandler) {
+		this.tokenHandler = tokenHandler;
+	}
 
 	public Authentication getAuthentication(HttpServletRequest request) {
 
 		String jwtToken = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-		if (jwtToken == null || "".equals(jwtToken)) {
+		if (isEmpty(jwtToken)) {
 			return null;
 		}
 

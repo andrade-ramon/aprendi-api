@@ -65,6 +65,11 @@ dependencies {
 	compile 'io.jsonwebtoken:jjwt:0.6.0'
 	compile 'org.springframework.boot:spring-boot-devtools'
 	compile 'org.mindrot:jbcrypt:0.3m'
+	
+	// Tests
+	compile 'org.springframework:spring-test'
+	compile 'junit:junit'
+	compile 'org.mockito:mockito-all:1.8.4'
 }
 
 task(runDebug, dependsOn: 'classes', type: JavaExec) {
