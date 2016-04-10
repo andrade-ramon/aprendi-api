@@ -19,10 +19,10 @@ public class AdminDAO implements AdminRepository{
 	private LoginInfoDAO loginInfoDAO;
 
 	public LoginInfo createAdminFrom(AdminDTO adminDTO) {
-		LoginInfo loginInfo = new LoginInfo(adminDTO.getEmail(), adminDTO.getPassword());
+		LoginInfo loginInfo = new LoginInfo(adminDTO.getEmail(), adminDTO.getPassword(), adminDTO.getLoginOrigin());
 		loginInfoDAO.create(loginInfo);
 		
-		Admin admin = new Admin(adminDTO.getName(), adminDTO.getEmail(), adminDTO.getPassword());
+		Admin admin = new Admin(adminDTO.getName(), adminDTO.getEmail());
 		save(admin);
 		
 		return loginInfo;

@@ -19,48 +19,44 @@ public class Admin {
 	@Column(unique=true)
 	@Email
 	private String email;
-	@NotNull
-	private String password;
 	
 	@Deprecated 
 	public Admin(){
 	}
 	
-	public Admin(String name, String email, String password){
+	public Admin(String name, String email){
 		this.name = name;
 		this.email = email;
-		this.password = password;
 	}
 	
-	public Admin(Long id, String name, String email, String password){
+	public Admin(Long id, String name, String email) {
+		super();
 		this.id = id;
 		this.name = name;
 		this.email = email;
-		this.password = password;
 	}
 	
-	public Long getId(){
-		return this.id;
+	public Long getId() {
+		return id;
 	}
-	public String getName(){
-		return this.name;
-	}
-	public String getEmail(){
-		return this.email;
-	}
-	public String getPassword(){
-		return this.password;
-	}
-	public void setId(Long id){
+
+	public void setId(Long id) {
 		this.id = id;
 	}
-	public void setName(String name){
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
 		this.name = name;
 	}
-	public void setEmail(String email){
-		this.email = email;
+
+	public String getEmail() {
+		return email;
 	}
-	public void setPassword(String password){
-		this.password = password;
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 }

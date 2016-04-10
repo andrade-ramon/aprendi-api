@@ -15,6 +15,7 @@ import com.hades.annotation.PermitEndpoint;
 import com.hades.configuration.security.TokenAuthenticationService;
 import com.hades.login.LoginInfo;
 import com.hades.login.LoginInfoDTO;
+import com.hades.login.LoginOrigin;
 
 @RestController
 public class AdminController {
@@ -27,6 +28,7 @@ public class AdminController {
 	@PermitEndpoint
 	@RequestMapping(path = "/adminRegister", method = POST)
 	public ResponseEntity<LoginInfoDTO> register(@Valid @RequestBody AdminDTO adminDTO) {
+		adminDTO.setLoginOrigin(LoginOrigin.ADMINISTRATOR);
 		LoginInfo loginInfo = adminDAO.createAdminFrom(adminDTO);
 		tokenService.createTokenFor(loginInfo);
 
