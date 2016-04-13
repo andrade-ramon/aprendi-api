@@ -1,7 +1,5 @@
 package com.hades.login;
 
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
-
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -9,9 +7,9 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hades.annotation.Post;
 import com.hades.annotation.PermitEndpoint;
 import com.hades.configuration.security.TokenAuthenticationService;
 import com.hades.exceptions.LoginFailureException;
@@ -26,7 +24,7 @@ public class LoginController {
 	private TokenAuthenticationService tokenService;
 
 	@PermitEndpoint
-	@RequestMapping(path = "/login", method = POST)
+	@Post("/login")
 	public LoginInfoDTO login(@RequestBody @Valid LoginInfo loginInfoToAuthenticate) {
 
 		Optional<LoginInfo> optionalLoginInfo = loginInfoDAO.findBy(loginInfoToAuthenticate.getLogin());
