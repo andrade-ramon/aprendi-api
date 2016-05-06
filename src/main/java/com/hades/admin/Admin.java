@@ -1,4 +1,4 @@
-package com.hades.user;
+package com.hades.admin;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -6,37 +6,40 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
 
 import com.hades.login.LoginOrigin;
 
 @Entity
-@Table(name = "user")
-public class User {
+@Table(name = "admin")
+public class Admin {
 	@Id
 	@GeneratedValue
 	private Long id;
-	
-	@NotNull
+
+	@NotBlank
 	private String name;
-	
-	@NotNull
+
+	@NotBlank
 	@Column(unique = true)
+	@Email
 	private String email;
-	
+
 	@Transient
 	private LoginOrigin loginOrigin;
-	
+
 	@Deprecated // Hibernate eyes only
-	public User() {
+	public Admin() {
 	}
 
-	public User(String name, String email, LoginOrigin loginOrigin) {
+	public Admin(String name, String email, LoginOrigin loginOrigin) {
 		this.name = name;
 		this.email = email;
 		this.loginOrigin = loginOrigin;
 	}
-	
+
 	public Long getId() {
 		return id;
 	}

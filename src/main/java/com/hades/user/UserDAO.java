@@ -11,17 +11,16 @@ public class UserDAO implements UserRepository {
 
 	@Autowired
 	private UserRepository userRepository;
-	
+
 	@Autowired
 	private LoginInfoDAO loginInfoDAO;
 
-	public LoginInfo createUserFrom(UserDTO userDTO) {
-		LoginInfo loginInfo = new LoginInfo(userDTO.getEmail(), userDTO.getPassword());
+	public LoginInfo createFrom(UserDTO userDTO) {
+		LoginInfo loginInfo = new LoginInfo(userDTO.getEmail(), userDTO.getPassword(), userDTO.getLoginOrigin());
 		loginInfoDAO.create(loginInfo);
-		
-		User user = new User(userDTO.getName(), userDTO.getEmail());
+		User user = new User(userDTO.getName(), userDTO.getEmail(), userDTO.getLoginOrigin());
 		save(user);
-		
+
 		return loginInfo;
 	}
 
