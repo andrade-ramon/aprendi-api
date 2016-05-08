@@ -9,8 +9,8 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hades.annotation.Post;
 import com.hades.annotation.PermitEndpoint;
+import com.hades.annotation.Post;
 import com.hades.configuration.security.TokenAuthenticationService;
 import com.hades.exceptions.LoginFailureException;
 
@@ -18,7 +18,7 @@ import com.hades.exceptions.LoginFailureException;
 public class LoginController {
 
 	@Autowired
-	private LoginInfoDAO loginInfoDAO;
+	private LoginInfoRepository loginInfoRepository;
 
 	@Autowired
 	private TokenAuthenticationService tokenService;
@@ -27,15 +27,14 @@ public class LoginController {
 	@Post("/login")
 	public LoginInfoDTO login(@RequestBody @Valid LoginInfo loginInfoToAuthenticate) {
 
-		Optional<LoginInfo> optionalLoginInfo = loginInfoDAO.findBy(loginInfoToAuthenticate.getLogin());
+		Optional<LoginInfo> optionalLoginInfo = loginInfoRepository.findByLogin(loginInfoToAuthenticate.getLogin());
 
 		if (optionalLoginInfo.isPresent()) {
 			LoginInfo loginInfo = optionalLoginInfo.get();
 
 			if (BCrypt.checkpw(loginInfoToAuthenticate.getPassword(), loginInfo.getPassword())) {
 				tokenService.createTokenFor(loginInfo);
-				LoginInfoDTO loginInfoDTO = new LoginInfoDTO(loginInfo);
-				return loginInfoDTO;
+				return new LoginInfoDTO(loginInfo);
 			}
 		}
 

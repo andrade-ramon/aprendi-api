@@ -15,6 +15,7 @@ import com.hades.login.LoginOrigin;
 @Entity
 @Table(name = "admin")
 public class Admin {
+
 	@Id
 	@GeneratedValue
 	private Long id;
@@ -28,16 +29,15 @@ public class Admin {
 	private String email;
 
 	@Transient
-	private LoginOrigin loginOrigin;
+	private LoginOrigin loginOrigin = LoginOrigin.ADMIN;
 
 	@Deprecated // Hibernate eyes only
 	public Admin() {
 	}
 
-	public Admin(String name, String email, LoginOrigin loginOrigin) {
+	public Admin(String name, String email) {
 		this.name = name;
 		this.email = email;
-		this.loginOrigin = loginOrigin;
 	}
 
 	public Long getId() {
@@ -68,7 +68,4 @@ public class Admin {
 		return loginOrigin;
 	}
 
-	public void setLoginOrigin(LoginOrigin loginOrigin) {
-		this.loginOrigin = loginOrigin;
-	}
 }

@@ -1,9 +1,10 @@
 package com.hades.user;
 
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.repository.RepositoryDefinition;
 
-@Repository
-public interface UserRepository extends CrudRepository<User, Long> {
+@RepositoryDefinition(domainClass = User.class, idClass = Long.class)
+public interface UserRepository {
+
+	User save(User user);
 
 }

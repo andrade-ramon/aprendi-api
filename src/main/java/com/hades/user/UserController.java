@@ -1,36 +1,48 @@
 package com.hades.user;
 
+import static org.springframework.http.HttpStatus.CREATED;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hades.annotation.Post;
 import com.hades.annotation.PermitEndpoint;
+import com.hades.annotation.Post;
 import com.hades.configuration.security.TokenAuthenticationService;
 import com.hades.login.LoginInfo;
 import com.hades.login.LoginInfoDTO;
+import com.hades.login.LoginInfoRepository;
+import com.hades.login.LoginOrigin;
 
 @RestController
 public class UserController {
 
 	@Autowired
-	private UserDAO userDAO;
+	private UserRepository userRepository;
+	
+	@Autowired
+	private LoginInfoRepository loginInfoRepository;
 
 	@Autowired
 	private TokenAuthenticationService tokenService;
 
+	@Transactional
 	@PermitEndpoint
 	@Post("/register")
-	public ResponseEntity<LoginInfoDTO> register(@Valid @RequestBody UserDTO userDTO) {
-		LoginInfo loginInfo = userDAO.createFrom(userDTO);
+	@ResponseStatus(CREATED)
+	public LoginInfoDTO register(@Valid @RequestBody UserDTO userDTO) {
+		LoginInfo loginInfo = new LoginInfo(userDTO.getEmail(), userDTO.getPassword(), LoginOrigin.USER);
+		loginInfoRepository.save(loginInfo);
+		User user = new User(userDTO.getName(), userDTO.getEmail());
+		userRepository.save(user);
+		
 		tokenService.createTokenFor(loginInfo);
 
-		LoginInfoDTO loginInfoDTO = new LoginInfoDTO(loginInfo);
-		return new ResponseEntity<LoginInfoDTO>(loginInfoDTO, HttpStatus.CREATED);
+		return new LoginInfoDTO(loginInfo);
 	}
 
 }

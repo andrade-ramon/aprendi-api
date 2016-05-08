@@ -25,16 +25,15 @@ public class User {
 	private String email;
 	
 	@Transient
-	private LoginOrigin loginOrigin;
+	private LoginOrigin loginOrigin = LoginOrigin.USER;
 	
 	@Deprecated // Hibernate eyes only
 	public User() {
 	}
 
-	public User(String name, String email, LoginOrigin loginOrigin) {
+	public User(String name, String email) {
 		this.name = name;
 		this.email = email;
-		this.loginOrigin = loginOrigin;
 	}
 	
 	public Long getId() {
@@ -65,7 +64,4 @@ public class User {
 		return loginOrigin;
 	}
 
-	public void setLoginOrigin(LoginOrigin loginOrigin) {
-		this.loginOrigin = loginOrigin;
-	}
 }

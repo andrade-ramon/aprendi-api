@@ -1,9 +1,10 @@
 package com.hades.admin;
 
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.repository.RepositoryDefinition;
 
-@Repository
-public interface AdminRepository extends CrudRepository<Admin, Long> {
+@RepositoryDefinition(domainClass = Admin.class, idClass = Long.class)
+public interface AdminRepository {
+
+	Admin save(Admin admin);
 
 }
