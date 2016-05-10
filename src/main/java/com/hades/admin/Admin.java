@@ -1,13 +1,19 @@
 package com.hades.admin;
 
+import static javax.persistence.CascadeType.ALL;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
+
+import com.hades.login.LoginInfo;
 
 @Entity
 @Table(name = "admin")
@@ -24,6 +30,10 @@ public class Admin {
 	@Column(unique = true)
 	@Email
 	private String email;
+	
+	@OneToOne(cascade = ALL)
+	@JoinColumn(name = "login_info_id", referencedColumnName = "id", nullable = false)
+	private LoginInfo loginInfo;
 
 	@Deprecated // Hibernate eyes only
 	public Admin() {
@@ -56,6 +66,14 @@ public class Admin {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public LoginInfo getLoginInfo() {
+		return loginInfo;
+	}
+
+	public void setLoginInfo(LoginInfo loginInfo) {
+		this.loginInfo = loginInfo;
 	}
 
 }

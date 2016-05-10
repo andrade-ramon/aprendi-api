@@ -9,5 +9,4 @@ public interface LoginInfoRepository {
 
 	Optional<LoginInfo> findByLogin(String login);
 
-	LoginInfo save(LoginInfo loginInfo);
 }

@@ -13,7 +13,6 @@ import com.hades.annotation.Post;
 import com.hades.configuration.security.TokenAuthenticationService;
 import com.hades.login.LoginInfo;
 import com.hades.login.LoginInfoDTO;
-import com.hades.login.LoginInfoRepository;
 import com.hades.login.LoginOrigin;
 
 @RestController
@@ -23,9 +22,6 @@ public class AdminController {
 	private AdminRepository adminRepository;
 
 	@Autowired
-	private LoginInfoRepository loginInfoRepository;
-	
-	@Autowired
 	private TokenAuthenticationService tokenService;
 
 	@Transactional
@@ -33,9 +29,9 @@ public class AdminController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public LoginInfoDTO register(@Valid @RequestBody AdminDTO adminDTO) {
 		LoginInfo loginInfo = new LoginInfo(adminDTO.getEmail(), adminDTO.getPassword(), LoginOrigin.ADMIN);
-		loginInfoRepository.save(loginInfo);
-
 		Admin admin = new Admin(adminDTO.getName(), adminDTO.getEmail());
+		admin.setLoginInfo(loginInfo);
+		
 		adminRepository.save(admin);
 		
 		tokenService.createTokenFor(loginInfo);
