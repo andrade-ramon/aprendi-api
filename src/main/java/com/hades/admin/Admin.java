@@ -5,12 +5,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
-
-import com.hades.login.LoginOrigin;
 
 @Entity
 @Table(name = "admin")
@@ -27,9 +24,6 @@ public class Admin {
 	@Column(unique = true)
 	@Email
 	private String email;
-
-	@Transient
-	private LoginOrigin loginOrigin = LoginOrigin.ADMIN;
 
 	@Deprecated // Hibernate eyes only
 	public Admin() {
@@ -62,10 +56,6 @@ public class Admin {
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public LoginOrigin getLoginOrigin() {
-		return loginOrigin;
 	}
 
 }
