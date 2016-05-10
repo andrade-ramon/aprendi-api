@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -16,16 +17,20 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 public class LoginInfo {
 
 	@Id
+	@GeneratedValue
+	private Long id;
+
 	@NotEmpty(message = "Informe seu login")
+	@Column(unique = true)
 	private String login;
-	
+
 	@NotEmpty(message = "Informe sua senha")
 	private String password;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "login_origin")
+	@Column(name = "origin", nullable = false)
 	private LoginOrigin loginOrigin;
-	
+
 	@Transient
 	private String token;
 
@@ -37,6 +42,14 @@ public class LoginInfo {
 		this.login = login;
 		this.password = (password != null ? BCrypt.hashpw(password, BCrypt.gensalt()) : "");
 		this.loginOrigin = loginOrigin;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getLogin() {

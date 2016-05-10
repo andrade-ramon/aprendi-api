@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.hades.login.LoginInfo;
-import com.hades.login.LoginInfoDAO;
+import com.hades.login.LoginInfoRepository;
 
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -15,11 +15,12 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 @Component
 class TokenHandler {
+
 	@Value("${jwt.secret}")
 	private String secret;
 
 	@Autowired
-	private LoginInfoDAO repository;
+	private LoginInfoRepository loginInfoRepository;
 
 	public String createTokenFor(LoginInfo loginInfo) {
 		return Jwts.builder().setSubject(loginInfo.getLogin()).signWith(SignatureAlgorithm.HS256, secret).compact();
@@ -32,7 +33,7 @@ class TokenHandler {
 		} catch (JwtException | IllegalArgumentException e) {
 			return Optional.empty();
 		}
-		
-		return repository.findBy(login);
+
+		return loginInfoRepository.findByLogin(login);
 	}
 }

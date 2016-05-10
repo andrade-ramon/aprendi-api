@@ -1,20 +1,24 @@
 package com.hades.admin;
 
+import static javax.persistence.CascadeType.ALL;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
-import com.hades.login.LoginOrigin;
+import com.hades.login.LoginInfo;
 
 @Entity
 @Table(name = "admin")
 public class Admin {
+
 	@Id
 	@GeneratedValue
 	private Long id;
@@ -26,18 +30,18 @@ public class Admin {
 	@Column(unique = true)
 	@Email
 	private String email;
-
-	@Transient
-	private LoginOrigin loginOrigin;
+	
+	@OneToOne(cascade = ALL)
+	@JoinColumn(name = "login_info_id", referencedColumnName = "id", nullable = false)
+	private LoginInfo loginInfo;
 
 	@Deprecated // Hibernate eyes only
 	public Admin() {
 	}
 
-	public Admin(String name, String email, LoginOrigin loginOrigin) {
+	public Admin(String name, String email) {
 		this.name = name;
 		this.email = email;
-		this.loginOrigin = loginOrigin;
 	}
 
 	public Long getId() {
@@ -64,11 +68,12 @@ public class Admin {
 		this.email = email;
 	}
 
-	public LoginOrigin getLoginOrigin() {
-		return loginOrigin;
+	public LoginInfo getLoginInfo() {
+		return loginInfo;
 	}
 
-	public void setLoginOrigin(LoginOrigin loginOrigin) {
-		this.loginOrigin = loginOrigin;
+	public void setLoginInfo(LoginInfo loginInfo) {
+		this.loginInfo = loginInfo;
 	}
+
 }

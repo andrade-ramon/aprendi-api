@@ -4,9 +4,8 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import com.hades.login.LoginOrigin;
-
 public class AdminDTO {
+
 	@NotEmpty(message = "hades.admin.empty.name")
 	private String name;
 
@@ -17,7 +16,6 @@ public class AdminDTO {
 	@NotEmpty(message = "hades.admin.empty.password")
 	@Length(min = 4, message = "hades.admin.invalid.password")
 	private String password;
-	private LoginOrigin loginOrigin;
 
 	public AdminDTO() {
 	}
@@ -26,7 +24,6 @@ public class AdminDTO {
 		this.name = name;
 		this.email = email;
 		this.password = password;
-		this.loginOrigin = LoginOrigin.ADMIN;
 	}
 
 	public String getName() {
@@ -53,7 +50,4 @@ public class AdminDTO {
 		this.password = password;
 	}
 
-	public LoginOrigin getLoginOrigin() {
-		return loginOrigin;
-	}
 }
