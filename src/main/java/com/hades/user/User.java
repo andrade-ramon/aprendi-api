@@ -35,7 +35,7 @@ public class User {
 	private String email;
 
 	@Column(name = "born_date")
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar bornDate;
 
 	@Column(name = "accept_email", columnDefinition = "TINYINT(1)")

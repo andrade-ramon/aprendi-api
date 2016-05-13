@@ -6,6 +6,7 @@ import static org.springframework.http.HttpStatus.OK;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -14,9 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.hades.annotation.PermitEndpoint;
 import com.hades.annotation.Post;
 import com.hades.configuration.security.TokenAuthenticationService;
+import com.hades.exceptions.InvalidPasswordException;
 import com.hades.login.LoggedUserManager;
 import com.hades.login.LoginInfo;
 import com.hades.login.LoginInfoDTO;
+import com.hades.login.LoginInfoRepository;
 import com.hades.login.LoginOrigin;
 
 @RestController
@@ -24,6 +27,9 @@ public class UserController {
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private LoginInfoRepository loginInfoRepository;
 	
 	@Autowired
 	private TokenAuthenticationService tokenService;
@@ -55,6 +61,18 @@ public class UserController {
 		user.setName(userProfileDTO.getName());
 		
 		userRepository.save(user);
+	}
+	
+	@Post("/user/password")
+	@ResponseStatus(OK)
+	public void editPassword(@Valid @RequestBody PasswordDTO passwordDTO){
+		LoginInfo loginInfo = loggedUser.getLoginInfo();
+		if (!BCrypt.checkpw(loginInfo.getPassword(), passwordDTO.getPassword())) {
+			throw new InvalidPasswordException();
+		}
+		
+		loginInfo.setPassword(passwordDTO.getPassword());
+		loginInfoRepository.save(loginInfo);
 	}
 	
 }
