@@ -27,8 +27,6 @@ public class LoginFacade {
 			if (BCrypt.checkpw(loginInfoToAuthenticate.getPassword(), loginInfo.getPassword())) {
 				tokenService.createTokenFor(loginInfo);
 				return new LoginInfoDTO(loginInfo);
-			}else{
-				System.out.println("A senha nao bateu vei");
 			}
 		}
 		
