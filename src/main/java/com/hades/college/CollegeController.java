@@ -20,11 +20,14 @@ import com.hermes.college.CollegeMecDTO;
 @RestController
 public class CollegeController {
 
-	@Autowired
 	private CollegeMecDTOToCollegeConverter converter;
-
-	@Autowired
 	private CollegeRepository repository;
+	
+	@Autowired
+	public CollegeController(CollegeMecDTOToCollegeConverter converter, CollegeRepository repository) {
+		this.converter = converter;
+		this.repository = repository;
+	}
 
 	@Post("/admin/{version}/colleges")
 	@InternalEndpoint

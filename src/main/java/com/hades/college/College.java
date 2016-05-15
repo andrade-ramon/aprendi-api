@@ -47,7 +47,7 @@ public class College {
 	private List<CollegeGrade> grades = new ArrayList<>();
 
 	@Deprecated // Hibernate eyes only
-	public College() {
+	College() {
 	}
 
 	public College( String name, String initials, Address address, String phone, String cnpj, String site) {
@@ -127,6 +127,12 @@ public class College {
 		private College college;
 		
 		public Builder() {
+			college = new College();
+		}
+		
+		Builder withId(Long id) {
+			this.college.setId(id);
+			return this;
 		}
 		
 		public Builder withName(String name) {
@@ -162,6 +168,7 @@ public class College {
 		public College build() {
 			return this.college;
 		}
+
 		
 		
 	}
