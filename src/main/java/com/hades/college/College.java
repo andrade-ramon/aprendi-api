@@ -5,6 +5,7 @@ import static javax.persistence.CascadeType.ALL;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -26,19 +27,20 @@ public class College {
 	@Column(name = "name", nullable = false)
 	private String name;
 
-	@Column(name = "initials", nullable = true)
+	@Column(name = "initials")
 	private String initials;
 
+	@AttributeOverride(name = "value", column = @Column(name = "address"))
 	@Embedded
 	private Address address;
 	
-	@Column(name = "phone", nullable = true)
+	@Column(name = "phone")
 	private String phone;
 
-	@Column(name = "cnpj", nullable = true)
+	@Column(name = "cnpj")
 	private String cnpj;
 
-	@Column(name = "site", nullable = true)
+	@Column(name = "site")
 	private String site;
 
 	@OneToMany(mappedBy = "college", cascade = ALL)
@@ -119,6 +121,49 @@ public class College {
 
 	public void setGrades(List<CollegeGrade> grades) {
 		this.grades = grades;
+	}
+	
+	public static class Builder {
+		private College college;
+		
+		public Builder() {
+		}
+		
+		public Builder withName(String name) {
+			this.college.setName(name);
+			return this;
+		}
+
+		public Builder withInitials(String initials) {
+			this.college.setInitials(initials);
+			return this;
+		}
+
+		public Builder withAddress(Address address) {
+			this.college.setAddress(address);
+			return this;
+		}
+
+		public Builder withPhone(String phone) {
+			this.college.setPhone(phone);
+			return this;
+		}
+
+		public Builder withCnpj(String cnpj) {
+			this.college.setCnpj(cnpj);
+			return this;
+		}
+
+		public Builder withSite(String site) {
+			this.college.setSite(site);
+			return this;
+		}
+
+		public College build() {
+			return this.college;
+		}
+		
+		
 	}
 	
 	

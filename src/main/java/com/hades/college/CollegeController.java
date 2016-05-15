@@ -26,7 +26,7 @@ public class CollegeController {
 	@Autowired
 	private CollegeRepository repository;
 
-	@Post("/admin/colleges")
+	@Post("/admin/{version}/colleges")
 	@InternalEndpoint
 	@ResponseStatus(CREATED)
 	public Long updateOrSave(@Valid @RequestBody CollegeMecDTO dto) {
