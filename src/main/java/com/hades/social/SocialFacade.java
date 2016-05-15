@@ -1,6 +1,7 @@
 package com.hades.social;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.social.connect.UserProfile;
 import org.springframework.stereotype.Component;
 
@@ -25,8 +26,10 @@ public class SocialFacade {
 	@Autowired
 	private TokenAuthenticationService tokenService;
 	
+	@Value("${social.defaultPassword}")
+	private String defaultPassword;
+	
 	public String socialAuthenticator(UserProfile userProfile){
-		String defaultPassword = "1234";
 		String email, name;
 		email = userProfile.getEmail();
 		if (email == null){

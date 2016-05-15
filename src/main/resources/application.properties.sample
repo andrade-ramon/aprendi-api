@@ -12,5 +12,7 @@ hibernate.show_sql=false
 
 jwt.secret=
 
+social.defaultPassword=
+
 facebook.clientId=
 facebook.clientSecret=
