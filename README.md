@@ -1,21 +1,24 @@
-# Projeto hades
+<img align="right"  src="/../images/images/hades.png?raw=true" width="144" height="200"/>
+# Hades
 
-_Projeto de back-end de TCC da USJT_
+_API REST Backend_
 
-__Este projeto é somente uma API restful, acessada pelo [zeus](https://github.com/andrade-ramon/zeus)__
+__Este projeto é acessado pelo [zeus](https://github.com/qualfacul/zeus) e [poseidon](https://github.com/qualfacul/poseidon)__
 
-## Arquitetura
+### Arquitetura
 
 * Framework Spring (Boot, MVC, Data)
-* Servlet container Tomcat 8
+* Servlet container Tomcat 8 embedded
 * Gerenciador de dependências Gradle
 
-## Requisitos
+### Requisitos
 
-É necessario ter instalado o __gradle__.
+É necessario ter instalado o [gradle](http://gradle.org/gradle-download/).
 
-## Build & development
+### Build & development
 
-Para instalar as dependencias do projeto: ``gradle``
+Para instalar as dependencias do projeto: ``gradle build``
 
-Inicializar spring boot: ``gradle run``, rodando no endereço ``localhost:6660``
+Inicializar spring boot: ``gradle run``, rodando no endereço ``https://localhost:6660``
+
+_Modo debug:_ ``gradle runDebug``, com debug remoto na porta *9999*
