@@ -40,7 +40,7 @@ public class LoginInfo {
 
 	public LoginInfo(String login, String password, LoginOrigin loginOrigin) {
 		this.login = login;
-		this.password = (password != null ? BCrypt.hashpw(password, BCrypt.gensalt()) : "");
+		setPassword(password);
 		this.loginOrigin = loginOrigin;
 	}
 
@@ -65,7 +65,7 @@ public class LoginInfo {
 	}
 
 	public void setPassword(String password) {
-		this.password = password;
+		this.password = BCrypt.hashpw(password, BCrypt.gensalt());
 	}
 
 	public LoginOrigin getLoginOrigin() {
