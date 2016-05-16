@@ -6,7 +6,7 @@ import org.springframework.social.connect.UserProfile;
 import org.springframework.stereotype.Component;
 
 import com.hades.configuration.security.TokenAuthenticationService;
-import com.hades.login.LoginFacade;
+import com.hades.login.LoginService;
 import com.hades.login.LoginInfo;
 import com.hades.login.LoginInfoDTO;
 import com.hades.login.LoginOrigin;
@@ -18,7 +18,7 @@ import com.hades.user.UserRepository;
 public class SocialFacade {
 	
 	@Autowired
-	LoginFacade loginFacade;
+	LoginService loginService;
 	
 	@Autowired
 	private UserRepository userRepository;
@@ -38,7 +38,7 @@ public class SocialFacade {
 		LoginInfo loginInfo = new LoginInfo(email, defaultPassword, LoginOrigin.USER);
 		loginInfo.setPassword(defaultPassword);
 		try{
-			LoginInfoDTO loginInfoDTO = loginFacade.login(loginInfo);
+			LoginInfoDTO loginInfoDTO = loginService.login(loginInfo);
 			return loginInfoDTO.getToken();
 		}catch(Exception e){
 			name = userProfile.getName();
