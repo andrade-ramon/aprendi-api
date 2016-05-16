@@ -4,15 +4,13 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Service;
 
 import com.hades.configuration.security.TokenAuthenticationService;
 import com.hades.exceptions.LoginFailureException;
 
-@Component
-@RestController
-public class LoginFacade {
+@Service
+public class LoginService {
 	@Autowired
 	private LoginInfoRepository loginInfoRepository;
 	
