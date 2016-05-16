@@ -1,12 +1,12 @@
 package com.hades.admin;
 
+import static org.springframework.http.HttpStatus.CREATED;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hades.annotation.Post;
@@ -25,8 +25,7 @@ public class AdminController {
 	private TokenAuthenticationService tokenService;
 
 	@Transactional
-	@Post("/admin/register")
-	@ResponseStatus(HttpStatus.CREATED)
+	@Post(value = "/admin/register", responseStatus = CREATED)
 	public LoginInfoDTO register(@Valid @RequestBody AdminDTO adminDTO) {
 		LoginInfo loginInfo = new LoginInfo(adminDTO.getEmail(), adminDTO.getPassword(), LoginOrigin.ADMIN);
 		Admin admin = new Admin(adminDTO.getName(), adminDTO.getEmail());

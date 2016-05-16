@@ -7,7 +7,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hades.annotation.PermitEndpoint;
@@ -28,8 +27,7 @@ public class UserController {
 
 	@Transactional
 	@PermitEndpoint
-	@Post("/register")
-	@ResponseStatus(CREATED)
+	@Post(value = "/register", responseStatus = CREATED)
 	public LoginInfoDTO register(@Valid @RequestBody UserDTO userDTO) {
 		LoginInfo loginInfo = new LoginInfo(userDTO.getEmail(), userDTO.getPassword(), LoginOrigin.USER);
 		User user = new User(userDTO.getName(), userDTO.getEmail());
