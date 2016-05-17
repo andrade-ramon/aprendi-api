@@ -7,27 +7,27 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import com.hades.configuration.security.TokenAuthenticationService;
-import com.hades.exceptions.LoginFailureException;
 
 @Service
 public class LoginService {
+	
 	@Autowired
 	private LoginInfoRepository loginInfoRepository;
 	
 	@Autowired
 	private TokenAuthenticationService tokenService;
 	
-	public LoginInfoDTO login(LoginInfo loginInfoToAuthenticate){
+	public void login(LoginInfo loginInfoToAuthenticate, LogingServiceCallback callback){
 		Optional<LoginInfo> optionalLoginInfo = loginInfoRepository.findByLogin(loginInfoToAuthenticate.getLogin());
 
 		if (optionalLoginInfo.isPresent()) {
 			LoginInfo loginInfo = optionalLoginInfo.get();
 			if (BCrypt.checkpw(loginInfoToAuthenticate.getPassword(), loginInfo.getPassword())) {
 				tokenService.createTokenFor(loginInfo);
-				return new LoginInfoDTO(loginInfo);
+				callback.onSuccess(loginInfo);
 			}
 		}
 		
-		throw new LoginFailureException();
+		callback.onError(loginInfoToAuthenticate);
 	}
 }

@@ -18,6 +18,19 @@ public class LoginController {
 	@PermitEndpoint
 	@Post("/login")
 	public LoginInfoDTO login(@RequestBody @Valid LoginInfo loginInfoToAuthenticate) {
-		return loginService.login(loginInfoToAuthenticate);
+		loginService.login(loginInfoToAuthenticate, new LogingServiceCallback() {
+
+			@Override
+			public LoginInfoDTO onSuccess(LoginInfo loginInfo) {
+				return new LoginInfoDTO(loginInfo);
+			}
+
+			@Override
+			public void onError(LoginInfo loginInfo) {
+				//LOGA QUE DEU ERROR ,troca status E FAZ OUTRA COISA
+			}
+			
+		});
+		return null;
 	}
 }
