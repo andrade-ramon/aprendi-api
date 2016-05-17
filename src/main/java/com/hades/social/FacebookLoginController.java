@@ -1,10 +1,11 @@
 package com.hades.social;
 
+import static org.springframework.http.HttpStatus.ACCEPTED;
+
 import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.social.ExpiredAuthorizationException;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.UserProfile;
@@ -24,42 +25,44 @@ import com.hades.annotation.PermitEndpoint;
 @RestController
 public class FacebookLoginController {
 	
+	private static final String SCOPE_PERMISSION_EMAIL = "email";
+	private static final String SCOPE_PERMISSION_PUBLICPROFILE = "public_profile";
+	private static final String FACEBOOK_LOGIN_URL = "/facebook/login";
+
 	@Autowired
-	private SocialFacade socialFacade;
+	private SocialService socialService;
+	
+	@Autowired
+	private FacebookConnectionFactory connectionFactory;
 	
 	@Value("${social.redirectDomain}")
 	private String redirectDomain;
-	
-	@Value("${facebook.clientId}")
-	private String facebookClientId;
-	
-	@Value("${facebook.clientSecret}")
-	private String facebookClientSecret;
+
 	
 	@Get("/facebook")
 	@PermitEndpoint
-	@ResponseStatus(HttpStatus.ACCEPTED)
+	@ResponseStatus(ACCEPTED)
 	public String facebookLinkGenerator(){
-		FacebookConnectionFactory connectionFactory = new FacebookConnectionFactory(facebookClientId, facebookClientSecret);
 		OAuth2Operations oauthOperations = connectionFactory.getOAuthOperations();
 		OAuth2Parameters params = new OAuth2Parameters();
-		params.setScope("email");
-		params.setRedirectUri(redirectDomain+"/facebook/login");
+		params.setScope(SCOPE_PERMISSION_PUBLICPROFILE);
+		params.setScope(SCOPE_PERMISSION_EMAIL);
+		params.setRedirectUri(redirectDomain + FACEBOOK_LOGIN_URL);
 		return oauthOperations.buildAuthorizeUrl(GrantType.IMPLICIT_GRANT, params);
 	}
 	
-	@Get("/facebook/login")
+	@Get(FACEBOOK_LOGIN_URL)
 	@PermitEndpoint
-	@ResponseStatus(HttpStatus.ACCEPTED)
+	@ResponseStatus(ACCEPTED)
 	public String login(@NotNull @RequestParam(value = "access_token") String accessToken){
-		FacebookConnectionFactory connectionFactory = new FacebookConnectionFactory(facebookClientId, facebookClientSecret);
+		AccessGrant accessGrant = new AccessGrant(accessToken);
+		Connection<Facebook> connection;
 		try{
-			AccessGrant accessGrant = new AccessGrant(accessToken);
-			Connection<Facebook> connection = connectionFactory.createConnection(accessGrant);
-			UserProfile userProfile = connection.fetchUserProfile();
-			return socialFacade.socialAuthenticator(userProfile);
+			connection = connectionFactory.createConnection(accessGrant);
 		}catch(ExpiredAuthorizationException e){
 			return facebookLinkGenerator();
 		}
+		UserProfile userProfile = connection.fetchUserProfile();
+		return socialService.authenticate(userProfile, SocialType.FACEBOOK);
 	}
 }

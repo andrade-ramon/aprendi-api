@@ -29,7 +29,7 @@ public class User {
 	private String email;
 	
 	@OneToOne(cascade = ALL)
-	@JoinColumn(name = "login_info_id", referencedColumnName = "id", nullable = false)
+	@JoinColumn(name = "login_info_id", referencedColumnName = "id", nullable = true)
 	private LoginInfo loginInfo;
 	
 	@Deprecated // Hibernate eyes only
