@@ -12,7 +12,6 @@ hibernate.show_sql=false
 
 jwt.secret=
 
-social.defaultPassword=
 social.redirectDomain=https://dev.qualfacul.com:6660
 
 facebook.clientId=

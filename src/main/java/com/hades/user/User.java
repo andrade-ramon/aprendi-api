@@ -36,9 +36,10 @@ public class User {
 	public User() {
 	}
 
-	public User(String name, String email) {
+	public User(String name, String email, LoginInfo loginInfo) {
 		this.name = name;
 		this.email = email;
+		this.loginInfo = loginInfo;
 	}
 	
 	public Long getId() {

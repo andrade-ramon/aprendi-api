@@ -10,24 +10,30 @@ import com.hades.configuration.security.TokenAuthenticationService;
 
 @Service
 public class LoginService {
-	
+
 	@Autowired
 	private LoginInfoRepository loginInfoRepository;
-	
+
 	@Autowired
 	private TokenAuthenticationService tokenService;
-	
-	public void login(LoginInfo loginInfoToAuthenticate, LogingServiceCallback callback){
+
+	public void login(LoginInfo loginInfoToAuthenticate, LogingServiceCallback callback) {
 		Optional<LoginInfo> optionalLoginInfo = loginInfoRepository.findByLogin(loginInfoToAuthenticate.getLogin());
 
 		if (optionalLoginInfo.isPresent()) {
 			LoginInfo loginInfo = optionalLoginInfo.get();
+
+			if (loginInfoToAuthenticate.getPassword() == null || "".equals(loginInfoToAuthenticate.getPassword())
+					|| loginInfo.getPassword() == null || "".equals(loginInfo.getPassword())) {
+				callback.onError(loginInfoToAuthenticate);
+			}
+
 			if (BCrypt.checkpw(loginInfoToAuthenticate.getPassword(), loginInfo.getPassword())) {
 				tokenService.createTokenFor(loginInfo);
 				callback.onSuccess(loginInfo);
 			}
 		}
-		
+
 		callback.onError(loginInfoToAuthenticate);
 	}
 }
