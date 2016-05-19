@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.hades.annotation.PermitEndpoint;
 import com.hades.annotation.Post;
+import com.hades.exceptions.LoginFailureException;
 
 @RestController
 public class LoginController {
@@ -27,10 +28,11 @@ public class LoginController {
 
 			@Override
 			public void onError(LoginInfo loginInfo) {
-				//LOGA QUE DEU ERROR ,troca status E FAZ OUTRA COISA
+				throw new LoginFailureException();
 			}
 			
 		});
-		return null;
+		
+		throw new LoginFailureException();
 	}
 }

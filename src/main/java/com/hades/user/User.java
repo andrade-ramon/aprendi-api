@@ -6,8 +6,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -29,16 +29,17 @@ public class User {
 	private String email;
 	
 	@OneToOne(cascade = ALL)
-	@JoinColumn(name = "login_info_id", referencedColumnName = "id", nullable = true)
+	@PrimaryKeyJoinColumn(name = "login_info_id")
 	private LoginInfo loginInfo;
 	
 	@Deprecated // Hibernate eyes only
 	public User() {
 	}
 
-	public User(String name, String email) {
+	public User(String name, String email, LoginInfo loginInfo) {
 		this.name = name;
 		this.email = email;
+		this.loginInfo = loginInfo;
 	}
 	
 	public Long getId() {
