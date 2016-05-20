@@ -1,6 +1,9 @@
 package com.hades.user;
 
+import static com.hades.login.LoginOrigin.USER;
 import static org.springframework.http.HttpStatus.CREATED;
+
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -14,14 +17,13 @@ import com.hades.annotation.Post;
 import com.hades.configuration.security.TokenAuthenticationService;
 import com.hades.login.LoginInfo;
 import com.hades.login.LoginInfoDTO;
-import com.hades.login.LoginOrigin;
 
 @RestController
 public class UserController {
 
 	@Autowired
 	private UserRepository userRepository;
-	
+
 	@Autowired
 	private TokenAuthenticationService tokenService;
 
@@ -29,13 +31,21 @@ public class UserController {
 	@PermitEndpoint
 	@Post(value = "/register", responseStatus = CREATED)
 	public LoginInfoDTO register(@Valid @RequestBody UserDTO userDTO) {
-		LoginInfo loginInfo = new LoginInfo(userDTO.getEmail(), userDTO.getPassword(), LoginOrigin.USER);
-		User user = new User(userDTO.getName(), userDTO.getEmail());
-		user.setLoginInfo(loginInfo);
-		userRepository.save(user);
-		
-		tokenService.createTokenFor(loginInfo);
+		User user;
+		Optional<User> optionalUser = userRepository.findByEmail(userDTO.getEmail());
 
+		if (optionalUser.isPresent() && optionalUser.get().getLoginInfo().isFromFacebook()) {
+			user = optionalUser.get();
+			user.getLoginInfo().setLoginOrigin(USER);
+			user.getLoginInfo().setPassword(userDTO.getPassword());
+		} else {
+			LoginInfo loginInfo = new LoginInfo(userDTO.getEmail(), userDTO.getPassword(), USER);
+			user = new User(userDTO.getName(), userDTO.getEmail(), loginInfo);
+		}
+
+		userRepository.save(user);
+		LoginInfo loginInfo = user.getLoginInfo();
+		tokenService.createTokenFor(loginInfo);
 		return new LoginInfoDTO(loginInfo);
 	}
 

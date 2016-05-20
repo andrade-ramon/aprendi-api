@@ -66,6 +66,13 @@ dependencies {
 	compile 'org.springframework.boot:spring-boot-devtools'
 	compile 'org.mindrot:jbcrypt:0.3m'
 	
+	//Social Dependencies
+	compile 'org.springframework.social:spring-social-core:1.1.4.RELEASE'
+	compile 'org.springframework.social:spring-social-web:1.1.4.RELEASE'
+	compile 'org.springframework.social:spring-social-config:1.1.4.RELEASE'
+	compile 'org.springframework.social:spring-social-security:1.1.4.RELEASE'
+	compile 'org.springframework.social:spring-social-facebook:2.0.3.RELEASE'
+	
 	// Tests
 	compile 'org.springframework:spring-test'
 	compile 'junit:junit'

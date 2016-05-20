@@ -1,43 +1,38 @@
 package com.hades.login;
 
-import java.util.Optional;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hades.annotation.PermitEndpoint;
 import com.hades.annotation.Post;
-import com.hades.configuration.security.TokenAuthenticationService;
 import com.hades.exceptions.LoginFailureException;
 
 @RestController
 public class LoginController {
-
+	
 	@Autowired
-	private LoginInfoRepository loginInfoRepository;
-
-	@Autowired
-	private TokenAuthenticationService tokenService;
-
+	private LoginService loginService;
+	
 	@PermitEndpoint
 	@Post("/login")
 	public LoginInfoDTO login(@RequestBody @Valid LoginInfo loginInfoToAuthenticate) {
+		loginService.login(loginInfoToAuthenticate, new LogingServiceCallback() {
 
-		Optional<LoginInfo> optionalLoginInfo = loginInfoRepository.findByLogin(loginInfoToAuthenticate.getLogin());
-
-		if (optionalLoginInfo.isPresent()) {
-			LoginInfo loginInfo = optionalLoginInfo.get();
-
-			if (BCrypt.checkpw(loginInfoToAuthenticate.getPassword(), loginInfo.getPassword())) {
-				tokenService.createTokenFor(loginInfo);
+			@Override
+			public LoginInfoDTO onSuccess(LoginInfo loginInfo) {
 				return new LoginInfoDTO(loginInfo);
 			}
-		}
 
+			@Override
+			public void onError(LoginInfo loginInfo) {
+				throw new LoginFailureException();
+			}
+			
+		});
+		
 		throw new LoginFailureException();
 	}
 }
