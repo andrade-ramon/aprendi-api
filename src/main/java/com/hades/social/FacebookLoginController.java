@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.hades.annotation.Get;
 import com.hades.annotation.PermitEndpoint;
+import com.hades.annotation.Post;
 import com.hades.exceptions.InvalidFacebookTokenException;
 import com.hades.exceptions.LoginFailureException;
 import com.hades.login.LoginInfoDTO;
@@ -56,9 +57,8 @@ public class FacebookLoginController {
 		return oauthOperations.buildAuthorizeUrl(GrantType.IMPLICIT_GRANT, params);
 	}
 
-	@Get("/facebook/login")
 	@PermitEndpoint
-	@ResponseStatus(ACCEPTED)
+	@Post("/facebook/login")
 	public LoginInfoDTO login(@RequestParam(value = "access_token") String accessToken) {
 		Connection<Facebook> connection;
 		try {
