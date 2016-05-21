@@ -1,6 +1,5 @@
 package com.hades.user;
 
-import static com.hades.login.LoginOrigin.FACEBOOK;
 import static com.hades.login.LoginOrigin.USER;
 import static org.springframework.http.HttpStatus.CREATED;
 
@@ -11,7 +10,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hades.annotation.PermitEndpoint;
@@ -31,13 +29,12 @@ public class UserController {
 
 	@Transactional
 	@PermitEndpoint
-	@Post("/register")
-	@ResponseStatus(CREATED)
+	@Post(value = "/register", responseStatus = CREATED)
 	public LoginInfoDTO register(@Valid @RequestBody UserDTO userDTO) {
 		User user;
 		Optional<User> optionalUser = userRepository.findByEmail(userDTO.getEmail());
-		
-		if (optionalUser.isPresent() && optionalUser.get().getLoginInfo().getLoginOrigin().equals(FACEBOOK)) {
+
+		if (optionalUser.isPresent() && optionalUser.get().getLoginInfo().isFromFacebook()) {
 			user = optionalUser.get();
 			user.getLoginInfo().setLoginOrigin(USER);
 			user.getLoginInfo().setPassword(userDTO.getPassword());

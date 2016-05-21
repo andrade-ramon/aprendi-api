@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.hades.configuration.security.TokenAuthenticationService;
 
@@ -20,11 +21,9 @@ public class LoginService {
 	public void login(LoginInfo loginInfoToAuthenticate, LogingServiceCallback callback) {
 		Optional<LoginInfo> optionalLoginInfo = loginInfoRepository.findByLogin(loginInfoToAuthenticate.getLogin());
 
-		if (optionalLoginInfo.isPresent()) {
-			LoginInfo loginInfo = optionalLoginInfo.get();
-
-			if (loginInfoToAuthenticate.getPassword() == null || "".equals(loginInfoToAuthenticate.getPassword())
-					|| loginInfo.getPassword() == null || "".equals(loginInfo.getPassword())) {
+		optionalLoginInfo.ifPresent(loginInfo -> {
+			if (StringUtils.isEmpty(loginInfoToAuthenticate.getPassword())
+					|| StringUtils.isEmpty(loginInfo.getPassword())) {
 				callback.onError(loginInfoToAuthenticate);
 			}
 
@@ -32,7 +31,7 @@ public class LoginService {
 				tokenService.createTokenFor(loginInfo);
 				callback.onSuccess(loginInfo);
 			}
-		}
+		});
 
 		callback.onError(loginInfoToAuthenticate);
 	}

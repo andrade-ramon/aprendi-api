@@ -1,7 +1,10 @@
 package com.hades.social;
 
+import static com.hades.login.LoginOrigin.FACEBOOK;
 import static org.springframework.http.HttpStatus.ACCEPTED;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.social.ExpiredAuthorizationException;
@@ -20,7 +23,6 @@ import com.hades.annotation.Post;
 import com.hades.exceptions.InvalidFacebookTokenException;
 import com.hades.exceptions.LoginFailureException;
 import com.hades.login.LoginInfoDTO;
-import com.hades.login.LoginOrigin;
 
 @RestController
 public class FacebookLoginController {
@@ -33,6 +35,8 @@ public class FacebookLoginController {
 	@Value("${social.redirectDomain}")
 	private String redirectDomain;
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(FacebookLoginController.class);
+	
 	@Post("/facebook/login")
 	@PermitEndpoint
 	@ResponseStatus(ACCEPTED)
@@ -42,6 +46,7 @@ public class FacebookLoginController {
 			AccessGrant accessGrant = new AccessGrant(accessToken);
 			connection = connectionFactory.createConnection(accessGrant);
 		} catch (ExpiredAuthorizationException e) {
+			LOGGER.info("Facebook Authorization has expired for token: {}", accessToken);
 			throw e;
 		} catch (InvalidAuthorizationException e) {
 			throw new InvalidFacebookTokenException();
@@ -52,7 +57,7 @@ public class FacebookLoginController {
 			throw new LoginFailureException();
 		}
 
-		LoginInfoDTO loginInfoDTO = socialService.authenticate(userProfile, LoginOrigin.FACEBOOK);
+		LoginInfoDTO loginInfoDTO = socialService.authenticate(userProfile, FACEBOOK);
 		return loginInfoDTO;
 	}
 }

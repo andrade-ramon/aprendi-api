@@ -5,6 +5,7 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
 public class UserDTO {
+
 	@NotEmpty(message = "hades.user.empty.name")
 	private String name;
 

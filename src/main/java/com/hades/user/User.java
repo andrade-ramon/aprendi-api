@@ -20,18 +20,18 @@ public class User {
 	@Id
 	@GeneratedValue
 	private Long id;
-	
+
 	@NotNull
 	private String name;
-	
+
 	@NotNull
 	@Column(unique = true)
 	private String email;
-	
+
 	@OneToOne(cascade = ALL)
-	@JoinColumn(name = "login_info_id", referencedColumnName = "id", nullable = true)
+	@JoinColumn(name = "login_info_id", referencedColumnName = "id")
 	private LoginInfo loginInfo;
-	
+
 	@Deprecated // Hibernate eyes only
 	public User() {
 	}
@@ -41,7 +41,7 @@ public class User {
 		this.email = email;
 		this.loginInfo = loginInfo;
 	}
-	
+
 	public Long getId() {
 		return id;
 	}

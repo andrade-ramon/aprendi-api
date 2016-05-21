@@ -1,5 +1,7 @@
 package com.hades.login;
 
+import static com.hades.login.LoginOrigin.FACEBOOK;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -36,12 +38,17 @@ public class LoginInfo {
 	public LoginInfo() {
 	}
 
+	public LoginInfo(String login, LoginOrigin loginOrigin) {
+		this.login = login;
+		this.loginOrigin = loginOrigin;
+	}
+
 	public LoginInfo(String login, String password, LoginOrigin loginOrigin) {
 		this.login = login;
 		setPassword(password);
 		this.loginOrigin = loginOrigin;
 	}
-
+	
 	public Long getId() {
 		return id;
 	}
@@ -81,5 +88,8 @@ public class LoginInfo {
 	public void setToken(String token) {
 		this.token = token;
 	}
-
+	
+	public boolean isFromFacebook(){
+		return FACEBOOK.equals(this.loginOrigin);
+	}
 }

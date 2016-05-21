@@ -29,7 +29,7 @@ public class SocialService {
 		if (optionalUser.isPresent()) {
 			loginInfo = optionalUser.get().getLoginInfo();
 		} else {
-			loginInfo = new LoginInfo(email, null, LoginOrigin.FACEBOOK);
+			loginInfo = new LoginInfo(email, LoginOrigin.FACEBOOK);
 			User user = new User(userProfile.getName(), email, loginInfo);
 			userRepository.save(user);
 		}
