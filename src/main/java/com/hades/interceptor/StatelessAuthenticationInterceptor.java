@@ -22,7 +22,7 @@ import com.hades.configuration.security.TokenAuthenticationService;
 @Component
 public class StatelessAuthenticationInterceptor extends HandlerInterceptorAdapter {
 
-	@Value("${jwt.secret}")
+	@Value("${internal.secret}")
 	private String internalAuth;
 
 	@Autowired

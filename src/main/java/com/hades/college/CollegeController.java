@@ -29,7 +29,7 @@ public class CollegeController {
 		this.repository = repository;
 	}
 
-	@Post("/admin/{version}/colleges")
+	@Post("/api/{version}/colleges")
 	@InternalEndpoint
 	@ResponseStatus(CREATED)
 	public Long updateOrSave(@Valid @RequestBody CollegeMecDTO dto) {
