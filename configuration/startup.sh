@@ -20,6 +20,7 @@ git clone https://github.com/andrade-ramon/hades.git /opt/app
 
 # Get bucket files
 mkdir /mnt/bucket
+mkdir /etc/nginx/ssl
 gcsfuse qual-facul.appspot.com /mnt/bucket
 cp /mnt/bucket/ssl/qualfacul.com.key /etc/nginx/ssl
 cp /mnt/bucket/ssl/qualfacul.com.crt /etc/nginx/ssl
@@ -33,6 +34,8 @@ ln -s /opt/app/configuration/nginx.conf /etc/nginx/sites-enabled/
 # Gradle release
 cd /opt/app
 ./gradlew build
+
+sudo nginx -s reload
 
 java -jar build/libs/hades.jar &
 
