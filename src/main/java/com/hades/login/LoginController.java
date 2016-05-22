@@ -19,11 +19,13 @@ public class LoginController {
 	@PermitEndpoint
 	@Post("/login")
 	public LoginInfoDTO login(@RequestBody @Valid LoginInfo loginInfoToAuthenticate) {
-		loginService.login(loginInfoToAuthenticate, new LogingServiceCallback() {
+		LoginInfoDTO dto = new LoginInfoDTO();
+		
+		loginService.login(loginInfoToAuthenticate, new LoginServiceCallback() {
 
 			@Override
-			public LoginInfoDTO onSuccess(LoginInfo loginInfo) {
-				return new LoginInfoDTO(loginInfo);
+			public void onSuccess(LoginInfo loginInfo) {
+				dto.from(loginInfo);
 			}
 
 			@Override
@@ -33,6 +35,6 @@ public class LoginController {
 			
 		});
 		
-		throw new LoginFailureException();
+		return dto;
 	}
 }

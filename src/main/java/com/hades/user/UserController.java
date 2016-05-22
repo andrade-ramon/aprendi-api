@@ -46,7 +46,7 @@ public class UserController {
 		userRepository.save(user);
 		LoginInfo loginInfo = user.getLoginInfo();
 		tokenService.createTokenFor(loginInfo);
-		return new LoginInfoDTO(loginInfo);
+		return new LoginInfoDTO().from(loginInfo);
 	}
 
 }

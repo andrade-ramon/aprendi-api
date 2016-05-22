@@ -35,6 +35,6 @@ public class AdminController {
 		
 		tokenService.createTokenFor(loginInfo);
 
-		return new LoginInfoDTO(loginInfo);
+		return new LoginInfoDTO().from(loginInfo);
 	}
 }

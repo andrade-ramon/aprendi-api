@@ -35,7 +35,6 @@ public class SocialService {
 		}
 
 		tokenService.createTokenFor(loginInfo);
-		LoginInfoDTO loginInfoDTO = new LoginInfoDTO(loginInfo);
-		return loginInfoDTO;
+		return new LoginInfoDTO().from(loginInfo);
 	}
 }
