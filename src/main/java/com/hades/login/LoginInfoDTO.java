@@ -1,13 +1,9 @@
 package com.hades.login;
 
 public class LoginInfoDTO {
+
 	private String login;
 	private String token;
-
-	public LoginInfoDTO(LoginInfo loginInfo) {
-		this.login = loginInfo.getLogin();
-		this.token = loginInfo.getToken();
-	}
 
 	public String getLogin() {
 		return login;
@@ -23,6 +19,12 @@ public class LoginInfoDTO {
 
 	public void setToken(String token) {
 		this.token = token;
+	}
+
+	public LoginInfoDTO from(LoginInfo loginInfo) {
+		this.setLogin(loginInfo.getLogin());
+		this.setToken(loginInfo.getToken());
+		return this;
 	}
 
 }

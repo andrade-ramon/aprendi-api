@@ -8,6 +8,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -45,8 +46,13 @@ public class LoginInfo {
 
 	public LoginInfo(String login, String password, LoginOrigin loginOrigin) {
 		this.login = login;
-		setPassword(password);
+		this.password = password;
 		this.loginOrigin = loginOrigin;
+	}
+	
+	@PrePersist
+	public void hashPassword(){
+		this.password = password != null ? BCrypt.hashpw(password, BCrypt.gensalt()) : password;
 	}
 	
 	public Long getId() {
@@ -70,7 +76,7 @@ public class LoginInfo {
 	}
 
 	public void setPassword(String password) {
-		this.password = password != null ? BCrypt.hashpw(password, BCrypt.gensalt()) : password;
+		this.password = password;
 	}
 
 	public LoginOrigin getLoginOrigin() {
