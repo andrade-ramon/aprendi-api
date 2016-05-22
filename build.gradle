@@ -1,6 +1,7 @@
 apply plugin: 'eclipse'
 apply plugin: 'spring-boot'
 apply plugin: 'application'
+apply plugin: 'maven'
 
 mainClassName = 'com.hades.HadesApplication'
 version = version
@@ -35,7 +36,6 @@ sourceSets {
 buildscript {
     repositories {
         jcenter()
-        mavenLocal()
     }
 
     dependencies {
@@ -45,6 +45,7 @@ buildscript {
 
 repositories {
     mavenCentral()
+    mavenLocal()
 }
 
 configurations {
@@ -73,10 +74,12 @@ dependencies {
 	compile 'org.springframework.social:spring-social-security:1.1.4.RELEASE'
 	compile 'org.springframework.social:spring-social-facebook:2.0.3.RELEASE'
 	
-	// Tests
-	compile 'org.springframework:spring-test'
-	compile 'junit:junit'
-	compile 'org.mockito:mockito-all:1.8.4'
+    compile 'com.hermes:hermes:1.0'
+
+    // Tests
+    compile 'org.springframework:spring-test'
+    compile 'junit:junit'
+    compile 'org.mockito:mockito-all:1.8.4'
 }
 
 task(runDebug, dependsOn: 'classes', type: JavaExec) {

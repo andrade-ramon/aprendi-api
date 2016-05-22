@@ -1,38 +1,46 @@
 package com.hades.interceptor;
 
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import com.hades.annotation.InternalEndpoint;
 import com.hades.annotation.PermitEndpoint;
 import com.hades.configuration.security.TokenAuthenticationService;
 
 @Component
 public class StatelessAuthenticationInterceptor extends HandlerInterceptorAdapter {
 
+	@Value("${internal.secret}")
+	private String internalAuth;
+
 	@Autowired
 	private TokenAuthenticationService tokenService;
 
 	@Override
-	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
-			throws Exception {
-		
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+
 		prepareResponse(response);
 
 		if (handler instanceof HandlerMethod) {
 			HandlerMethod handlerMethod = (HandlerMethod) handler;
 			boolean permitRequest = handlerMethod.getMethod().isAnnotationPresent(PermitEndpoint.class);
 			boolean isErrorPath = "/error".equals(request.getServletPath());
+			boolean isInternal = internalAuth.equals(request.getHeader(AUTHORIZATION)) 
+							&& handlerMethod.getMethod().isAnnotationPresent(InternalEndpoint.class);
 
-			if (permitRequest | isErrorPath) {
+			if (permitRequest | isErrorPath | isInternal) {
 				return true;
 			}
 
@@ -53,8 +61,8 @@ public class StatelessAuthenticationInterceptor extends HandlerInterceptorAdapte
 		}
 
 		if (response.getHeader("Access-Control-Allow-Headers") == null) {
-			response.addHeader("Access-Control-Allow-Headers", "Authorization");
-			response.addHeader("Access-Control-Allow-Headers", "Content-Type");
+			response.addHeader("Access-Control-Allow-Headers", AUTHORIZATION);
+			response.addHeader("Access-Control-Allow-Headers", CONTENT_TYPE);
 		}
 	}
 }
