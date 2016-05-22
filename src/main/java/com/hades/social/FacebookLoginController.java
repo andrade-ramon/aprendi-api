@@ -6,7 +6,6 @@ import static org.springframework.http.HttpStatus.ACCEPTED;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.social.ExpiredAuthorizationException;
 import org.springframework.social.InvalidAuthorizationException;
 import org.springframework.social.connect.Connection;
@@ -31,9 +30,6 @@ public class FacebookLoginController {
 
 	@Autowired
 	private FacebookConnectionFactory connectionFactory;
-
-	@Value("${social.redirectDomain}")
-	private String redirectDomain;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(FacebookLoginController.class);
 	
