@@ -51,7 +51,7 @@ public class CollegeMecDTOToCollegeConverterTest {
 		assertEquals(dto.getSite(), converted.getSite());
 		assertEquals(dto.getCollegeMecGradeDTO().get(0).getValue(), converted.getGrades().get(0).getValue());
 		assertEquals(dto.getCollegeMecGradeDTO().get(0).getDate(), converted.getGrades().get(0).getDate());
-		assertEquals(dto.getCollegeMecGradeDTO().get(0).getGradeType(), converted.getGrades().get(0).getGradeOrigin());
+		assertEquals(dto.getCollegeMecGradeDTO().get(0).getGradeType(), converted.getGrades().get(0).getGradeType());
 	}
 
 }

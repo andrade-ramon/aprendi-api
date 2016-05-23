@@ -67,7 +67,7 @@ public class CollegeGrade {
 		this.college = college;
 	}
 
-	public GradeType getGradeOrigin() {
+	public GradeType getGradeType() {
 		return gradeType;
 	}
 

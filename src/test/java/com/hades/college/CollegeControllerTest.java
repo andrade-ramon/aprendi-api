@@ -15,24 +15,27 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.hades.college.converter.CollegeMecDTOToCollegeConverter;
+import com.hades.college.converter.CollegeToCollegeMecDTOConverter;
 import com.hermes.college.CollegeMecDTO;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CollegeControllerTest {
 
 	@Mock
-	private CollegeMecDTOToCollegeConverter converter;
-	
+	private CollegeMecDTOToCollegeConverter dtoConverter;
+	@Mock
+	private CollegeToCollegeMecDTOConverter collegeConverter;
 	@Mock
 	private CollegeRepository repository;
 	
 	private CollegeController subject;
 
 	private College validCollege;
+
 	
 	@Before
 	public void setup() {
-		subject = new CollegeController(converter, repository);
+		subject = new CollegeController(dtoConverter, collegeConverter, repository);
 		
 		validCollege = new College.Builder()
 						.withId(1L)
@@ -41,7 +44,7 @@ public class CollegeControllerTest {
 	
 	@Test
 	public void shouldUpdateOrSaveDtoWhenCollegeDoesNotExists() {
-		when(converter.convert(Mockito.any(CollegeMecDTO.class))).thenReturn(validCollege);
+		when(dtoConverter.convert(Mockito.any(CollegeMecDTO.class))).thenReturn(validCollege);
 		when(repository.findByCnpj(validCollege.getCnpj())).thenReturn(Optional.of(validCollege));
 		
 		CollegeMecDTO dto = new CollegeMecDTO();

@@ -1,0 +1,34 @@
+package com.hades.college.converter;
+
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
+
+import com.hades.college.College;
+import com.hermes.college.CollegeMecDTO;
+import com.hermes.college.CollegeMecGradeDTO;
+
+@Component
+public class CollegeToCollegeMecDTOConverter implements Converter<College, CollegeMecDTO>{
+
+	@Override
+	public CollegeMecDTO convert(College college) {
+		CollegeMecDTO dto = new CollegeMecDTO();
+		dto.setName(college.getName());
+		dto.setAddress(college.getAddress());
+		dto.setCnpj(college.getCnpj());
+		dto.setInitials(college.getInitials());
+		dto.setPhone(college.getPhone());
+		dto.setSite(college.getSite());
+		
+		college.getGrades().forEach(grade -> {
+			CollegeMecGradeDTO gradeDto = new CollegeMecGradeDTO();
+			gradeDto.setValue(grade.getValue());
+			gradeDto.setDate(grade.getDate());
+			gradeDto.setGradeType(grade.getGradeType());
+			dto.addCollegeMecGradeDTO(gradeDto);
+		});
+		
+		return dto;
+	}
+
+}
