@@ -14,7 +14,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.hades.user.User;
-import com.hermes.college.GradeType;
+import com.qualfacul.hermes.college.CollegeGradeType;
 
 @Entity
 @Table(name = "college_grade")
@@ -29,7 +29,7 @@ public class CollegeGrade {
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name = "grade_origin", nullable = false)
-	private GradeType gradeType;
+	private CollegeGradeType gradeType;
 	
 	@Column(name = "date")
 	private Calendar date;
@@ -44,7 +44,7 @@ public class CollegeGrade {
 	public CollegeGrade() {
 	}
 	
-	public CollegeGrade(College college, GradeType gradeType, Calendar date, Double value) {
+	public CollegeGrade(College college, CollegeGradeType gradeType, Calendar date, Double value) {
 		this.college = college;
 		this.gradeType = gradeType;
 		this.date = date;
@@ -67,11 +67,11 @@ public class CollegeGrade {
 		this.college = college;
 	}
 
-	public GradeType getGradeType() {
+	public CollegeGradeType getGradeType() {
 		return gradeType;
 	}
 
-	public void setGradeOrigin(GradeType gradeOrigin) {
+	public void setGradeOrigin(CollegeGradeType gradeOrigin) {
 		this.gradeType = gradeOrigin;
 	}
 

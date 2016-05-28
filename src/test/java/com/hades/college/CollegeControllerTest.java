@@ -16,7 +16,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.hades.college.converter.CollegeMecDTOToCollegeConverter;
 import com.hades.college.converter.CollegeToCollegeMecDTOConverter;
-import com.hermes.college.CollegeMecDTO;
+import com.qualfacul.hermes.college.CollegeMecDTO;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CollegeControllerTest {
@@ -28,14 +28,14 @@ public class CollegeControllerTest {
 	@Mock
 	private CollegeRepository repository;
 	
-	private CollegeController subject;
+	private CollegeApiController subject;
 
 	private College validCollege;
 
 	
 	@Before
 	public void setup() {
-		subject = new CollegeController(dtoConverter, collegeConverter, repository);
+		subject = new CollegeApiController(dtoConverter, collegeConverter, repository);
 		
 		validCollege = new College.Builder()
 						.withId(1L)

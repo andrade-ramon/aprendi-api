@@ -14,7 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.hermes.college.Address;
+import com.qualfacul.hermes.college.Address;
 
 @Entity
 @Table(name = "college")

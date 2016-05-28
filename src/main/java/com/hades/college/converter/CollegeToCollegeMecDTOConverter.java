@@ -4,8 +4,8 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 import com.hades.college.College;
-import com.hermes.college.CollegeMecDTO;
-import com.hermes.college.CollegeMecGradeDTO;
+import com.qualfacul.hermes.college.CollegeMecDTO;
+import com.qualfacul.hermes.college.CollegeMecGradeDTO;
 
 @Component
 public class CollegeToCollegeMecDTOConverter implements Converter<College, CollegeMecDTO>{

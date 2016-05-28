@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.hades.college.College;
 import com.hades.college.CollegeGrade;
-import com.hermes.college.CollegeMecDTO;
+import com.qualfacul.hermes.college.CollegeMecDTO;
 
 @Component
 public class CollegeMecDTOToCollegeConverter implements Converter<CollegeMecDTO, College>{

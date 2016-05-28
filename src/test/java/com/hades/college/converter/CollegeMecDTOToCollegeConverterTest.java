@@ -1,6 +1,6 @@
 package com.hades.college.converter;
 
-import static com.hermes.college.GradeType.MEC_IGC;
+import static com.qualfacul.hermes.college.CollegeGradeType.MEC_IGC;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Calendar;
@@ -9,9 +9,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.hades.college.College;
-import com.hermes.college.Address;
-import com.hermes.college.CollegeMecDTO;
-import com.hermes.college.CollegeMecGradeDTO;
+import com.qualfacul.hermes.college.Address;
+import com.qualfacul.hermes.college.CollegeMecDTO;
+import com.qualfacul.hermes.college.CollegeMecGradeDTO;
 
 
 public class CollegeMecDTOToCollegeConverterTest {
