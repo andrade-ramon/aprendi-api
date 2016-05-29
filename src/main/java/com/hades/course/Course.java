@@ -1,11 +1,14 @@
 package com.hades.course;
 
+import static javax.persistence.EnumType.STRING;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
@@ -24,11 +27,13 @@ public class Course {
 	@Column(name = "name", nullable = false)
 	private String name;
 
-	@Column(name = "modality")
-	private String modality;
+	@Enumerated(STRING)
+	@Column(name = "modality", nullable = false)
+	private CourseModality modality;
 	
-	@Column(name = "type")
-	private String type;
+	@Enumerated(STRING)
+	@Column(name = "degree", nullable = false)
+	private CourseDegree degree;
 	
 	@ManyToMany(mappedBy = "courses")
 	private List<College> colleges = new ArrayList<>();
@@ -37,10 +42,10 @@ public class Course {
 	public Course() { //Hibernate eyes only
 	}
 	
-	public Course(String name, String modality, String type, List<College> colleges) {
+	public Course(String name, CourseModality modality, CourseDegree degree, List<College> colleges) {
 		this.name = name;
 		this.modality = modality;
-		this.type = type;
+		this.degree = degree;
 		this.colleges = colleges;
 	}
 
@@ -60,20 +65,20 @@ public class Course {
 		this.name = name;
 	}
 
-	public String getModality() {
+	public CourseModality getModality() {
 		return modality;
 	}
 
-	public void setModality(String modality) {
+	public void setModality(CourseModality modality) {
 		this.modality = modality;
 	}
 
-	public String getType() {
-		return type;
+	public CourseDegree getDegree() {
+		return degree;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setDegree(CourseDegree degree) {
+		this.degree = degree;
 	}
 
 	public List<College> getColleges() {
@@ -98,6 +103,10 @@ public class Course {
 		
 		Course other = (Course) obj;
 		return Objects.equals(this.name, other.name);
+	}
+
+	public void addCollege(College college) {
+		this.colleges.add(college);
 	}
 	
 	

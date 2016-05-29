@@ -19,6 +19,7 @@ import com.hades.annotation.Post;
 import com.hades.college.converter.CollegeMecDTOToCollegeConverter;
 import com.hades.college.converter.CollegeToCollegeMecDTOConverter;
 import com.hades.course.Course;
+import com.hades.course.CourseRepository;
 import com.hades.course.converter.CourseMecDTOToCourseConverter;
 import com.hades.exceptions.college.NoColegeFound;
 import com.qualfacul.hermes.college.CollegeMecDTO;
@@ -31,15 +32,17 @@ public class CollegeApiController {
 	private CollegeToCollegeMecDTOConverter collegeToDtoConverter;
 	private CourseMecDTOToCourseConverter dtoToCourseConverter;
 
-	private CollegeRepository repository;
+	private CollegeRepository collegeRepository;
+	private CourseRepository courseRepository;
 
 	@Autowired
 	public CollegeApiController(CollegeMecDTOToCollegeConverter dtoToCollegeConverter, CollegeToCollegeMecDTOConverter collegeToDtoConverter,
-								CourseMecDTOToCourseConverter dtoToCourseConverter, CollegeRepository repository) {
+					CourseMecDTOToCourseConverter dtoToCourseConverter, CollegeRepository collegeRepository, CourseRepository courseRepository) {
 		this.dtoToCollegeConverter = dtoToCollegeConverter;
 		this.collegeToDtoConverter = collegeToDtoConverter;
 		this.dtoToCourseConverter = dtoToCourseConverter;
-		this.repository = repository;
+		this.collegeRepository = collegeRepository;
+		this.courseRepository = courseRepository;
 	}
 
 	@InternalEndpoint
@@ -47,7 +50,7 @@ public class CollegeApiController {
 	public Long updateOrSave(@Valid @RequestBody CollegeMecDTO dto) {
 		College collegeToMerge = dtoToCollegeConverter.convert(dto);
 
-		Optional<College> optionalCollege = repository.findByCnpj(collegeToMerge.getCnpj());
+		Optional<College> optionalCollege = collegeRepository.findByCnpj(collegeToMerge.getCnpj());
 
 		optionalCollege.ifPresent(college -> {
 			if (equalsIgnoreCase(collegeToMerge.getCnpj(), college.getCnpj())) {
@@ -55,7 +58,7 @@ public class CollegeApiController {
 			}
 		});
 
-		repository.save(collegeToMerge);
+		collegeRepository.save(collegeToMerge);
 
 		return collegeToMerge.getId();
 	}
@@ -63,7 +66,7 @@ public class CollegeApiController {
 	@InternalEndpoint
 	@Get("/api/{version}/colleges/{collegeId}")
 	public CollegeMecDTO getById(@PathVariable("collegeId") Long collegeId) {
-		Optional<College> optionalCollege = repository.findById(collegeId);
+		Optional<College> optionalCollege = collegeRepository.findById(collegeId);
 		College collegeFound = optionalCollege.orElseThrow(NoColegeFound::new);
 
 		return collegeToDtoConverter.convert(collegeFound);
@@ -72,19 +75,25 @@ public class CollegeApiController {
 	@InternalEndpoint
 	@Get("/api/{version}/colleges/count")
 	public Long count() {
-		return repository.count();
+		return collegeRepository.count();
 	}
 
 	@InternalEndpoint
 	@Post(value = "/api/{version}/colleges/{collegeId}/grades", responseStatus = CREATED)
-	public Long updateOrSaveGrade(@PathVariable Long collegeId, @Valid @RequestBody CourseMecDTO dto) {
-		Course courseToMerge = dtoToCourseConverter.convert(dto);
+	public void updateOrSaveGrade(@PathVariable Long collegeId, @Valid @RequestBody CourseMecDTO dto) {
+		Course courseToFind = dtoToCourseConverter.convert(dto);
+		
+		Course courseToMerge = courseRepository.findByNameAndDegreeAndModality(
+									courseToFind.getName(),
+									courseToFind.getDegree(),
+									courseToFind.getModality()
+								).orElse(courseToFind);
 
-		repository.findById(collegeId).ifPresent(college -> {
-			
+		collegeRepository.findById(collegeId).ifPresent(college -> {
+
 			List<Course> collegeCourses = college.getCourses();
-			
-			if (!collegeCourses.contains(college)) {
+
+			if (!collegeCourses.contains(courseToMerge)) {
 				collegeCourses.add(courseToMerge);
 			} else {
 				collegeCourses.stream()
@@ -92,9 +101,7 @@ public class CollegeApiController {
 							  .map(course -> courseToMerge);
 			}
 
-			repository.save(college);
+			collegeRepository.save(college);
 		});
-		
-		return courseToMerge.getId();
 	}
 }

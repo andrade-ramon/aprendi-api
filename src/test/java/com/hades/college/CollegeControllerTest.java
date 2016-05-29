@@ -16,17 +16,23 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.hades.college.converter.CollegeMecDTOToCollegeConverter;
 import com.hades.college.converter.CollegeToCollegeMecDTOConverter;
+import com.hades.course.CourseRepository;
+import com.hades.course.converter.CourseMecDTOToCourseConverter;
 import com.qualfacul.hermes.college.CollegeMecDTO;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CollegeControllerTest {
 
 	@Mock
-	private CollegeMecDTOToCollegeConverter dtoConverter;
+	private CollegeMecDTOToCollegeConverter dtoToCollegeConverter;
 	@Mock
-	private CollegeToCollegeMecDTOConverter collegeConverter;
+	private CollegeToCollegeMecDTOConverter collegeToDTOConverter;
 	@Mock
-	private CollegeRepository repository;
+	private CourseMecDTOToCourseConverter dtoToCourseConverter;
+	@Mock
+	private CollegeRepository collegeRepository;
+	@Mock
+	private CourseRepository courseRepository;
 	
 	private CollegeApiController subject;
 
@@ -35,8 +41,7 @@ public class CollegeControllerTest {
 	
 	@Before
 	public void setup() {
-		subject = new CollegeApiController(dtoConverter, collegeConverter, repository);
-		
+		subject = new CollegeApiController(dtoToCollegeConverter, collegeToDTOConverter, dtoToCourseConverter, collegeRepository, courseRepository);
 		validCollege = new College.Builder()
 						.withId(1L)
 						.build();
@@ -44,14 +49,14 @@ public class CollegeControllerTest {
 	
 	@Test
 	public void shouldUpdateOrSaveDtoWhenCollegeDoesNotExists() {
-		when(dtoConverter.convert(Mockito.any(CollegeMecDTO.class))).thenReturn(validCollege);
-		when(repository.findByCnpj(validCollege.getCnpj())).thenReturn(Optional.of(validCollege));
+		when(dtoToCollegeConverter.convert(Mockito.any(CollegeMecDTO.class))).thenReturn(validCollege);
+		when(collegeRepository.findByCnpj(validCollege.getCnpj())).thenReturn(Optional.of(validCollege));
 		
 		CollegeMecDTO dto = new CollegeMecDTO();
 		
 		assertEquals(validCollege.getId(), subject.updateOrSave(dto));
 		
-		verify(repository).save(validCollege);
+		verify(collegeRepository).save(validCollege);
 	}
 
 }
