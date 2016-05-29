@@ -13,6 +13,7 @@ public class CollegeToCollegeMecDTOConverter implements Converter<College, Colle
 	@Override
 	public CollegeMecDTO convert(College college) {
 		CollegeMecDTO dto = new CollegeMecDTO();
+		dto.setId(college.getId());
 		dto.setName(college.getName());
 		dto.setAddress(college.getAddress());
 		dto.setCnpj(college.getCnpj());

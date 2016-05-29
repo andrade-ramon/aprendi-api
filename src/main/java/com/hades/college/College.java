@@ -1,6 +1,7 @@
 package com.hades.college;
 
 import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.FetchType.LAZY;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,9 +12,13 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.hades.course.Course;
 import com.qualfacul.hermes.college.Address;
 
 @Entity
@@ -45,18 +50,26 @@ public class College {
 
 	@OneToMany(mappedBy = "college", cascade = ALL)
 	private List<CollegeGrade> grades = new ArrayList<>();
+	
+	@ManyToMany(fetch = LAZY, cascade = ALL)
+	@JoinTable(name = "college_course",
+			   joinColumns = { @JoinColumn(name = "college_id") },
+			   inverseJoinColumns = { @JoinColumn(name = "course_id") })
+	private List<Course> courses = new ArrayList<>();
 
 	@Deprecated // Hibernate eyes only
 	College() {
 	}
 
-	public College( String name, String initials, Address address, String phone, String cnpj, String site) {
+	public College(Long id, String name, String initials, Address address, String phone, String cnpj, String site, List<Course> courses) {
+		this.id = id;
 		this.name = name;
 		this.initials = initials;
 		this.address = address;
 		this.phone = phone;
 		this.cnpj = cnpj;
 		this.site = site;
+		this.courses = courses;
 	}
 
 	public Long getId() {
@@ -123,6 +136,14 @@ public class College {
 		this.grades = grades;
 	}
 	
+	public List<Course> getCourses() {
+		return courses;
+	}
+
+	public void setCourses(List<Course> courses) {
+		this.courses = courses;
+	}
+
 	public static class Builder {
 		private College college;
 		
@@ -169,9 +190,6 @@ public class College {
 			return this.college;
 		}
 
-		
-		
 	}
-	
 	
 }
