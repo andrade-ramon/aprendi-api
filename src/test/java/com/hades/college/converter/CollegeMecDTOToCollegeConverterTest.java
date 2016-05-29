@@ -1,6 +1,6 @@
 package com.hades.college.converter;
 
-import static com.qualfacul.hermes.college.CollegeGradeType.MEC_IGC;
+import static com.qualfacul.hermes.college.CollegeGradeOrigin.MEC_IGC;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Calendar;
@@ -36,7 +36,7 @@ public class CollegeMecDTOToCollegeConverterTest {
 		dto.setSite("www.test.com.br");
 		
 		CollegeMecGradeDTO gradeDTO = new CollegeMecGradeDTO();
-		gradeDTO.setGradeType(MEC_IGC);
+		gradeDTO.setGradeOrigin(MEC_IGC);
 		gradeDTO.setDate(Calendar.getInstance());
 		gradeDTO.setValue(2.0);
 		dto.addCollegeMecGradeDTO(gradeDTO);
@@ -51,7 +51,7 @@ public class CollegeMecDTOToCollegeConverterTest {
 		assertEquals(dto.getSite(), converted.getSite());
 		assertEquals(dto.getCollegeMecGradeDTO().get(0).getValue(), converted.getGrades().get(0).getValue());
 		assertEquals(dto.getCollegeMecGradeDTO().get(0).getDate(), converted.getGrades().get(0).getDate());
-		assertEquals(dto.getCollegeMecGradeDTO().get(0).getGradeType(), converted.getGrades().get(0).getGradeType());
+		assertEquals(dto.getCollegeMecGradeDTO().get(0).getGradeOrigin(), converted.getGrades().get(0).getGradeOrigin());
 	}
 
 }

@@ -25,7 +25,7 @@ public class CollegeToCollegeMecDTOConverter implements Converter<College, Colle
 			CollegeMecGradeDTO gradeDto = new CollegeMecGradeDTO();
 			gradeDto.setValue(grade.getValue());
 			gradeDto.setDate(grade.getDate());
-			gradeDto.setGradeType(grade.getGradeType());
+			gradeDto.setGradeOrigin(grade.getGradeOrigin());
 			dto.addCollegeMecGradeDTO(gradeDto);
 		});
 		

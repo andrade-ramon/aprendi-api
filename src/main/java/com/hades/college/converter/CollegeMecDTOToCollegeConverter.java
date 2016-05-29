@@ -28,7 +28,7 @@ public class CollegeMecDTOToCollegeConverter implements Converter<CollegeMecDTO,
 		List<CollegeGrade> grades = new ArrayList<>();
 		
 		dto.getCollegeMecGradeDTO().forEach(gradeDto -> {
-			CollegeGrade collegeGrade = new CollegeGrade(college, gradeDto.getGradeType(), gradeDto.getDate(), gradeDto.getValue());
+			CollegeGrade collegeGrade = new CollegeGrade(college, gradeDto.getGradeOrigin(), gradeDto.getDate(), gradeDto.getValue());
 			grades.add(collegeGrade);
 		});
 		

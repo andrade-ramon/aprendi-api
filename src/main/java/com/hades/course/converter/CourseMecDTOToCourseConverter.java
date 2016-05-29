@@ -12,6 +12,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 import com.hades.course.Course;
+import com.hades.course.CourseGrade;
 import com.qualfacul.poseidon.course.CourseMecDTO;
 
 @Component
@@ -38,6 +39,16 @@ public class CourseMecDTOToCourseConverter implements Converter<CourseMecDTO, Co
 		} else {
 			to.setDegree(SEQUENTIAL);
 		}
+		
+		from.getCourseMecGradeDTOs().forEach(gradeDTO -> {
+			CourseGrade grade = new CourseGrade();
+			
+			grade.setValue(gradeDTO.getValue());
+			grade.setGradeOrigin(gradeDTO.getGradeOrigin());
+			grade.setCourse(to);
+			
+			to.addGrade(grade);
+		});
 		
 		return to;
 	}

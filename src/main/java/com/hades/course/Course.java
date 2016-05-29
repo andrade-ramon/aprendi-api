@@ -1,5 +1,6 @@
 package com.hades.course;
 
+import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.EnumType.STRING;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.hades.college.College;
@@ -35,6 +37,9 @@ public class Course {
 	@Column(name = "degree", nullable = false)
 	private CourseDegree degree;
 	
+	@OneToMany(mappedBy = "course", cascade = ALL)
+	private List<CourseGrade> grades = new ArrayList<>(); 
+	
 	@ManyToMany(mappedBy = "courses")
 	private List<College> colleges = new ArrayList<>();
 
@@ -42,10 +47,11 @@ public class Course {
 	public Course() { //Hibernate eyes only
 	}
 	
-	public Course(String name, CourseModality modality, CourseDegree degree, List<College> colleges) {
+	public Course(String name, CourseModality modality, CourseDegree degree, List<CourseGrade> grades ,List<College> colleges) {
 		this.name = name;
 		this.modality = modality;
 		this.degree = degree;
+		this.grades = grades;
 		this.colleges = colleges;
 	}
 
@@ -80,6 +86,14 @@ public class Course {
 	public void setDegree(CourseDegree degree) {
 		this.degree = degree;
 	}
+	
+	public List<CourseGrade> getGrades() {
+		return grades;
+	}
+
+	public void setGrades(List<CourseGrade> grades) {
+		this.grades = grades;
+	}
 
 	public List<College> getColleges() {
 		return colleges;
@@ -87,6 +101,14 @@ public class Course {
 
 	public void setColleges(List<College> colleges) {
 		this.colleges = colleges;
+	}
+	
+	public void addCollege(College college) {
+		this.colleges.add(college);
+	}
+
+	public void addGrade(CourseGrade grade) {
+		this.grades.add(grade);
 	}
 
 	@Override
@@ -105,9 +127,4 @@ public class Course {
 		return Objects.equals(this.name, other.name);
 	}
 
-	public void addCollege(College college) {
-		this.colleges.add(college);
-	}
-	
-	
 }
