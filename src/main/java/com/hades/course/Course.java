@@ -16,6 +16,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+
 import com.hades.college.College;
 
 @Entity
@@ -30,11 +32,11 @@ public class Course {
 	private String name;
 
 	@Enumerated(STRING)
-	@Column(name = "modality", nullable = false)
+	@Column(name = "modality", nullable = false, length = 15)
 	private CourseModality modality;
 	
 	@Enumerated(STRING)
-	@Column(name = "degree", nullable = false)
+	@Column(name = "degree", nullable = false, length = 15)
 	private CourseDegree degree;
 	
 	@OneToMany(mappedBy = "course", cascade = ALL)
@@ -109,6 +111,11 @@ public class Course {
 
 	public void addGrade(CourseGrade grade) {
 		this.grades.add(grade);
+	}
+	
+	@Override
+	public String toString() {
+		return ReflectionToStringBuilder.toString(this);
 	}
 
 	@Override

@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+
 import com.hades.user.User;
 import com.qualfacul.hermes.college.CollegeGradeOrigin;
 
@@ -28,7 +30,7 @@ public class CollegeGrade {
 	private College college;
 	
 	@Enumerated(EnumType.STRING)
-	@Column(name = "grade_origin", nullable = false)
+	@Column(name = "grade_origin", nullable = false, length = 15)
 	private CollegeGradeOrigin gradeOrigin;
 	
 	@Column(name = "date")
@@ -98,5 +100,9 @@ public class CollegeGrade {
 	public void setUser(User user) {
 		this.user = user;
 	}
-
+	
+	@Override
+	public String toString() {
+		return ReflectionToStringBuilder.toString(this);
+	}
 }

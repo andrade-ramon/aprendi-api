@@ -20,37 +20,37 @@ public class CourseMecDTOToCourseConverter implements Converter<CourseMecDTO, Co
 
 	@Override
 	@SuppressWarnings("deprecation")
-	public Course convert(CourseMecDTO from) {
-		Course to = new Course();
+	public Course convert(CourseMecDTO courseMecDTO) {
+		Course course = new Course();
 		
-		to.setName(from.getName());
-		if (equalsIgnoreCase(from.getModality() , "Presencial")){
-			to.setModality(PRESENTIAL);
+		course.setName(courseMecDTO.getName());
+		if (equalsIgnoreCase(courseMecDTO.getModality() , "Presencial")){
+			course.setModality(PRESENTIAL);
 		} else {
-			to.setModality(DISTANCE);
+			course.setModality(DISTANCE);
 		}
 		
-		if (equalsIgnoreCase(from.getType() , "Tecnológico")){
-			to.setDegree(TECHNOLOGIST);
-		} else if (equalsIgnoreCase(from.getType() , "Bacharelado")) {
-			to.setDegree(BACHELOR);
-		} else if (equalsIgnoreCase(from.getType() , "Licenciatura")) {
-			to.setDegree(GRADUATION);
+		if (equalsIgnoreCase(courseMecDTO.getType() , "Tecnológico")){
+			course.setDegree(TECHNOLOGIST);
+		} else if (equalsIgnoreCase(courseMecDTO.getType() , "Bacharelado")) {
+			course.setDegree(BACHELOR);
+		} else if (equalsIgnoreCase(courseMecDTO.getType() , "Licenciatura")) {
+			course.setDegree(GRADUATION);
 		} else {
-			to.setDegree(SEQUENTIAL);
+			course.setDegree(SEQUENTIAL);
 		}
 		
-		from.getCourseMecGradeDTOs().forEach(gradeDTO -> {
+		courseMecDTO.getCourseMecGradeDTOs().forEach(gradeDTO -> {
 			CourseGrade grade = new CourseGrade();
 			
 			grade.setValue(gradeDTO.getValue());
 			grade.setGradeOrigin(gradeDTO.getGradeOrigin());
-			grade.setCourse(to);
+			grade.setCourse(course);
 			
-			to.addGrade(grade);
+			course.addGrade(grade);
 		});
 		
-		return to;
+		return course;
 	}
 
 }

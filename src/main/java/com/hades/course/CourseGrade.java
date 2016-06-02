@@ -28,7 +28,7 @@ public class CourseGrade {
 	private Course course;
 	
 	@Enumerated(EnumType.STRING)
-	@Column(name = "grade_origin", nullable = false)
+	@Column(name = "grade_origin", nullable = false, length = 15)
 	private CourseGradeOrigin gradeOrigin;
 	
 	@Column(name = "value", nullable = false)

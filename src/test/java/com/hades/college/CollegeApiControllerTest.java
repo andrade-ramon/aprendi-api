@@ -21,7 +21,7 @@ import com.hades.course.converter.CourseMecDTOToCourseConverter;
 import com.qualfacul.hermes.college.CollegeMecDTO;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CollegeControllerTest {
+public class CollegeApiControllerTest {
 
 	@Mock
 	private CollegeMecDTOToCollegeConverter dtoToCollegeConverter;
@@ -41,10 +41,9 @@ public class CollegeControllerTest {
 	
 	@Before
 	public void setup() {
-		subject = new CollegeApiController(dtoToCollegeConverter, collegeToDTOConverter, dtoToCourseConverter, collegeRepository, courseRepository);
-		validCollege = new College.Builder()
-						.withId(1L)
-						.build();
+		subject = new CollegeApiController(dtoToCollegeConverter, collegeToDTOConverter, 
+				dtoToCourseConverter, collegeRepository, courseRepository);
+		validCollege = new College.Builder().withId(1L).build();
 	}
 	
 	@Test

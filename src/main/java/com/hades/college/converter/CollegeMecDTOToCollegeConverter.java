@@ -14,20 +14,20 @@ import com.qualfacul.hermes.college.CollegeMecDTO;
 public class CollegeMecDTOToCollegeConverter implements Converter<CollegeMecDTO, College>{
 
 	@Override
-	public College convert(CollegeMecDTO dto) {
+	public College convert(CollegeMecDTO collegeMecDTO) {
 		
 		College college = new College.Builder()
-						.withName(dto.getName())
-						.withInitials(dto.getInitials())
-						.withAddress(dto.getAddress())
-						.withPhone(dto.getPhone())
-						.withCnpj(dto.getCnpj())
-						.withSite(dto.getSite())
+						.withName(collegeMecDTO.getName())
+						.withInitials(collegeMecDTO.getInitials())
+						.withAddress(collegeMecDTO.getAddress())
+						.withPhone(collegeMecDTO.getPhone())
+						.withCnpj(collegeMecDTO.getCnpj())
+						.withSite(collegeMecDTO.getSite())
 						.build();
 		
 		List<CollegeGrade> grades = new ArrayList<>();
 		
-		dto.getCollegeMecGradeDTO().forEach(gradeDto -> {
+		collegeMecDTO.getCollegeMecGradeDTO().forEach(gradeDto -> {
 			CollegeGrade collegeGrade = new CollegeGrade(college, gradeDto.getGradeOrigin(), gradeDto.getDate(), gradeDto.getValue());
 			grades.add(collegeGrade);
 		});

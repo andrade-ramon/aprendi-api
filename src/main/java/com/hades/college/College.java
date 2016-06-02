@@ -32,7 +32,7 @@ public class College {
 	@Column(name = "name", nullable = false)
 	private String name;
 
-	@Column(name = "initials")
+	@Column(name = "initials", length = 30)
 	private String initials;
 
 	@AttributeOverride(name = "value", column = @Column(name = "address"))
@@ -60,18 +60,7 @@ public class College {
 	@Deprecated // Hibernate eyes only
 	College() {
 	}
-
-	public College(Long id, String name, String initials, Address address, String phone, String cnpj, String site, List<Course> courses) {
-		this.id = id;
-		this.name = name;
-		this.initials = initials;
-		this.address = address;
-		this.phone = phone;
-		this.cnpj = cnpj;
-		this.site = site;
-		this.courses = courses;
-	}
-
+	
 	public Long getId() {
 		return id;
 	}

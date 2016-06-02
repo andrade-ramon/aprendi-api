@@ -1,6 +1,5 @@
 package com.hades.college;
 
-import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 import static org.springframework.http.HttpStatus.CREATED;
 
 import java.util.List;
@@ -21,7 +20,7 @@ import com.hades.college.converter.CollegeToCollegeMecDTOConverter;
 import com.hades.course.Course;
 import com.hades.course.CourseRepository;
 import com.hades.course.converter.CourseMecDTOToCourseConverter;
-import com.hades.exceptions.college.NoColegeFound;
+import com.hades.exceptions.college.ColegeNotFound;
 import com.qualfacul.hermes.college.CollegeMecDTO;
 import com.qualfacul.poseidon.course.CourseMecDTO;
 
@@ -49,17 +48,8 @@ public class CollegeApiController {
 	@Post(value = "/api/{version}/colleges", responseStatus = CREATED)
 	public Long updateOrSave(@Valid @RequestBody CollegeMecDTO dto) {
 		College collegeToMerge = dtoToCollegeConverter.convert(dto);
-
-		Optional<College> optionalCollege = collegeRepository.findByCnpj(collegeToMerge.getCnpj());
-
-		optionalCollege.ifPresent(college -> {
-			if (equalsIgnoreCase(collegeToMerge.getCnpj(), college.getCnpj())) {
-				collegeToMerge.setId(college.getId());
-			}
-		});
-
 		collegeRepository.save(collegeToMerge);
-
+		
 		return collegeToMerge.getId();
 	}
 
@@ -67,7 +57,7 @@ public class CollegeApiController {
 	@Get("/api/{version}/colleges/{collegeId}")
 	public CollegeMecDTO getById(@PathVariable("collegeId") Long collegeId) {
 		Optional<College> optionalCollege = collegeRepository.findById(collegeId);
-		College collegeFound = optionalCollege.orElseThrow(NoColegeFound::new);
+		College collegeFound = optionalCollege.orElseThrow(ColegeNotFound::new);
 
 		return collegeToDtoConverter.convert(collegeFound);
 	}
