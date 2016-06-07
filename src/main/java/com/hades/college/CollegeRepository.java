@@ -8,7 +8,7 @@ import org.springframework.data.repository.RepositoryDefinition;
 public interface CollegeRepository {
 
 	College save(College college);
-
+	
 	Optional<College> findByCnpj(String cnpj);
 
 	Optional<College> findById(Long collegeId);

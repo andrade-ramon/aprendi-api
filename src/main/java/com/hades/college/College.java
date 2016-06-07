@@ -16,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.hades.course.Course;
@@ -24,10 +25,12 @@ import com.qualfacul.hermes.college.Address;
 @Entity
 @Table(name = "college")
 public class College {
-
 	@Id
 	@GeneratedValue
 	private Long id;
+
+	@OneToOne(mappedBy = "college", cascade = ALL)
+	private CollegeMec collegeMec;
 
 	@Column(name = "name", nullable = false)
 	private String name;
@@ -38,7 +41,7 @@ public class College {
 	@AttributeOverride(name = "value", column = @Column(name = "address"))
 	@Embedded
 	private Address address;
-	
+
 	@Column(name = "phone")
 	private String phone;
 
@@ -50,23 +53,32 @@ public class College {
 
 	@OneToMany(mappedBy = "college", cascade = ALL)
 	private List<CollegeGrade> grades = new ArrayList<>();
-	
+
 	@ManyToMany(fetch = LAZY, cascade = ALL)
-	@JoinTable(name = "college_course",
-			   joinColumns = { @JoinColumn(name = "college_id") },
-			   inverseJoinColumns = { @JoinColumn(name = "course_id") })
+	@JoinTable(name = "college_course", 
+				joinColumns = { @JoinColumn(name = "college_id") }, 
+				inverseJoinColumns = { @JoinColumn(name = "course_id") })
 	private List<Course> courses = new ArrayList<>();
 
 	@Deprecated // Hibernate eyes only
 	College() {
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public CollegeMec getCollegeMec() {
+		return collegeMec;
+	}
+
+	public void setCollegeMec(CollegeMec collegeMec) {
+		this.collegeMec = collegeMec;
+		collegeMec.setCollege(this);
 	}
 
 	public String getName() {
@@ -124,7 +136,7 @@ public class College {
 	public void setGrades(List<CollegeGrade> grades) {
 		this.grades = grades;
 	}
-	
+
 	public List<Course> getCourses() {
 		return courses;
 	}
@@ -135,16 +147,16 @@ public class College {
 
 	public static class Builder {
 		private College college;
-		
+
 		public Builder() {
 			college = new College();
 		}
-		
+
 		Builder withId(Long id) {
 			this.college.setId(id);
 			return this;
 		}
-		
+
 		public Builder withName(String name) {
 			this.college.setName(name);
 			return this;
@@ -174,11 +186,16 @@ public class College {
 			this.college.setSite(site);
 			return this;
 		}
+		
+		public Builder withCollegeMec(CollegeMec collegeMec) {
+			this.college.setCollegeMec(collegeMec);
+			return this;
+		}
 
 		public College build() {
 			return this.college;
 		}
 
 	}
-	
+
 }

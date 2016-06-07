@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.hades.college.College;
 import com.hades.college.CollegeGrade;
+import com.hades.college.CollegeMec;
 import com.qualfacul.hermes.college.CollegeMecDTO;
 
 @Component
@@ -15,6 +16,7 @@ public class CollegeMecDTOToCollegeConverter implements Converter<CollegeMecDTO,
 
 	@Override
 	public College convert(CollegeMecDTO collegeMecDTO) {
+		CollegeMec collegeMec = new CollegeMec(collegeMecDTO.getMecId());
 		
 		College college = new College.Builder()
 						.withName(collegeMecDTO.getName())
@@ -23,6 +25,7 @@ public class CollegeMecDTOToCollegeConverter implements Converter<CollegeMecDTO,
 						.withPhone(collegeMecDTO.getPhone())
 						.withCnpj(collegeMecDTO.getCnpj())
 						.withSite(collegeMecDTO.getSite())
+						.withCollegeMec(collegeMec)
 						.build();
 		
 		List<CollegeGrade> grades = new ArrayList<>();

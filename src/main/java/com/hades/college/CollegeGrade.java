@@ -30,7 +30,7 @@ public class CollegeGrade {
 	private College college;
 	
 	@Enumerated(EnumType.STRING)
-	@Column(name = "grade_origin", nullable = false, length = 15)
+	@Column(name = "grade_origin", nullable = false, length = 20)
 	private CollegeGradeOrigin gradeOrigin;
 	
 	@Column(name = "date")

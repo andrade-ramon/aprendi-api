@@ -43,14 +43,15 @@ public class CollegeApiController {
 		this.collegeRepository = collegeRepository;
 		this.courseRepository = courseRepository;
 	}
-
+	
 	@InternalEndpoint
 	@Post(value = "/api/{version}/colleges", responseStatus = CREATED)
 	public Long updateOrSave(@Valid @RequestBody CollegeMecDTO dto) {
-		College collegeToMerge = dtoToCollegeConverter.convert(dto);
-		collegeRepository.save(collegeToMerge);
+		College college = dtoToCollegeConverter.convert(dto);
 		
-		return collegeToMerge.getId();
+		collegeRepository.save(college);
+		
+		return college.getId();
 	}
 
 	@InternalEndpoint
