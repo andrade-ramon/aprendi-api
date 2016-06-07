@@ -19,6 +19,7 @@ import javax.persistence.Table;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 import com.hades.college.College;
+import com.hades.validation.AccentNormalizer;
 
 @Entity
 @Table(name = "course")
@@ -131,7 +132,7 @@ public class Course {
 			return false;
 		
 		Course other = (Course) obj;
-		return Objects.equals(this.name, other.name);
+		return Objects.equals(AccentNormalizer.removeAccents(this.name), AccentNormalizer.removeAccents(other.name));
 	}
 
 }

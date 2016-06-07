@@ -20,6 +20,7 @@ public class CollegeToCollegeMecDTOConverter implements Converter<College, Colle
 		dto.setInitials(college.getInitials());
 		dto.setPhone(college.getPhone());
 		dto.setSite(college.getSite());
+		dto.setMecId(college.getCollegeMec().getId());
 		
 		college.getGrades().forEach(grade -> {
 			CollegeMecGradeDTO gradeDto = new CollegeMecGradeDTO();

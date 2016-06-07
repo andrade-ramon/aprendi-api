@@ -63,6 +63,10 @@ public class College {
 	@Deprecated // Hibernate eyes only
 	College() {
 	}
+	
+	public College(Long id) {
+		this.id = id;
+	}
 
 	public Long getId() {
 		return id;

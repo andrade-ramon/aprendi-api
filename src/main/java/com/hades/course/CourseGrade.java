@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.hades.college.College;
 import com.hades.user.User;
 import com.qualfacul.poseidon.course.CourseGradeOrigin;
 
@@ -26,6 +27,9 @@ public class CourseGrade {
 	
 	@OneToOne(cascade = ALL)
 	private Course course;
+	
+	@OneToOne(cascade = ALL)
+	private College college;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name = "grade_origin", nullable = false, length = 15)
@@ -87,6 +91,14 @@ public class CourseGrade {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+	
+	public College getCollege() {
+		return college;
+	}
+
+	public void setCollege(College college) {
+		this.college = college;
 	}
 	
 }

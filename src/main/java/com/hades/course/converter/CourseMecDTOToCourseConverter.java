@@ -11,13 +11,13 @@ import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+import com.hades.college.College;
 import com.hades.course.Course;
 import com.hades.course.CourseGrade;
 import com.qualfacul.poseidon.course.CourseMecDTO;
 
 @Component
 public class CourseMecDTOToCourseConverter implements Converter<CourseMecDTO, Course> {
-
 	@Override
 	@SuppressWarnings("deprecation")
 	public Course convert(CourseMecDTO courseMecDTO) {
@@ -46,6 +46,7 @@ public class CourseMecDTOToCourseConverter implements Converter<CourseMecDTO, Co
 			grade.setValue(gradeDTO.getValue());
 			grade.setGradeOrigin(gradeDTO.getGradeOrigin());
 			grade.setCourse(course);
+			grade.setCollege(new College(gradeDTO.getCollegeId()));
 			
 			course.addGrade(grade);
 		});

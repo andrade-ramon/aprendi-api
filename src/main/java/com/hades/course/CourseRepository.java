@@ -8,5 +8,7 @@ import org.springframework.data.repository.RepositoryDefinition;
 public interface CourseRepository {
 
 	Optional<Course> findByNameAndDegreeAndModality(String name, CourseDegree degree, CourseModality modality);
+	
+	Course save(Course course);
 
 }

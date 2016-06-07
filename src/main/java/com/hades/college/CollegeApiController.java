@@ -79,9 +79,8 @@ public class CollegeApiController {
 									courseToFind.getDegree(),
 									courseToFind.getModality()
 								).orElse(courseToFind);
-
+				
 		collegeRepository.findById(collegeId).ifPresent(college -> {
-
 			List<Course> collegeCourses = college.getCourses();
 
 			if (!collegeCourses.contains(courseToMerge)) {
