@@ -14,9 +14,20 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
 
+import org.hibernate.search.annotations.Boost;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Indexed;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+@XmlRootElement
+@Indexed
 @Entity
 @Table(name = "college")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class College {
 
 	@Id
@@ -27,24 +38,34 @@ public class College {
 	@Column(name = "mec_id", unique = true)
 	private long mecId;
 
+	@Field
 	@Column(name = "name", nullable = false)
+	@Boost(1.8f)
 	private String name;
 
+	@Field
 	@Column(name = "initials", length = 30)
+	@Boost(2.0f)
 	private String initials;
 
 	@OneToMany(mappedBy = "college", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
 	private List<CollegeAddress> collegeAdresses = new ArrayList<>();
 
+	@Field
 	@Column(name = "phone")
+	@Boost(1.5f)
 	private String phone;
 
+	@Field
 	@Column(name = "cnpj")
 	private String cnpj;
 
+	@Field
 	@Column(name = "site")
+	@Boost(1.5f)
 	private String site;
 
+	@JsonManagedReference
 	@OneToMany(mappedBy = "college", cascade = ALL)
 	private List<CollegeGrade> grades = new ArrayList<>();
 	

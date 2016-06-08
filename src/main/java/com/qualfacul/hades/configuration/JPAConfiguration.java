@@ -50,6 +50,8 @@ class JPAConfiguration {
 		properties.put("hibernate.naming_strategy", "org.hibernate.cfg.ImprovedNamingStrategy");
 		properties.put("hibernate.format_sql", "true");
 		properties.put("hibernate.show_sql", env.getRequiredProperty("hibernate.show_sql"));
+		properties.put("hibernate.search.default.directory_provider", "filesystem");
+		properties.put("hibernate.search.default.indexBase", "/var/lucene/indexes/");
 
 		entityManagerFactoryBean.setJpaProperties(properties);
 

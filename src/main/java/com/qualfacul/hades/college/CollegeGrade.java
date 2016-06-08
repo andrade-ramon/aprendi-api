@@ -16,6 +16,7 @@ import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.qualfacul.hades.user.User;
 
 @Entity
@@ -27,6 +28,7 @@ public class CollegeGrade {
 	private Long id;
 	
 	@NotNull
+	@JsonBackReference
 	@OneToOne(cascade = ALL)
 	private College college;
 	
