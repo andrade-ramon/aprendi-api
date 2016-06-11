@@ -24,9 +24,6 @@ public class CollegeSearchController {
 	@PermitEndpoint
 	@Get("/colleges")
 	public List<College> list(@NotBlank @RequestParam("q") String query) {
-		
-		List<College> colleges = searchRepository.listByQyery(query);
-		
-		return colleges;
+		return searchRepository.listByQyery(query);
 	}
 }
