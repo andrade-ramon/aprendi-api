@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import org.apache.lucene.search.Query;
 import org.hibernate.Session;
@@ -12,61 +13,70 @@ import org.hibernate.search.FullTextQuery;
 import org.hibernate.search.FullTextSession;
 import org.hibernate.search.Search;
 import org.hibernate.search.query.dsl.QueryBuilder;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
+@Repository
+@Transactional
 public class SearchQuery<T> {
 
 	private static final int MAX_RESULTS_PER_PAGE = 40;
-	Session session;
-	String match;
-	Class<?> clazz;
-	Set<String> fieldNames;
-	float threshold;
-	Integer page;
 
-	public SearchQuery<T>.Entities withManager(EntityManager manager) {
-		this.session = manager.unwrap(Session.class);
-		return new Entities(); 
+	@PersistenceContext
+	private EntityManager manager;
+	
+	private String match;
+	private Class<?> clazz;
+	private Set<String> fieldNames = new HashSet<>();
+	private Float threshold;
+	private Integer currentPage;
+	
+	public SearchQueryBuilder builder() {
+		return new SearchQueryBuilder();
 	}
-	public class Entities {
-		public SearchQuery<T>.Threshold forEntity(Class<?> c) {
-			fieldNames = new HashSet<>();
+	
+	public class SearchQueryBuilder {
+		
+		public SearchQueryWithThreshold forEntity(Class<?> c) {
 			clazz = c;
 	        for (Field field : clazz.getDeclaredFields()) {
 	            if (field.isAnnotationPresent(org.hibernate.search.annotations.Field.class)) {
 	               fieldNames.add(field.getName()); 
 	            }
 	        }
-	        return new Threshold();
+	        return new SearchQueryWithThreshold();
 		}
 	}
-	public class Threshold {
+	
+	public class SearchQueryWithThreshold {
 
-		public Matcher withThreshold(float t) {
+		public SearchQueryWithMatcher withThreshold(Float t) {
 			threshold = t;
-			return new Matcher();
+			return new SearchQueryWithMatcher();
 		}
 	}
 
-	public class Matcher {
+	public class SearchQueryWithMatcher {
 		
-		public SearchQuery<T>.Pagination matching(String m) {
+		public SearchQueryPagination matching(String m) {
 			match = m;
-			return new Pagination();
+			return new SearchQueryPagination();
 		}
 	}
 	
-	public class Pagination {
+	public class SearchQueryPagination {
 		
-		public SearchQuery<T>.Factory forPage(Integer pageNum) {
-			page = pageNum != 0 ? pageNum : 1;
-			return new Factory();
+		public SearchQueryFactory forPage(Integer pageNum) {
+			currentPage = pageNum != null && currentPage != 0 ? pageNum : 1;
+			return new SearchQueryFactory();
 		}
 	}
 	
-	public class Factory {
+	public class SearchQueryFactory {
 
 		@SuppressWarnings("unchecked")
 		public PaginatedSearch<T> build() {
+			Session session = manager.unwrap(Session.class);
 			FullTextSession fullTextSession = Search.getFullTextSession(session);
 			
 			QueryBuilder queryBuilder = fullTextSession
@@ -84,12 +94,12 @@ public class SearchQuery<T> {
 			
 			FullTextQuery query = fullTextSession.createFullTextQuery(luceneQuery, clazz);
 			query.setMaxResults(MAX_RESULTS_PER_PAGE);
-			query.setFirstResult((page-1) * MAX_RESULTS_PER_PAGE);
+			query.setFirstResult((currentPage-1) * MAX_RESULTS_PER_PAGE);
 			
 			PaginatedSearch<T> paginatedSearch = new PaginatedSearch<>(
 								query.list(),
 								query.getResultSize(),
-								page,
+								currentPage,
 								MAX_RESULTS_PER_PAGE
 							);
 			

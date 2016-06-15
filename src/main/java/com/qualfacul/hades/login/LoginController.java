@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.qualfacul.hades.annotation.PermitEndpoint;
+import com.hades.annotation.PublicEndpoint;
 import com.qualfacul.hades.annotation.Post;
 import com.qualfacul.hades.exceptions.LoginFailureException;
 
@@ -16,7 +16,7 @@ public class LoginController {
 	@Autowired
 	private LoginService loginService;
 	
-	@PermitEndpoint
+	@PublicEndpoint
 	@Post("/login")
 	public LoginInfoDTO login(@RequestBody @Valid LoginInfo loginInfoToAuthenticate) {
 		LoginInfoDTO dto = new LoginInfoDTO();

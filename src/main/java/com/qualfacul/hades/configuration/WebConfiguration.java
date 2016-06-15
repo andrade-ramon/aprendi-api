@@ -10,8 +10,9 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
+import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module.Feature;
 import com.qualfacul.hades.annotation.WebComponent;
 import com.qualfacul.hades.interceptor.StatelessAuthenticationInterceptor;
 
@@ -38,7 +39,9 @@ class WebConfiguration extends WebMvcConfigurerAdapter {
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         final MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
         final ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        Hibernate4Module module = new Hibernate4Module();
+        module.enable(Feature.FORCE_LAZY_LOADING);
+		objectMapper.registerModule(module);
         converter.setObjectMapper(objectMapper);
         converters.add(converter);
         super.configureMessageConverters(converters);

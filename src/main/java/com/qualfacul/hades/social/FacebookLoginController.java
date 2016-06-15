@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.qualfacul.hades.annotation.PermitEndpoint;
+import com.hades.annotation.PublicEndpoint;
 import com.qualfacul.hades.annotation.Post;
 import com.qualfacul.hades.exceptions.InvalidFacebookTokenException;
 import com.qualfacul.hades.exceptions.LoginFailureException;
@@ -34,7 +34,7 @@ public class FacebookLoginController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(FacebookLoginController.class);
 	
 	@Post("/facebook/login")
-	@PermitEndpoint
+	@PublicEndpoint
 	@ResponseStatus(ACCEPTED)
 	public LoginInfoDTO login(@RequestBody String accessToken) {
 		Connection<Facebook> connection;

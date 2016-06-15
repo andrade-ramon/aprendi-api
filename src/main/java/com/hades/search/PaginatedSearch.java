@@ -15,7 +15,7 @@ public class PaginatedSearch<T> {
 		this.count = count;
 		this.page = page;
 		this.pageSize = pageSize;
-		this.totalPages = count / pageSize;
+		this.totalPages = (Integer) ((count / pageSize) + 1);
 	}
 
 	public List<T> getSearchResult() {

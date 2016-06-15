@@ -15,7 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import com.qualfacul.hades.annotation.PermitEndpoint;
+import com.hades.annotation.PublicEndpoint;
 import com.qualfacul.hades.annotation.WebComponent;
 import com.qualfacul.hades.configuration.security.TokenAuthenticationService;
 
@@ -32,7 +32,7 @@ public class StatelessAuthenticationInterceptor extends HandlerInterceptorAdapte
 
 		if (handler instanceof HandlerMethod) {
 			HandlerMethod handlerMethod = (HandlerMethod) handler;
-			boolean permitRequest = handlerMethod.getMethod().isAnnotationPresent(PermitEndpoint.class);
+			boolean permitRequest = handlerMethod.getMethod().isAnnotationPresent(PublicEndpoint.class);
 			boolean isErrorPath = "/error".equals(request.getServletPath());
 			
 			if (permitRequest | isErrorPath) {

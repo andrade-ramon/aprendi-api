@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.qualfacul.hades.annotation.PermitEndpoint;
+import com.hades.annotation.PublicEndpoint;
 import com.qualfacul.hades.annotation.Post;
 import com.qualfacul.hades.configuration.security.TokenAuthenticationService;
 import com.qualfacul.hades.exceptions.EmailAlreadyInUseException;
@@ -29,7 +29,7 @@ public class UserController {
 	private TokenAuthenticationService tokenService;
 
 	@Transactional
-	@PermitEndpoint
+	@PublicEndpoint
 	@Post(value = "/register", responseStatus = CREATED)
 	public LoginInfoDTO register(@Valid @RequestBody UserDTO userDTO) throws EmailAlreadyInUseException {
 		User user;

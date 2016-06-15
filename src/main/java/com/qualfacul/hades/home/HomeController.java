@@ -3,8 +3,8 @@ package com.qualfacul.hades.home;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hades.annotation.PublicEndpoint;
 import com.qualfacul.hades.annotation.Get;
-import com.qualfacul.hades.annotation.PermitEndpoint;
 import com.qualfacul.hades.login.LoggedUserManager;
 
 @RestController
@@ -18,7 +18,7 @@ public class HomeController {
 		return loggedUser.getLoginInfo().getLogin();
 	}
 
-	@PermitEndpoint
+	@PublicEndpoint
 	@Get("/")
 	public String home() {
 		return "home";
