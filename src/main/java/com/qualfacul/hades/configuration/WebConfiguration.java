@@ -24,26 +24,27 @@ class WebConfiguration extends WebMvcConfigurerAdapter {
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**");
 	}
-	
+
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-	    registry.addInterceptor(StatelessAuthenticationInterceptor());
-	} 
-	
+		registry.addInterceptor(StatelessAuthenticationInterceptor());
+	}
+
 	@Bean
 	public StatelessAuthenticationInterceptor StatelessAuthenticationInterceptor() {
-	    return new StatelessAuthenticationInterceptor();
+		return new StatelessAuthenticationInterceptor();
 	}
-	
+
 	@Override
-    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        final MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-        final ObjectMapper objectMapper = new ObjectMapper();
-        Hibernate4Module module = new Hibernate4Module();
-        module.enable(Feature.FORCE_LAZY_LOADING);
+	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+		final MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+		final ObjectMapper objectMapper = new ObjectMapper();
+		final Hibernate4Module module = new Hibernate4Module();
+		
+		module.enable(Feature.FORCE_LAZY_LOADING);
 		objectMapper.registerModule(module);
-        converter.setObjectMapper(objectMapper);
-        converters.add(converter);
-        super.configureMessageConverters(converters);
-    }
+		converter.setObjectMapper(objectMapper);
+		converters.add(converter);
+		super.configureMessageConverters(converters);
+	}
 }

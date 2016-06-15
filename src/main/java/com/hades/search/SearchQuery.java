@@ -24,30 +24,30 @@ public class SearchQuery<T> {
 
 	@PersistenceContext
 	private EntityManager manager;
-	
+
 	private String match;
 	private Class<?> clazz;
 	private Set<String> fieldNames = new HashSet<>();
 	private Float threshold;
 	private Integer currentPage;
-	
+
 	public SearchQueryBuilder builder() {
 		return new SearchQueryBuilder();
 	}
-	
+
 	public class SearchQueryBuilder {
-		
+
 		public SearchQueryWithThreshold forEntity(Class<?> c) {
 			clazz = c;
-	        for (Field field : clazz.getDeclaredFields()) {
-	            if (field.isAnnotationPresent(org.hibernate.search.annotations.Field.class)) {
-	               fieldNames.add(field.getName()); 
-	            }
-	        }
-	        return new SearchQueryWithThreshold();
+			for (Field field : clazz.getDeclaredFields()) {
+				if (field.isAnnotationPresent(org.hibernate.search.annotations.Field.class)) {
+					fieldNames.add(field.getName());
+				}
+			}
+			return new SearchQueryWithThreshold();
 		}
 	}
-	
+
 	public class SearchQueryWithThreshold {
 
 		public SearchQueryWithMatcher withThreshold(Float t) {
@@ -57,54 +57,48 @@ public class SearchQuery<T> {
 	}
 
 	public class SearchQueryWithMatcher {
-		
+
 		public SearchQueryPagination matching(String m) {
 			match = m;
 			return new SearchQueryPagination();
 		}
 	}
-	
+
 	public class SearchQueryPagination {
-		
+
 		public SearchQueryFactory forPage(Integer pageNum) {
 			currentPage = pageNum != null && currentPage != 0 ? pageNum : 1;
 			return new SearchQueryFactory();
 		}
 	}
-	
+
 	public class SearchQueryFactory {
 
 		@SuppressWarnings("unchecked")
 		public PaginatedSearch<T> build() {
 			Session session = manager.unwrap(Session.class);
 			FullTextSession fullTextSession = Search.getFullTextSession(session);
+
+			QueryBuilder queryBuilder = fullTextSession.getSearchFactory()
+													   .buildQueryBuilder()
+													   .forEntity(clazz)
+													   .get();
 			
-			QueryBuilder queryBuilder = fullTextSession
-							.getSearchFactory()
-							.buildQueryBuilder()
-							.forEntity(clazz)
-							.get();
-			Query luceneQuery = queryBuilder
-							.keyword()
-							.fuzzy()
-							.withThreshold(threshold)
-							.onFields(fieldNames.toArray(new String[fieldNames.size()]))
-							.matching(match)
-							.createQuery();
-			
+			Query luceneQuery = queryBuilder.keyword()
+											.fuzzy()
+											.withThreshold(threshold)
+											.onFields(fieldNames.toArray(new String[fieldNames.size()]))
+											.matching(match)
+											.createQuery();
+
 			FullTextQuery query = fullTextSession.createFullTextQuery(luceneQuery, clazz);
 			query.setMaxResults(MAX_RESULTS_PER_PAGE);
-			query.setFirstResult((currentPage-1) * MAX_RESULTS_PER_PAGE);
-			
-			PaginatedSearch<T> paginatedSearch = new PaginatedSearch<>(
-								query.list(),
-								query.getResultSize(),
-								currentPage,
-								MAX_RESULTS_PER_PAGE
-							);
-			
+			query.setFirstResult((currentPage - 1) * MAX_RESULTS_PER_PAGE);
+
+			PaginatedSearch<T> paginatedSearch = new PaginatedSearch<>(query.list(), query.getResultSize(), currentPage, MAX_RESULTS_PER_PAGE);
+
 			return paginatedSearch;
 		}
 	}
-	
+
 }

@@ -12,6 +12,7 @@ import com.qualfacul.hades.college.College;
 @RestController
 public class SearchController {
 	
+	private static final float COLLEGE_THRESHOLD = 0.4f;
 	private SearchQuery<College> collegeSearch; 
 	
 	@Autowired
@@ -26,7 +27,7 @@ public class SearchController {
 		PaginatedSearch<College> paginatedSearch = collegeSearch
 			.builder()
 			.forEntity(College.class)
-			.withThreshold(0.4f)
+			.withThreshold(COLLEGE_THRESHOLD)
 			.matching(query)
 			.forPage(page)
 			.build();
