@@ -66,6 +66,9 @@ dependencies {
 	compile 'io.jsonwebtoken:jjwt:0.6.0'
 	compile 'org.springframework.boot:spring-boot-devtools'
 	compile 'org.mindrot:jbcrypt:0.3m'
+    compile 'org.apache.commons:commons-lang3:3.4'
+    compile 'org.jsoup:jsoup:1.9.1'
+    compile 'org.glassfish.jersey.core:jersey-client:2.23'
 	
 	//Social Dependencies
 	compile 'org.springframework.social:spring-social-core:1.1.4.RELEASE'
@@ -74,8 +77,6 @@ dependencies {
 	compile 'org.springframework.social:spring-social-security:1.1.4.RELEASE'
 	compile 'org.springframework.social:spring-social-facebook:2.0.3.RELEASE'
 	
-    compile 'com.hermes:hermes:1.0'
-
     // Tests
     compile 'org.springframework:spring-test'
     compile 'junit:junit'
@@ -84,6 +85,7 @@ dependencies {
 
 task(runDebug, dependsOn: 'classes', type: JavaExec) {
     main = 'com.hades.HadesApplication'
+    
     classpath = sourceSets.main.runtimeClasspath
     jvmArgs = ["-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=9999"]
 }
