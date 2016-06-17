@@ -8,14 +8,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 
+import com.qualfacul.hades.annotation.TaskComponent;
 import com.qualfacul.hades.college.College;
 import com.qualfacul.hades.college.CollegeRepository;
 import com.qualfacul.hades.mec.MecCollegeService;
 import com.qualfacul.hades.mec.MecRequester;
 
-@Component
+@TaskComponent
 class MECInformationsTasks {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(MECInformationsTasks.class);
@@ -27,7 +27,8 @@ class MECInformationsTasks {
 	@Autowired
 	private MecRequester mec;
 
-	@Scheduled(cron = "* 0 0 1 * ?")
+//	@Scheduled(cron = "* 0 0 1 * ?")
+	@Scheduled(fixedDelay = 10000)
 	public void getAllColleges() {
 		LOGGER.info("Starting task getAllCollges");
 

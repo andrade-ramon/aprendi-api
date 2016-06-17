@@ -11,15 +11,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.qualfacul.hades.annotation.InternalEndpoint;
 import com.qualfacul.hades.annotation.PermitEndpoint;
+import com.qualfacul.hades.annotation.WebComponent;
 import com.qualfacul.hades.configuration.security.TokenAuthenticationService;
 
-@Component
+@WebComponent
 public class StatelessAuthenticationInterceptor extends HandlerInterceptorAdapter {
 
 	@Value("${internal.secret}")

@@ -9,12 +9,12 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Service;
 
+import com.qualfacul.hades.annotation.WebService;
 import com.qualfacul.hades.login.LoginAuthentication;
 import com.qualfacul.hades.login.LoginInfo;
 
-@Service
+@WebService
 public class TokenAuthenticationService {
 
 	private TokenHandler tokenHandler;

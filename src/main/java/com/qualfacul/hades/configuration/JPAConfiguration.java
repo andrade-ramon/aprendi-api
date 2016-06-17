@@ -18,9 +18,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages = { "com.hades" })
+@EnableJpaRepositories(basePackages = { JPAConfiguration.ENTITYMANAGER_PACKAGES_TO_SCAN })
 class JPAConfiguration {
-	private static final String ENTITYMANAGER_PACKAGES_TO_SCAN = "com.hades";
+	
+	protected static final String ENTITYMANAGER_PACKAGES_TO_SCAN = "com.qualfacul.hades";
 
 	@Resource
 	private Environment env;

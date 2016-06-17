@@ -54,18 +54,18 @@ configurations {
 }
 
 dependencies {
-	compile 'org.springframework.boot:spring-boot-starter-web'
-	compile 'org.springframework.boot:spring-boot-starter-data-jpa'
-	compile 'org.springframework.boot:spring-boot-starter-log4j'
-	compile 'org.springframework:spring-webmvc'
-	compile 'org.springframework.boot:spring-boot-starter-undertow'
-	compile 'org.mortbay.jetty.alpn:alpn-boot:8.1.5.v20150921'
-	compile 'mysql:mysql-connector-java'
-	compile 'org.springframework.security:spring-security-web'
-	compile 'org.springframework.security:spring-security-config'
-	compile 'io.jsonwebtoken:jjwt:0.6.0'
-	compile 'org.springframework.boot:spring-boot-devtools'
-	compile 'org.mindrot:jbcrypt:0.3m'
+    compile 'org.springframework.boot:spring-boot-starter-web'
+    compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+    compile 'org.springframework.boot:spring-boot-starter-log4j'
+    compile 'org.springframework:spring-webmvc'
+    compile 'org.springframework.boot:spring-boot-starter-undertow'
+    compile 'org.mortbay.jetty.alpn:alpn-boot:8.1.5.v20150921'
+    compile 'mysql:mysql-connector-java'
+    compile 'org.springframework.security:spring-security-web'
+    compile 'org.springframework.security:spring-security-config'
+    compile 'io.jsonwebtoken:jjwt:0.6.0'
+    compile 'org.springframework.boot:spring-boot-devtools'
+    compile 'org.mindrot:jbcrypt:0.3m'
     compile 'org.apache.commons:commons-lang3:3.4'
     compile 'org.jsoup:jsoup:1.9.1'
     compile 'org.glassfish.jersey.core:jersey-client:2.23'
@@ -83,8 +83,14 @@ dependencies {
     compile 'org.mockito:mockito-all:1.8.4'
 }
 
-task(runDebug, dependsOn: 'classes', type: JavaExec) {
-    main = 'com.hades.HadesApplication'
+task(runWeb, dependsOn: 'classes', type: JavaExec) {
+    main = 'com.qualfacul.hades.HadesWebApplication'
+    
+    classpath = sourceSets.main.runtimeClasspath
+    jvmArgs = ["-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=9999"]
+}
+task(runTasks, dependsOn: 'classes', type: JavaExec) {
+    main = 'com.qualfacul.hades.HadesTasksApplication'
     
     classpath = sourceSets.main.runtimeClasspath
     jvmArgs = ["-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=9999"]

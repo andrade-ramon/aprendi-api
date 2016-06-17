@@ -8,14 +8,14 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.jsoup.nodes.Document;
-import org.springframework.stereotype.Service;
 
+import com.qualfacul.hades.annotation.TaskService;
 import com.qualfacul.hades.college.Address;
 import com.qualfacul.hades.college.College;
 import com.qualfacul.hades.college.CollegeGrade;
 import com.qualfacul.hades.college.GradeOrigin;
 
-@Service
+@TaskService
 public class MecCollegeService {
 
 	public void setupBasicInformations(College college, Document document) {

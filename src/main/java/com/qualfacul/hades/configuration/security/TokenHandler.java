@@ -4,8 +4,8 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
+import com.qualfacul.hades.annotation.WebComponent;
 import com.qualfacul.hades.login.LoginInfo;
 import com.qualfacul.hades.login.LoginInfoRepository;
 
@@ -13,7 +13,7 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
-@Component
+@WebComponent
 class TokenHandler {
 
 	@Value("${jwt.secret}")

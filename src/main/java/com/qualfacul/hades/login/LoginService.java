@@ -6,11 +6,11 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.stereotype.Service;
 
+import com.qualfacul.hades.annotation.WebService;
 import com.qualfacul.hades.configuration.security.TokenAuthenticationService;
 
-@Service
+@WebService
 public class LoginService {
 
 	private LoginInfoRepository loginInfoRepository;

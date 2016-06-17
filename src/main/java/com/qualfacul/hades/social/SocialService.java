@@ -4,8 +4,8 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.UserProfile;
-import org.springframework.stereotype.Service;
 
+import com.qualfacul.hades.annotation.WebService;
 import com.qualfacul.hades.configuration.security.TokenAuthenticationService;
 import com.qualfacul.hades.login.LoginInfo;
 import com.qualfacul.hades.login.LoginInfoDTO;
@@ -13,8 +13,9 @@ import com.qualfacul.hades.login.LoginOrigin;
 import com.qualfacul.hades.user.User;
 import com.qualfacul.hades.user.UserRepository;
 
-@Service
+@WebService
 public class SocialService {
+	
 	@Autowired
 	private UserRepository userRepository;
 

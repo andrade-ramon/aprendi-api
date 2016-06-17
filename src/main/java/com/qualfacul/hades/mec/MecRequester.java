@@ -14,11 +14,11 @@ import javax.ws.rs.core.Form;
 import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
+import com.qualfacul.hades.annotation.TaskComponent;
 import com.qualfacul.hades.crypt.Base64Utils;
 
-@Component
+@TaskComponent
 public class MecRequester {
 
 	public static final String MEC_ENDPOINT = "http://emec.mec.gov.br";

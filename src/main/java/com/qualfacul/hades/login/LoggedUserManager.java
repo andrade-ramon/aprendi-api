@@ -5,11 +5,11 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
+import com.qualfacul.hades.annotation.WebComponent;
 import com.qualfacul.hades.configuration.security.TokenAuthenticationService;
 
-@Component
+@WebComponent
 public class LoggedUserManager {
 
 	@Autowired
