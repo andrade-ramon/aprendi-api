@@ -13,8 +13,10 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+
 import com.hades.user.User;
-import com.hermes.college.GradeType;
+import com.qualfacul.hermes.college.CollegeGradeOrigin;
 
 @Entity
 @Table(name = "college_grade")
@@ -28,8 +30,8 @@ public class CollegeGrade {
 	private College college;
 	
 	@Enumerated(EnumType.STRING)
-	@Column(name = "grade_origin", nullable = false)
-	private GradeType gradeType;
+	@Column(name = "grade_origin", nullable = false, length = 20)
+	private CollegeGradeOrigin gradeOrigin;
 	
 	@Column(name = "date")
 	private Calendar date;
@@ -44,9 +46,9 @@ public class CollegeGrade {
 	public CollegeGrade() {
 	}
 	
-	public CollegeGrade(College college, GradeType gradeType, Calendar date, Double value) {
+	public CollegeGrade(College college, CollegeGradeOrigin gradeOrigin, Calendar date, Double value) {
 		this.college = college;
-		this.gradeType = gradeType;
+		this.gradeOrigin = gradeOrigin;
 		this.date = date;
 		this.value = value;
 	}
@@ -67,12 +69,12 @@ public class CollegeGrade {
 		this.college = college;
 	}
 
-	public GradeType getGradeOrigin() {
-		return gradeType;
+	public CollegeGradeOrigin getGradeOrigin() {
+		return gradeOrigin;
 	}
 
-	public void setGradeOrigin(GradeType gradeOrigin) {
-		this.gradeType = gradeOrigin;
+	public void setGradeOrigin(CollegeGradeOrigin gradeOrigin) {
+		this.gradeOrigin = gradeOrigin;
 	}
 
 	public Calendar getDate() {
@@ -98,5 +100,9 @@ public class CollegeGrade {
 	public void setUser(User user) {
 		this.user = user;
 	}
-
+	
+	@Override
+	public String toString() {
+		return ReflectionToStringBuilder.toString(this);
+	}
 }

@@ -14,7 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@RequestMapping(method = GET)
+@RequestMapping(method = GET, produces = "application/json")
 @Target(METHOD)
 @Retention(RUNTIME)
 @Documented
