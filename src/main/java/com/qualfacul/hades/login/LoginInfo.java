@@ -9,6 +9,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -49,12 +50,13 @@ public class LoginInfo {
 		this.password = password;
 		this.loginOrigin = loginOrigin;
 	}
-	
+
 	@PrePersist
-	public void hashPassword(){
+	@PreUpdate
+	private void hashPassword() {
 		this.password = password != null ? BCrypt.hashpw(password, BCrypt.gensalt()) : password;
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -94,8 +96,8 @@ public class LoginInfo {
 	public void setToken(String token) {
 		this.token = token;
 	}
-	
-	public boolean isFromFacebook(){
+
+	public boolean isFromFacebook() {
 		return FACEBOOK.equals(this.loginOrigin);
 	}
 }
