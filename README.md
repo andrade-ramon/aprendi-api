@@ -3,7 +3,7 @@
 
 _API REST Backend_
 
-__Este projeto é acessado pelo [zeus](https://github.com/qualfacul/zeus) e [poseidon](https://github.com/qualfacul/poseidon)__
+__Este projeto é acessado pelo [zeus](https://github.com/qualfacul/zeus)
 
 ### Arquitetura
 
