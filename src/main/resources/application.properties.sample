@@ -13,7 +13,6 @@ db.driver=com.mysql.jdbc.Driver
 hibernate.show_sql=false
 
 jwt.secret=
-internal.secret=
 
 facebook.clientId=
 facebook.clientSecret=

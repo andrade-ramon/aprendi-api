@@ -3,9 +3,9 @@ apply plugin: 'spring-boot'
 apply plugin: 'application'
 apply plugin: 'maven'
 
-mainClassName = 'com.hades.HadesApplication'
+mainClassName = 'com.qualfacul.hades.HadesWebApplication'
 version = version
-group = 'com.hades'
+group = 'com.qualfacul.hades'
 
 compileJava.options.encoding = 'UTF-8'
 sourceCompatibility = 1.8
