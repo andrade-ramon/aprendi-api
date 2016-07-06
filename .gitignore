@@ -12,3 +12,4 @@ hades.key
 !gradle-wrapper.jar
 
 *.orig
+*.swp

@@ -3,6 +3,7 @@ package com.qualfacul.hades.college;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.hibernate.validator.constraints.NotBlank;
 
 @Embeddable
@@ -76,4 +77,8 @@ public class Address {
 		this.state = state;
 	}
 	
+	@Override
+	public String toString() {
+		return ReflectionToStringBuilder.toString(this);
+	}
 }

@@ -12,6 +12,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 import com.qualfacul.hades.user.User;
 
@@ -23,12 +26,13 @@ public class CollegeGrade {
 	@GeneratedValue
 	private Long id;
 	
+	@NotNull
 	@OneToOne(cascade = ALL)
 	private College college;
 	
 	@Enumerated(EnumType.STRING)
-	@Column(name = "grade_origin", nullable = false)
-	private GradeOrigin gradeOrigin;
+	@Column(name = "grade_origin", nullable = false, length = 20)
+	private CollegeGradeOrigin gradeOrigin;
 	
 	@Column(name = "date")
 	private Calendar date;
@@ -41,13 +45,6 @@ public class CollegeGrade {
 	
 	@Deprecated //Hibernate eyes only
 	public CollegeGrade() {
-	}
-	
-	public CollegeGrade(College college, GradeOrigin gradeOrigin, Calendar date, Double value) {
-		this.college = college;
-		this.gradeOrigin = gradeOrigin;
-		this.date = date;
-		this.value = value;
 	}
 
 	public Long getId() {
@@ -66,11 +63,11 @@ public class CollegeGrade {
 		this.college = college;
 	}
 
-	public GradeOrigin getGradeOrigin() {
+	public CollegeGradeOrigin getGradeOrigin() {
 		return gradeOrigin;
 	}
 
-	public void setGradeOrigin(GradeOrigin gradeOrigin) {
+	public void setGradeOrigin(CollegeGradeOrigin gradeOrigin) {
 		this.gradeOrigin = gradeOrigin;
 	}
 
@@ -97,5 +94,9 @@ public class CollegeGrade {
 	public void setUser(User user) {
 		this.user = user;
 	}
-
+	
+	@Override
+	public String toString() {
+		return ReflectionToStringBuilder.toString(this);
+	}
 }

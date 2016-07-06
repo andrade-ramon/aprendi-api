@@ -12,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -21,11 +22,14 @@ public class College {
 	@Id
 	@GeneratedValue
 	private Long id;
-
+		
+	@OneToOne(mappedBy = "college", cascade = ALL)
+	private CollegeMec collegeMec;
+	
 	@Column(name = "name", nullable = false)
 	private String name;
 
-	@Column(name = "initials")
+	@Column(name = "initials", length = 30)
 	private String initials;
 
 	@AttributeOverride(name = "value", column = @Column(name = "address"))
@@ -45,16 +49,7 @@ public class College {
 	private List<CollegeGrade> grades = new ArrayList<>();
 
 	@Deprecated // Hibernate eyes only
-	College() {
-	}
-
-	public College( String name, String initials, Address address, String phone, String cnpj, String site) {
-		this.name = name;
-		this.initials = initials;
-		this.address = address;
-		this.phone = phone;
-		this.cnpj = cnpj;
-		this.site = site;
+	public College() {
 	}
 
 	public Long getId() {
@@ -63,6 +58,15 @@ public class College {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public CollegeMec getCollegeMec() {
+		return collegeMec;
+	}
+
+	public void setCollegeMec(CollegeMec collegeMec) {
+		this.collegeMec = collegeMec;
+		collegeMec.setCollege(this);
 	}
 
 	public String getName() {
@@ -162,13 +166,15 @@ public class College {
 			this.college.setSite(site);
 			return this;
 		}
+		
+		public Builder withCollegeMec(CollegeMec collegeMec) {
+			this.college.setCollegeMec(collegeMec);
+			return this;
+		}
 
 		public College build() {
 			return this.college;
 		}
 
-		
-		
 	}
-	
 }
