@@ -5,9 +5,7 @@ import static javax.persistence.CascadeType.ALL;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -32,9 +30,8 @@ public class College {
 	@Column(name = "initials", length = 30)
 	private String initials;
 
-	@AttributeOverride(name = "value", column = @Column(name = "address"))
-	@Embedded
-	private Address address;
+	@OneToMany(mappedBy = "college", cascade = ALL)
+	private List<CollegeAddress> collegeAdresses = new ArrayList<>();
 	
 	@Column(name = "phone")
 	private String phone;
@@ -85,12 +82,12 @@ public class College {
 		this.initials = initials;
 	}
 
-	public Address getAddress() {
-		return address;
+	public List<CollegeAddress> getCollegeAdresses() {
+		return collegeAdresses;
 	}
 
-	public void setAddress(Address address) {
-		this.address = address;
+	public void setCollegeAdresses(List<CollegeAddress> collegeAdresses) {
+		this.collegeAdresses = collegeAdresses;
 	}
 
 	public String getPhone() {
@@ -125,56 +122,5 @@ public class College {
 		this.grades = grades;
 	}
 	
-	public static class Builder {
-		private College college;
-		
-		public Builder() {
-			college = new College();
-		}
-		
-		Builder withId(Long id) {
-			this.college.setId(id);
-			return this;
-		}
-		
-		public Builder withName(String name) {
-			this.college.setName(name);
-			return this;
-		}
-
-		public Builder withInitials(String initials) {
-			this.college.setInitials(initials);
-			return this;
-		}
-
-		public Builder withAddress(Address address) {
-			this.college.setAddress(address);
-			return this;
-		}
-
-		public Builder withPhone(String phone) {
-			this.college.setPhone(phone);
-			return this;
-		}
-
-		public Builder withCnpj(String cnpj) {
-			this.college.setCnpj(cnpj);
-			return this;
-		}
-
-		public Builder withSite(String site) {
-			this.college.setSite(site);
-			return this;
-		}
-		
-		public Builder withCollegeMec(CollegeMec collegeMec) {
-			this.college.setCollegeMec(collegeMec);
-			return this;
-		}
-
-		public College build() {
-			return this.college;
-		}
-
-	}
+	
 }

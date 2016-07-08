@@ -14,9 +14,10 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
-import com.qualfacul.hades.college.Address;
+import com.qualfacul.hades.college.CollegeAddress;
 import com.qualfacul.hades.college.College;
 import com.qualfacul.hades.college.CollegeGrade;
 
@@ -24,10 +25,9 @@ import com.qualfacul.hades.college.CollegeGrade;
 public class MecCollegeService {
 
 	public College setupBasicCollegeInformations(Document document) {
-		Address address = new Address();
 		College college = new College();
 
-		document.select("td.avalTituloCampos + td").forEach((td) -> {
+		document.select("td.avalTituloCampos + td").forEach(td -> {
 			String tdText = td.text();
 
 			switch (td.previousElementSibling().text()) {
@@ -43,24 +43,6 @@ public class MecCollegeService {
 				college.setName(abbreviate(name, 255));
 				college.setInitials(abbreviate(initials, 30));
 				break;
-			case "Endereço:":
-				address.setValue(tdText);
-				break;
-			case "Nº:":
-				address.setNumber(tdText);
-				break;
-			case "CEP:":
-				address.setCep(tdText);
-				break;
-			case "Bairro:":
-				address.setNeighborhood(tdText);
-				break;
-			case "UF:":
-				address.setState(tdText);
-				break;
-			case "Município":
-				address.setCity(tdText);
-				break;
 			case "Telefone:":
 				college.setPhone(tdText);
 				break;
@@ -72,9 +54,26 @@ public class MecCollegeService {
 				break;
 			}
 		});
-
-		college.setAddress(address);
+		
 		return college;
+	}
+	
+	public void setupCollegeAddress(College college, Document document) {
+		List<CollegeAddress> collegeAdresses = new ArrayList<>();
+		
+		document.select("table#listar-ies-cadastro tbody tr").forEach(tr -> {
+			CollegeAddress collegeAddress = new CollegeAddress();
+			collegeAddress.setCollege(college);
+			Elements tds = tr.getAllElements().select("td");
+			
+			collegeAddress.setName(tds.get(1).text());
+			collegeAddress.setAddress(tds.get(2).text());
+			collegeAddress.setCity(tds.get(4).text());
+			collegeAddress.setState(tds.get(5).text());
+			
+			collegeAdresses.add(collegeAddress);
+		});
+		college.setCollegeAdresses(collegeAdresses);
 	}
 	
 	public void setupCollegeGrades(College college, Document document) {
@@ -112,4 +111,5 @@ public class MecCollegeService {
 		
 		college.setGrades(grades);
 	}
+	
 }

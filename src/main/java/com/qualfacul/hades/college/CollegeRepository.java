@@ -1,5 +1,6 @@
 package com.qualfacul.hades.college;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.repository.RepositoryDefinition;
@@ -14,5 +15,7 @@ public interface CollegeRepository {
 	Optional<College> findById(Long collegeId);
 	
 	Long count();
+	
+	List<College> findAll();
 	
 }

@@ -2,6 +2,9 @@ package com.qualfacul.hades.task;
 
 import static java.lang.Long.parseLong;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
@@ -34,79 +37,41 @@ class MECInformationsTasks {
 	void getAllColleges() {
 		LOGGER.info("Starting task getAllCollges");
 		
-		String html = mecRequester.requestCollegeBasic();
+		String html = mecRequester.requestCollegeBasicInfo();
 		Document document = Jsoup.parse(html);
 		int lastPage = Integer.parseInt(
 				document.select("select#paginationControlItemdiv_listar_consulta_avancada option").last().text());
 
 		for (int page = 1; page <= lastPage; page++) {
-			Document baseDocument = Jsoup.parse(mecRequester.requestCollegeBasic(page));
+			Document baseDocument = Jsoup.parse(mecRequester.requestCollegeBasicInfo(page));
 			
 			baseDocument.select("tbody#tbyDados > tr").forEach((trCollege) -> {
 				trCollege.children().last().remove();
 
 				String functionValue = trCollege.attr("onclick");
-				String mecIdParameter = (String) functionValue.subSequence(functionValue.indexOf("(") + 1,
-						functionValue.indexOf(")"));
+				String mecIdParameter = ((String) functionValue.subSequence(functionValue.indexOf("(") + 1,
+						functionValue.indexOf(")"))).trim();
 				
-				String response = mecRequester.requestCollegeDetails(mecIdParameter.trim());
+				String collegeDetails = mecRequester.requestCollegeDetails(mecIdParameter);
+				Document collegeDetailsDocument = Jsoup.parse(collegeDetails);
 
-				Document detailsDocument = Jsoup.parse(response);
-
-				long mecId = parseLong(mecIdParameter.trim());
+				long mecId = parseLong(mecIdParameter);
 				
-				College college = mecCollegeService.setupBasicCollegeInformations(detailsDocument);
-				CollegeMec collegeMec = new CollegeMec(mecId, college);
+				College college = mecCollegeService.setupBasicCollegeInformations(collegeDetailsDocument);
+				college.setCollegeMec(new CollegeMec(mecId, college));
+								
+				String adressesDetails = mecRequester.requestCollegeAdresses(mecIdParameter);
+				Document adressesDetailsDocument = Jsoup.parse(adressesDetails);
 				
-				college.setCollegeMec(collegeMec);
-
-				mecCollegeService.setupCollegeGrades(college, detailsDocument);
+				mecCollegeService.setupCollegeAddress(college, adressesDetailsDocument);
+				
+				mecCollegeService.setupCollegeGrades(college, collegeDetailsDocument);
 				collegeRepository.save(college);
-				
 				
 				LOGGER.info("Saved college: {}", college.getName());
 			});
 		}
+		
 		LOGGER.info("Finished task getAllColleges");
 	}
-
-//	// @Scheduled(cron = "* 0 0 1 * ?")
-//	@Scheduled(fixedDelay = 10_000_000)
-//	void getAllCoursesFromColleges() {
-//		LOGGER.info("Starting task getAllCoursesFromColleges");
-//
-//		Long count = collegeRepository.count();
-//		for (long collegeId = 1; collegeId <= count; collegeId++) {
-//			Optional<CollegeMecDTO> optionalCollege = collegeRepository.findById(collegeId);
-//
-//			optionalCollege.ifPresent(college -> {
-//				Long mecId = college.getMecId();
-//				try {
-//					String responseForPage = mec.requestCollegeCourses(mecId);
-//					Document coursesDocForPage = Jsoup.parse(responseForPage);
-//
-//					int lastPage = Integer.parseInt(coursesDocForPage
-//							.select("select#paginationControlItemdivListarCurso option").last().text());
-//
-//					for (int page = 1; page <= lastPage; page++) {
-//						String detailsResponse = mec.requestCollegeCourses(mecId, page);
-//						Document coursesDoc = Jsoup.parse(detailsResponse);
-//
-//						coursesDoc.select("table#listar-ies-cadastro tr td:first-child > a").forEach(a -> {
-//							String courseResponse = mec.requestCourse(a.attr("href"));
-//							Document courseDoc = Jsoup.parse(courseResponse);
-//
-//							mecCourseService.setupCoursesInformations(courseDoc, college).ifPresent(courseDTO -> {
-//								collegeRepository.saveGradeFor(college.getId(), courseDTO);
-//							});
-//						});
-//					}
-//				} catch (NullPointerException e) {
-//					LOGGER.error("College {} not found on mec", college.getName());
-//				}
-//			});
-//
-//		}
-//
-//	}
 }
