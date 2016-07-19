@@ -1,16 +1,25 @@
 package com.qualfacul.hades.college;
 
-import static javax.persistence.CascadeType.ALL;
+import static org.apache.commons.lang3.StringUtils.stripAccents;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import com.qualfacul.hades.course.CourseGrade;
 
 @Entity
 @Table(name = "college_address")
@@ -21,7 +30,7 @@ public class CollegeAddress {
 	private Long id;
 
 	@NotNull
-	@OneToOne(cascade = ALL)
+	@OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
 	private College college;
 
 	@Column(name = "name")
@@ -29,6 +38,9 @@ public class CollegeAddress {
 
 	@Column(name = "address")
 	private String address;
+
+	@Column(name = "cep")
+	private String cep;
 
 	@Column(name = "number")
 	private String number;
@@ -42,10 +54,20 @@ public class CollegeAddress {
 	@Column(name = "state")
 	private String state;
 
+	@ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+	@JoinTable(name = "college_course", 
+		joinColumns = { @JoinColumn(name = "college_address_id") }, 
+		inverseJoinColumns = { @JoinColumn(name = "course_grade_id") })
+	private List<CourseGrade> courseGrades = new ArrayList<>();
+
 	@Deprecated // Hibernate eyes only
 	public CollegeAddress() {
 	}
-
+	
+	public CollegeAddress(College college) {
+		this.college = college;
+	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -60,6 +82,10 @@ public class CollegeAddress {
 
 	public String getAddress() {
 		return address;
+	}
+
+	public String getCep() {
+		return cep;
 	}
 
 	public String getNumber() {
@@ -78,6 +104,10 @@ public class CollegeAddress {
 		return state;
 	}
 
+	public List<CourseGrade> getCourseGrades() {
+		return courseGrades;
+	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -92,6 +122,10 @@ public class CollegeAddress {
 
 	public void setAddress(String address) {
 		this.address = address;
+	}
+
+	public void setCep(String cep) {
+		this.cep = cep;
 	}
 
 	public void setNumber(String number) {
@@ -110,8 +144,23 @@ public class CollegeAddress {
 		this.state = state;
 	}
 
-	@Override
-	public String toString() {
-		return ReflectionToStringBuilder.toString(this);
+	public void setCourseGrades(List<CourseGrade> courseGrades) {
+		this.courseGrades = courseGrades;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!(obj instanceof CollegeAddress))
+			return false;
+
+		CollegeAddress other = (CollegeAddress) obj;
+		
+		return Objects.equals(stripAccents(this.address), stripAccents(other.address)) &&
+				Objects.equals(stripAccents(this.cep), stripAccents(other.cep)) &&
+				Objects.equals(stripAccents(this.city), stripAccents(other.city)) &&
+				Objects.equals(stripAccents(this.state), stripAccents(other.state));
+	}
+
 }
