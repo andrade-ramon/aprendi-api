@@ -53,7 +53,7 @@ public class LoginInfo {
 
 	@PrePersist
 	@PreUpdate
-	private void hashPassword() {
+	public void hashPassword() {
 		this.password = password != null ? BCrypt.hashpw(password, BCrypt.gensalt()) : password;
 	}
 
