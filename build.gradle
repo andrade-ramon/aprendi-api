@@ -69,6 +69,10 @@ dependencies {
     compile 'org.apache.commons:commons-lang3:3.4'
     compile 'org.jsoup:jsoup:1.9.1'
     compile 'org.glassfish.jersey.core:jersey-client:2.23'
+    
+	compile 'org.glassfish.jersey.media:jersey-media-moxy:2.22.2'
+	compile 'org.glassfish.jersey.media:jersey-media-json-jackson:2.23'
+	compile 'com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.7.4'
 	
 	//Social Dependencies
 	compile 'org.springframework.social:spring-social-core:1.1.4.RELEASE'

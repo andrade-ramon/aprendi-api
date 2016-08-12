@@ -35,6 +35,10 @@ class RestConfiguration {
 				}
 			}
 		}, new java.security.SecureRandom());
-		return ClientBuilder.newBuilder().sslContext(sslcontext).hostnameVerifier((s1, s2) -> "dev".equals(env)).build();
+		
+		return ClientBuilder.newBuilder()
+				.sslContext(sslcontext)
+				.hostnameVerifier((s1, s2) -> "dev".equals(env))
+				.build();
 	}
 }

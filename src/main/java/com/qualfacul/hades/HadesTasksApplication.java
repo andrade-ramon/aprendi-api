@@ -17,14 +17,9 @@ import com.qualfacul.hades.annotation.WebService;
 @EnableScheduling
 @TaskComponent
 @EnableAutoConfiguration(exclude = WebMvcAutoConfiguration.class)
-@ComponentScan(excludeFilters = @Filter({RestController.class, 
-										 WebComponent.class,
-										 WebService.class}))
+@ComponentScan(excludeFilters = @Filter({ RestController.class, WebComponent.class, WebService.class }) )
 public class HadesTasksApplication {
-	
 	public static void main(String[] args) {
-		new SpringApplicationBuilder(HadesTasksApplication.class)
-        	.web(false)
-        	.run(args);
+		new SpringApplicationBuilder(HadesTasksApplication.class).web(false).run(args);
 	}
 }

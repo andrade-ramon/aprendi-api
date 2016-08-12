@@ -5,14 +5,15 @@ import static javax.persistence.CascadeType.ALL;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.AttributeOverride;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "college")
@@ -22,16 +23,19 @@ public class College {
 	@GeneratedValue
 	private Long id;
 
+	@NotNull
+	@Column(name = "mec_id", unique = true)
+	private long mecId;
+
 	@Column(name = "name", nullable = false)
 	private String name;
 
-	@Column(name = "initials")
+	@Column(name = "initials", length = 30)
 	private String initials;
 
-	@AttributeOverride(name = "value", column = @Column(name = "address"))
-	@Embedded
-	private Address address;
-	
+	@OneToMany(mappedBy = "college", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+	private List<CollegeAddress> collegeAdresses = new ArrayList<>();
+
 	@Column(name = "phone")
 	private String phone;
 
@@ -43,18 +47,9 @@ public class College {
 
 	@OneToMany(mappedBy = "college", cascade = ALL)
 	private List<CollegeGrade> grades = new ArrayList<>();
-
+	
 	@Deprecated // Hibernate eyes only
-	College() {
-	}
-
-	public College( String name, String initials, Address address, String phone, String cnpj, String site) {
-		this.name = name;
-		this.initials = initials;
-		this.address = address;
-		this.phone = phone;
-		this.cnpj = cnpj;
-		this.site = site;
+	public College() {
 	}
 
 	public Long getId() {
@@ -63,6 +58,14 @@ public class College {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public long getMecId() {
+		return mecId;
+	}
+
+	public void setMecId(long mecId) {
+		this.mecId = mecId;
 	}
 
 	public String getName() {
@@ -81,12 +84,12 @@ public class College {
 		this.initials = initials;
 	}
 
-	public Address getAddress() {
-		return address;
+	public List<CollegeAddress> getCollegeAdresses() {
+		return collegeAdresses;
 	}
 
-	public void setAddress(Address address) {
-		this.address = address;
+	public void setCollegeAdresses(List<CollegeAddress> collegeAdresses) {
+		this.collegeAdresses = collegeAdresses;
 	}
 
 	public String getPhone() {
@@ -120,55 +123,5 @@ public class College {
 	public void setGrades(List<CollegeGrade> grades) {
 		this.grades = grades;
 	}
-	
-	public static class Builder {
-		private College college;
-		
-		public Builder() {
-			college = new College();
-		}
-		
-		Builder withId(Long id) {
-			this.college.setId(id);
-			return this;
-		}
-		
-		public Builder withName(String name) {
-			this.college.setName(name);
-			return this;
-		}
 
-		public Builder withInitials(String initials) {
-			this.college.setInitials(initials);
-			return this;
-		}
-
-		public Builder withAddress(Address address) {
-			this.college.setAddress(address);
-			return this;
-		}
-
-		public Builder withPhone(String phone) {
-			this.college.setPhone(phone);
-			return this;
-		}
-
-		public Builder withCnpj(String cnpj) {
-			this.college.setCnpj(cnpj);
-			return this;
-		}
-
-		public Builder withSite(String site) {
-			this.college.setSite(site);
-			return this;
-		}
-
-		public College build() {
-			return this.college;
-		}
-
-		
-		
-	}
-	
 }

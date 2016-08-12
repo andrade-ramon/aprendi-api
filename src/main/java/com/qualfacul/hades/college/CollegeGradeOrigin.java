@@ -1,6 +1,6 @@
 package com.qualfacul.hades.college;
 
-public enum GradeOrigin {
+public enum CollegeGradeOrigin {
 	MEC_IGC,
 	MEC_CONTINUOUS_IGC,
 	MEC_CI,
