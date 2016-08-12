@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.qualfacul.hades.annotation.PermitEndpoint;
 import com.qualfacul.hades.annotation.Post;
 import com.qualfacul.hades.configuration.security.TokenAuthenticationService;
+import com.qualfacul.hades.exceptions.EmailAlreadyInUseException;
 import com.qualfacul.hades.login.LoginInfo;
 import com.qualfacul.hades.login.LoginInfoDTO;
 
@@ -30,19 +31,22 @@ public class UserController {
 	@Transactional
 	@PermitEndpoint
 	@Post(value = "/register", responseStatus = CREATED)
-	public LoginInfoDTO register(@Valid @RequestBody UserDTO userDTO) {
+	public LoginInfoDTO register(@Valid @RequestBody UserDTO userDTO) throws EmailAlreadyInUseException {
 		User user;
 		Optional<User> optionalUser = userRepository.findByEmail(userDTO.getEmail());
 
-		if (optionalUser.isPresent() && optionalUser.get().getLoginInfo().isFromFacebook()) {
+		if (optionalUser.isPresent()) {
 			user = optionalUser.get();
-			user.getLoginInfo().setLoginOrigin(USER);
-			user.getLoginInfo().setPassword(userDTO.getPassword());
+			if (user.getLoginInfo().isFromFacebook()) {
+				user.getLoginInfo().setLoginOrigin(USER);
+				user.getLoginInfo().setPassword(userDTO.getPassword());
+			} else {
+				throw new EmailAlreadyInUseException();
+			}
 		} else {
 			LoginInfo loginInfo = new LoginInfo(userDTO.getEmail(), userDTO.getPassword(), USER);
 			user = new User(userDTO.getName(), userDTO.getEmail(), loginInfo);
 		}
-
 		userRepository.save(user);
 		LoginInfo loginInfo = user.getLoginInfo();
 		tokenService.createTokenFor(loginInfo);
