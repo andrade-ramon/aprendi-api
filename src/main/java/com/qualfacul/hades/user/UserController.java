@@ -37,10 +37,10 @@ public class UserController {
 
 		if (optionalUser.isPresent()) {
 			user = optionalUser.get();
-			if (optionalUser.get().getLoginInfo().isFromFacebook()) {
+			if (user.getLoginInfo().isFromFacebook()) {
 				user.getLoginInfo().setLoginOrigin(USER);
 				user.getLoginInfo().setPassword(userDTO.getPassword());
-			}else{
+			} else {
 				throw new EmailAlreadyInUseException();
 			}
 		} else {
