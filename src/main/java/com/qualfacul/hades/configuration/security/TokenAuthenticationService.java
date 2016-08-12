@@ -54,6 +54,10 @@ public class TokenAuthenticationService {
 		expirationDate.add(Calendar.MINUTE, ONE_DAY_IN_MINUTES_EXPIRATION_TIME);
 		createToken(loginInfo, expirationDate.getTime());
 	}
+	
+	public String createTokenFor(LoginInfo loginInfo, Date expirationDate){
+		return tokenHandler.createTokenFor(loginInfo, expirationDate);
+	}
 
 	public Optional<LoginInfo> getUserFromToken(String token) {
 		return tokenHandler.parseUserFromToken(token);
