@@ -2,6 +2,7 @@ package com.qualfacul.hades.configuration.security;
 
 import static org.springframework.util.StringUtils.isEmpty;
 
+import java.util.Date;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -44,6 +45,10 @@ public class TokenAuthenticationService {
 	public void createTokenFor(LoginInfo loginInfo) {
 		String token = tokenHandler.createTokenFor(loginInfo);
 		loginInfo.setToken(token);
+	}
+	
+	public String createTokenFor(LoginInfo loginInfo, Date expirationDate){
+		return tokenHandler.createTokenFor(loginInfo, expirationDate);
 	}
 
 	public Optional<LoginInfo> getUserFromToken(String token) {

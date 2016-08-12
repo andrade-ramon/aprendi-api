@@ -62,6 +62,10 @@ dependencies {
 	compile 'org.springframework.social:spring-social-security:1.1.4.RELEASE'
 	compile 'org.springframework.social:spring-social-facebook:2.0.3.RELEASE'
 	
+	//Mail delivery dependencies
+	compile group: 'org.apache.commons', name: 'commons-email', version: '1.4'
+	
+	
     // Tests
     compile 'org.springframework:spring-test'
     compile 'junit:junit'
