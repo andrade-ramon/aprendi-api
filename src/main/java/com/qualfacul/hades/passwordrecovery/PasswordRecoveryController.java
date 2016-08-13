@@ -2,11 +2,15 @@ package com.qualfacul.hades.passwordrecovery;
 
 import java.util.Date;
 import java.util.Optional;
+
+import javax.validation.Valid;
+
 import com.qualfacul.hades.configuration.security.TokenAuthenticationService;
+import com.qualfacul.hades.crypt.Base64Utils;
 import com.qualfacul.hades.exceptions.FacebookAccountException;
+import com.qualfacul.hades.exceptions.UsernameNotFoundException;
 import com.qualfacul.hades.login.LoginInfo;
 import com.qualfacul.hades.login.LoginInfoRepository;
-import com.qualfacul.hades.login.LoginOrigin;
 import com.qualfacul.hades.mail.EmailAddress;
 import com.qualfacul.hades.mail.SmtpEmailSender;
 
@@ -32,18 +36,19 @@ public class PasswordRecoveryController {
 	private SmtpEmailSender emailDelivery;
 	
 	@PermitEndpoint
-	@Post("/account/password/recovery")
+	@Post("/passwordrecovery/request")
 	public boolean requestToken(@RequestBody @NotBlank String login) throws FacebookAccountException {
 		System.out.println(login+"\n");
 		Optional<LoginInfo> optionalLoginInfo = loginInfoRepository.findByLogin(login);
 		if (optionalLoginInfo.isPresent()){
 			LoginInfo loginInfo = optionalLoginInfo.get();
-			if (loginInfo.getLoginOrigin() == LoginOrigin.FACEBOOK){
+			if (loginInfo.isFromFacebook()){
 				throw new FacebookAccountException();
 			}
 			Date expirationDate = new Date();
 			expirationDate = DateUtils.addMinutes(expirationDate, EXPIRATION_TIME);
 			String userToken = tokenAuthenticationService.createTokenFor(loginInfo, expirationDate);
+			userToken = Base64Utils.encode(userToken);
 			StringBuilder message = new StringBuilder();
 			message.append("Olá!<br/>Para redefinir sua senha, clique ");
 			message.append("<a href=\"http://dev.qualfacul.com:9000/redefinirsenha/"+userToken+"\">");
@@ -56,4 +61,26 @@ public class PasswordRecoveryController {
 		return true;
 	}
 	
+	@PermitEndpoint
+	@Post("/passwordrecovery/change")
+	public boolean changePassword(@RequestBody @Valid PasswordRecoveryDTO passwordRecoveryDTO) throws FacebookAccountException, UsernameNotFoundException {
+		System.out.println(passwordRecoveryDTO.getToken()+"\n\n\n");
+		String token = Base64Utils.decode(passwordRecoveryDTO.getToken());
+		Optional<LoginInfo> optionalLoginInfo = tokenAuthenticationService.getUserFromToken(token);
+		if (!optionalLoginInfo.isPresent()){
+			throw new UsernameNotFoundException();
+		}
+		LoginInfo loginInfo = optionalLoginInfo.get();
+		if (loginInfo.isFromFacebook()){
+			throw new FacebookAccountException();
+		}
+		loginInfo.setPassword(passwordRecoveryDTO.getPassword());
+		try{
+			loginInfoRepository.save(loginInfo);
+			return true;
+		}catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+	}
 }
