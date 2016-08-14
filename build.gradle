@@ -64,6 +64,7 @@ dependencies {
 	
 	//Mail delivery dependencies
 	compile group: 'org.apache.commons', name: 'commons-email', version: '1.4'
+	compile 'org.thymeleaf:thymeleaf:3.0.0.RELEASE'
 	
 	
     // Tests

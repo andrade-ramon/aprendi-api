@@ -38,7 +38,6 @@ public class PasswordRecoveryController {
 	@PermitEndpoint
 	@Post("/passwordrecovery/request")
 	public boolean requestToken(@RequestBody @NotBlank String login) throws FacebookAccountException {
-		System.out.println(login+"\n");
 		Optional<LoginInfo> optionalLoginInfo = loginInfoRepository.findByLogin(login);
 		if (optionalLoginInfo.isPresent()){
 			LoginInfo loginInfo = optionalLoginInfo.get();
@@ -50,13 +49,13 @@ public class PasswordRecoveryController {
 			String userToken = tokenAuthenticationService.createTokenFor(loginInfo, expirationDate);
 			userToken = Base64Utils.encode(userToken);
 			StringBuilder message = new StringBuilder();
-			message.append("Olá!<br/>Para redefinir sua senha, clique ");
+			message.append("Ola!<br/>Para redefinir sua senha, clique ");
 			message.append("<a href=\"http://dev.qualfacul.com:9000/redefinirsenha/"+userToken+"\">");
 			message.append("aqui</a><br/>");
-			message.append("Este link é válido por 24h, após esse período, será necessário ");
-			message.append("solicitar um novo link através do site.");
+			message.append("Este link e valido por 24h, apos esse periodo, sera necessario ");
+			message.append("solicitar um novo link atraves do site.");
 			EmailAddress email = new EmailAddress(loginInfo.getLogin());
-			return emailDelivery.send("Recuperação de Senha", message, email);
+			return emailDelivery.send("Recuperacao de Senha", message, email);
 		}
 		return true;
 	}
@@ -64,7 +63,6 @@ public class PasswordRecoveryController {
 	@PermitEndpoint
 	@Post("/passwordrecovery/change")
 	public boolean changePassword(@RequestBody @Valid PasswordRecoveryDTO passwordRecoveryDTO) throws FacebookAccountException, UsernameNotFoundException {
-		System.out.println(passwordRecoveryDTO.getToken()+"\n\n\n");
 		String token = Base64Utils.decode(passwordRecoveryDTO.getToken());
 		Optional<LoginInfo> optionalLoginInfo = tokenAuthenticationService.getUserFromToken(token);
 		if (!optionalLoginInfo.isPresent()){
