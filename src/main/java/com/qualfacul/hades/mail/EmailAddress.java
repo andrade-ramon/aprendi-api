@@ -4,10 +4,6 @@ public class EmailAddress {
 	private String name;
 	private String email;
 
-	public EmailAddress(String email, String name, String charset){
-		this.name=name;
-		this.email=email;
-	}
 	public EmailAddress(String name, String email){
 		this.name=name;
 		this.email=email;
