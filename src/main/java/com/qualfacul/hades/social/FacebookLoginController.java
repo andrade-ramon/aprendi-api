@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hades.annotation.PublicEndpoint;
 import com.qualfacul.hades.annotation.Post;
+import com.qualfacul.hades.annotation.PublicEndpoint;
 import com.qualfacul.hades.exceptions.InvalidFacebookTokenException;
 import com.qualfacul.hades.exceptions.LoginFailureException;
 import com.qualfacul.hades.login.LoginInfoDTO;

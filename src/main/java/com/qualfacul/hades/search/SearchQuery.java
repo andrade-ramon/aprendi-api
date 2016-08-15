@@ -1,4 +1,4 @@
-package com.hades.search;
+package com.qualfacul.hades.search;
 
 import java.lang.reflect.Field;
 import java.util.HashSet;
@@ -67,7 +67,7 @@ public class SearchQuery<T> {
 	public class SearchQueryPagination {
 
 		public SearchQueryFactory forPage(Integer pageNum) {
-			currentPage = pageNum != null && currentPage != 0 ? pageNum : 1;
+			currentPage = pageNum != null && pageNum > 0 ? pageNum : 1;
 			return new SearchQueryFactory();
 		}
 	}

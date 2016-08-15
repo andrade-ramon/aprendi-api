@@ -1,4 +1,4 @@
-package com.hades.search;
+package com.qualfacul.hades.search;
 
 import java.util.List;
 

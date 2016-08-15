@@ -15,7 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import com.hades.annotation.PublicEndpoint;
+import com.qualfacul.hades.annotation.PublicEndpoint;
 import com.qualfacul.hades.annotation.WebComponent;
 import com.qualfacul.hades.configuration.security.TokenAuthenticationService;
 

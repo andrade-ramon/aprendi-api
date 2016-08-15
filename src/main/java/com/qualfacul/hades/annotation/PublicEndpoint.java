@@ -1,4 +1,4 @@
-package com.hades.annotation;
+package com.qualfacul.hades.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

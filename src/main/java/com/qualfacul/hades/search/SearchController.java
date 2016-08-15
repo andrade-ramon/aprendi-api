@@ -1,12 +1,12 @@
-package com.hades.search;
+package com.qualfacul.hades.search;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hades.annotation.PublicEndpoint;
 import com.qualfacul.hades.annotation.Get;
+import com.qualfacul.hades.annotation.PublicEndpoint;
 import com.qualfacul.hades.college.College;
 
 @RestController

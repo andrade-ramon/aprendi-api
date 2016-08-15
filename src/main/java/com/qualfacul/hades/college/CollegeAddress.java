@@ -53,7 +53,7 @@ public class CollegeAddress {
 
 	@Column(name = "state")
 	private String state;
-
+	
 	@ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
 	@JoinTable(name = "college_course", 
 		joinColumns = { @JoinColumn(name = "college_address_id") }, 

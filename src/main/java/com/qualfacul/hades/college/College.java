@@ -19,7 +19,7 @@ import org.hibernate.search.annotations.Boost;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Indexed
 @Entity
@@ -36,7 +36,7 @@ public class College {
 
 	@Field
 	@Column(name = "name", nullable = false)
-	@Boost(1.0f)
+	@Boost(2.5f)
 	private String name;
 
 	@Field
@@ -44,6 +44,7 @@ public class College {
 	@Boost(3.0f)
 	private String initials;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "college", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
 	private List<CollegeAddress> collegeAdresses = new ArrayList<>();
 
@@ -60,8 +61,8 @@ public class College {
 	@Column(name = "site")
 	@Boost(0.7f)
 	private String site;
-
-	@JsonManagedReference
+	
+	@JsonIgnore
 	@OneToMany(mappedBy = "college", cascade = ALL)
 	private List<CollegeGrade> grades = new ArrayList<>();
 	

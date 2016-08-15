@@ -1,4 +1,4 @@
-package com.hades.configuration;
+package com.qualfacul.hades.configuration;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -25,7 +25,7 @@ class SearchIndexInitializer implements ApplicationListener<ApplicationReadyEven
 			FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
 			fullTextEntityManager.createIndexer().startAndWait();
 		} catch (InterruptedException e) {
-			LOGGER.error("Error on building the search index", e);
+			LOGGER.error("Error building the search index", e);
 		}
 	}
 
