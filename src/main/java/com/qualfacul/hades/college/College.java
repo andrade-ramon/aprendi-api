@@ -15,6 +15,13 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.search.annotations.Boost;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Indexed;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+@Indexed
 @Entity
 @Table(name = "college")
 public class College {
@@ -27,24 +34,35 @@ public class College {
 	@Column(name = "mec_id", unique = true)
 	private long mecId;
 
+	@Field
 	@Column(name = "name", nullable = false)
+	@Boost(2.5f)
 	private String name;
 
+	@Field
 	@Column(name = "initials", length = 30)
+	@Boost(3.0f)
 	private String initials;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "college", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
 	private List<CollegeAddress> collegeAdresses = new ArrayList<>();
 
+	@Field
 	@Column(name = "phone")
+	@Boost(0.5f)
 	private String phone;
 
+	@Field
 	@Column(name = "cnpj")
 	private String cnpj;
 
+	@Field
 	@Column(name = "site")
+	@Boost(0.7f)
 	private String site;
-
+	
+	@JsonIgnore
 	@OneToMany(mappedBy = "college", cascade = ALL)
 	private List<CollegeGrade> grades = new ArrayList<>();
 	
@@ -123,5 +141,4 @@ public class College {
 	public void setGrades(List<CollegeGrade> grades) {
 		this.grades = grades;
 	}
-
 }

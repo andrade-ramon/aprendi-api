@@ -11,6 +11,7 @@ db.password=
 db.driver=com.mysql.jdbc.Driver
 
 hibernate.show_sql=false
+hibernate.search.lucene.indexes=/var/lucene/indexes/
 
 jwt.secret=
 

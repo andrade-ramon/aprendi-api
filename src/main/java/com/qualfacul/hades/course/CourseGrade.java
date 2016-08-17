@@ -35,7 +35,7 @@ public class CourseGrade {
 
 	@OneToOne(optional = true)
 	private User user;
-
+	
 	@ManyToMany(mappedBy = "courseGrades", fetch = FetchType.EAGER)
 	private List<CollegeAddress> collegeAdresses = new ArrayList<>();
 
