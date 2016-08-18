@@ -2,7 +2,7 @@ package com.qualfacul.hades.configuration;
 
 import java.util.List;
 
-import org.springframework.context.annotation.Bean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -19,7 +19,10 @@ import com.qualfacul.hades.interceptor.StatelessAuthenticationInterceptor;
 @Configuration
 @WebComponent
 class WebConfiguration extends WebMvcConfigurerAdapter {
-
+	
+	@Autowired
+	private StatelessAuthenticationInterceptor statelessAuthenticationInterceptor;
+	
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**");
@@ -27,12 +30,7 @@ class WebConfiguration extends WebMvcConfigurerAdapter {
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(StatelessAuthenticationInterceptor());
-	}
-
-	@Bean
-	public StatelessAuthenticationInterceptor StatelessAuthenticationInterceptor() {
-		return new StatelessAuthenticationInterceptor();
+		registry.addInterceptor(statelessAuthenticationInterceptor);
 	}
 
 	@Override

@@ -37,14 +37,14 @@ public class PasswordRecoveryController {
 			throw new FacebookAccountException();
 		}
 
-		tokenAuthenticationService.createTemporaryTokenFor(loginInfo);
+		tokenAuthenticationService.createTokenFor(loginInfo);
 		
 		String userToken = Base64Utils.encode(loginInfo.getToken());
 		StringBuilder message = new StringBuilder();
 		message.append("Olá!<br/>Para redefinir sua senha, clique ");
 		message.append("<a href=\"http://dev.qualfacul.com:9000/redefinir-senha/" + userToken + "\">");
-		message.append("aquí</a><br/>");
-		message.append("Este link é valido por 24h, após esse período, será necessário ");
+		message.append("aqui</a><br/>");
+		message.append("Este link é válido por 24 horas, após esse período, será necessário ");
 		message.append("solicitar um novo link através do site.");
 
 		emailSender.to(loginInfo.getLogin())
