@@ -19,6 +19,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.qualfacul.hades.course.CourseGrade;
 
 @Entity
@@ -54,6 +55,7 @@ public class CollegeAddress {
 	@Column(name = "state")
 	private String state;
 	
+	@JsonManagedReference
 	@ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
 	@JoinTable(name = "college_course", 
 		joinColumns = { @JoinColumn(name = "college_address_id") }, 

@@ -19,8 +19,6 @@ import org.hibernate.search.annotations.Boost;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @Indexed
 @Entity
 @Table(name = "college")
@@ -44,7 +42,6 @@ public class College {
 	@Boost(3.0f)
 	private String initials;
 
-	@JsonIgnore
 	@OneToMany(mappedBy = "college", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
 	private List<CollegeAddress> collegeAdresses = new ArrayList<>();
 
@@ -62,8 +59,7 @@ public class College {
 	@Boost(0.7f)
 	private String site;
 	
-	@JsonIgnore
-	@OneToMany(mappedBy = "college", cascade = ALL)
+	@OneToMany(mappedBy = "college", cascade = ALL, fetch = FetchType.LAZY)
 	private List<CollegeGrade> grades = new ArrayList<>();
 	
 	@Deprecated // Hibernate eyes only

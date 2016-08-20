@@ -9,6 +9,10 @@ public interface CollegeRepository {
 
 	College save(College college);
 	
+	Optional<College> findById(long id);
+	
 	Optional<College> findByMecId(long mecId);
+	
+	Optional<College> findByName(String name);
 	
 }

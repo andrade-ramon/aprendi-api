@@ -1,5 +1,6 @@
 package com.qualfacul.hades.college;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.repository.RepositoryDefinition;
@@ -8,6 +9,10 @@ import org.springframework.data.repository.RepositoryDefinition;
 public interface CollegeAddressRepository {
 	
 	Optional<CollegeAddress> findByAddressAndCep(String address, String cep);
+	
+	Optional<CollegeAddress> findById(Long id);
+	
+	List<CollegeAddress> findByCollegeId(Long id);
 
 	CollegeAddress save(CollegeAddress collegeAddress);
 }
