@@ -13,3 +13,12 @@ hades.key
 
 *.orig
 *.swp
+
+*.fdt
+*.fdx
+*.frq
+*.nrm
+*.prx
+*.tis
+*.fnm
+*.tii
