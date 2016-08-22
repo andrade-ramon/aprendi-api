@@ -8,11 +8,11 @@ import org.springframework.data.repository.RepositoryDefinition;
 @RepositoryDefinition(domainClass = CollegeAddress.class, idClass = Long.class)
 public interface CollegeAddressRepository {
 	
-	Optional<CollegeAddress> findByAddressAndCep(String address, String cep);
-	
 	Optional<CollegeAddress> findById(Long id);
 	
-	List<CollegeAddress> findByCollegeId(Long id);
+	Optional<CollegeAddress> findByAddressAndCep(String address, String cep);
 
-	CollegeAddress save(CollegeAddress collegeAddress);
+	List<CollegeAddress> findAllByCollegeId(Long id);
+
+	Optional<CollegeAddress> save(CollegeAddress collegeAddress);
 }

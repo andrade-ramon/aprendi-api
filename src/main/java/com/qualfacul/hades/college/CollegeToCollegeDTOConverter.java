@@ -2,6 +2,9 @@ package com.qualfacul.hades.college;
 
 import org.springframework.core.convert.converter.Converter;
 
+import com.qualfacul.hades.annotation.WebComponent;
+
+@WebComponent
 public class CollegeToCollegeDTOConverter implements Converter<College, CollegeDTO>{
 
 	@Override
