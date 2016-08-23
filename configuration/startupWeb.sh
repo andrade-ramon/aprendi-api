@@ -14,7 +14,7 @@ apt-get update
 apt-get install -yq openjdk-8-jdk nginx gcsfuse
 
 mkdir /opt/app
-git clone https://github.com/andrade-ramon/hades.git /opt/app
+git clone https://github.com/qualfacul/hades.git /opt/app
 
 # Get bucket files
 mkdir /mnt/bucket
@@ -30,8 +30,6 @@ ln -sf /opt/app/configuration/nginx.conf /etc/nginx/nginx.conf
 
 # Gradle release
 cd /opt/app
-./gradlew build
-
-java -jar build/libs/hades.jar &
+./gradlew runWeb &
 
 systemctl restart nginx
