@@ -10,9 +10,9 @@ public class PaginatedSearch<T> {
 	private Integer totalPages;
 	private List<T> searchResult;
 	
-	public PaginatedSearch(List<T> searchResult, Integer count, Integer page, Integer pageSize) {
+	public PaginatedSearch(List<T> searchResult, Integer page, Integer pageSize) {
 		this.searchResult = searchResult;
-		this.count = count;
+		this.count = searchResult.size();
 		this.page = page;
 		this.pageSize = pageSize;
 		this.totalPages = (Integer) ((count / pageSize) + 1);

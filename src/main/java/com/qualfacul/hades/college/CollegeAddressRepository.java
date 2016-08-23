@@ -15,4 +15,6 @@ public interface CollegeAddressRepository {
 	List<CollegeAddress> findAllByCollegeId(Long id);
 
 	Optional<CollegeAddress> save(CollegeAddress collegeAddress);
+
+	Optional<CollegeAddress> findByIdAndCollegeId(Long addressId, Long collegeId);
 }

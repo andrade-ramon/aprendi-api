@@ -8,7 +8,6 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -18,6 +17,7 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.search.annotations.Boost;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.IndexedEmbedded;
 
 @Indexed
 @Entity
@@ -42,7 +42,8 @@ public class College {
 	@Boost(3.0f)
 	private String initials;
 
-	@OneToMany(mappedBy = "college", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+	@IndexedEmbedded
+	@OneToMany(mappedBy = "college", cascade = CascadeType.MERGE)
 	private List<CollegeAddress> collegeAdresses = new ArrayList<>();
 
 	@Field
@@ -59,13 +60,9 @@ public class College {
 	@Boost(0.7f)
 	private String site;
 	
-	@OneToMany(mappedBy = "college", cascade = ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "college", cascade = ALL)
 	private List<CollegeGrade> grades = new ArrayList<>();
 	
-	@Deprecated // Hibernate eyes only
-	public College() {
-	}
-
 	public Long getId() {
 		return id;
 	}

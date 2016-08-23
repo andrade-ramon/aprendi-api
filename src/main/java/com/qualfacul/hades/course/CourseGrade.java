@@ -15,7 +15,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.qualfacul.hades.college.CollegeAddress;
 import com.qualfacul.hades.user.User;
 
@@ -37,7 +36,6 @@ public class CourseGrade {
 	@OneToOne(optional = true)
 	private User user;
 
-	@JsonBackReference
 	@ManyToMany(mappedBy = "courseGrades", fetch = FetchType.EAGER)
 	private List<CollegeAddress> collegeAdresses = new ArrayList<>();
 

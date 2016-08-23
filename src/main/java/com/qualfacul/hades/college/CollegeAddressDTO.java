@@ -1,6 +1,7 @@
 package com.qualfacul.hades.college;
 
 public class CollegeAddressDTO {
+
 	private Long id;
 
 	private String name;

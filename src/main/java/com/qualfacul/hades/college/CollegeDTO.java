@@ -1,9 +1,8 @@
 package com.qualfacul.hades.college;
 
 public class CollegeDTO {
-	private Long id;
 
-	private long mecId;
+	private Long id;
 
 	private String name;
 
@@ -15,20 +14,14 @@ public class CollegeDTO {
 
 	private String site;
 
+	private Integer coursesCount;
+
 	public Long getId() {
 		return id;
 	}
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public long getMecId() {
-		return mecId;
-	}
-
-	public void setMecId(long mecId) {
-		this.mecId = mecId;
 	}
 
 	public String getName() {
@@ -71,4 +64,12 @@ public class CollegeDTO {
 		this.site = site;
 	}
 
+	public Integer getCoursesCount() {
+		return coursesCount;
+	}
+
+	public void setCoursesCount(Integer coursesCount) {
+		this.coursesCount = coursesCount;
+	}
+	
 }

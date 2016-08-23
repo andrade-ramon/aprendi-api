@@ -8,15 +8,21 @@ import com.qualfacul.hades.annotation.WebComponent;
 public class CollegeToCollegeDTOConverter implements Converter<College, CollegeDTO>{
 
 	@Override
-	public CollegeDTO convert(College source) {
+	public CollegeDTO convert(College from) {
 		CollegeDTO collegeDTO = new CollegeDTO();
-		collegeDTO.setId(source.getId());
-		collegeDTO.setMecId(source.getMecId());
-		collegeDTO.setName(source.getName());
-		collegeDTO.setInitials(source.getInitials());
-		collegeDTO.setPhone(source.getPhone());
-		collegeDTO.setCnpj(source.getCnpj());
-		collegeDTO.setSite(source.getSite());
+		collegeDTO.setId(from.getId());
+		collegeDTO.setName(from.getName());
+		collegeDTO.setInitials(from.getInitials());
+		collegeDTO.setPhone(from.getPhone());
+		collegeDTO.setCnpj(from.getCnpj());
+		collegeDTO.setSite(from.getSite());
+		
+		Integer collegesCount = from.getCollegeAdresses().stream()
+				.map(collegeAddress -> collegeAddress.getCourseGrades().size())
+				.mapToInt(i -> i.intValue()).sum();
+		
+		
+		collegeDTO.setCoursesCount(collegesCount);
 		return collegeDTO;
 	}
 
