@@ -63,7 +63,7 @@ dependencies {
 	compile 'org.springframework.social:spring-social-facebook:2.0.3.RELEASE'
 	
 	//Mail delivery dependencies
-	compile group: 'org.apache.commons', name: 'commons-email', version: '1.4'
+	compile 'org.apache.commons:commons-email:1.4'
 	compile 'org.thymeleaf:thymeleaf:3.0.0.RELEASE'
 	
 	

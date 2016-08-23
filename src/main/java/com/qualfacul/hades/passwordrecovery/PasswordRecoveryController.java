@@ -37,7 +37,7 @@ public class PasswordRecoveryController {
 	
 	@PermitEndpoint
 	@Post("/password/reset")
-	public boolean requestToken(@RequestBody @NotBlank String login) throws FacebookAccountException {
+	public boolean requestToken(@RequestBody @NotBlank String login) {
 		Optional<LoginInfo> optionalLoginInfo = loginInfoRepository.findByLogin(login);
 		if (optionalLoginInfo.isPresent()){
 			LoginInfo loginInfo = optionalLoginInfo.get();
@@ -62,7 +62,7 @@ public class PasswordRecoveryController {
 	
 	@PermitEndpoint
 	@Post("/password/change")
-	public boolean changePassword(@RequestBody @Valid PasswordRecoveryDTO passwordRecoveryDTO) throws FacebookAccountException, UsernameNotFoundException {
+	public boolean changePassword(@RequestBody @Valid PasswordRecoveryDTO passwordRecoveryDTO) {
 		String token = Base64Utils.decode(passwordRecoveryDTO.getToken());
 		Optional<LoginInfo> optionalLoginInfo = tokenAuthenticationService.getUserFromToken(token);
 		if (!optionalLoginInfo.isPresent()){
