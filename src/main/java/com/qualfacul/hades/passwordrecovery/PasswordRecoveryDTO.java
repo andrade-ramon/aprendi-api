@@ -5,21 +5,12 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 public class PasswordRecoveryDTO {
 	
-	@NotEmpty(message = "hades.passwordrecovery.token_unreceived")
-	String token;
+	@NotEmpty(message = "hades.passwordrecovery.token.not.received")
+	private String token;
 
 	@NotEmpty(message = "hades.user.empty.password")
 	@Length(min = 4, message = "hades.user.invalid.password")
-	String password;
-	
-	@Deprecated
-	private PasswordRecoveryDTO(){
-	}
-	
-	private PasswordRecoveryDTO(String token, String password){
-		this.token = token;
-		this.password = password;
-	}
+	private String password;
 
 	public String getToken() {
 		return token;
@@ -36,6 +27,5 @@ public class PasswordRecoveryDTO {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
-	
+
 }

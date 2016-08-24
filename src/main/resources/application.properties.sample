@@ -15,7 +15,6 @@ email.port=
 email.name=
 email.username=
 email.password=
-email.charset=
 
 hibernate.show_sql=false
 hibernate.search.lucene.indexes=/var/lucene/indexes/

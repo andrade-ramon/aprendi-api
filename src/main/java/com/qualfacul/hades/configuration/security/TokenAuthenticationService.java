@@ -2,6 +2,7 @@ package com.qualfacul.hades.configuration.security;
 
 import static org.springframework.util.StringUtils.isEmpty;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
 
@@ -17,6 +18,8 @@ import com.qualfacul.hades.login.LoginInfo;
 
 @WebService
 public class TokenAuthenticationService {
+	
+	private final static int ONE_DAY_IN_MINUTES_EXPIRATION_TIME = 60*24;
 
 	private TokenHandler tokenHandler;
 
@@ -43,15 +46,21 @@ public class TokenAuthenticationService {
 	}
 
 	public void createTokenFor(LoginInfo loginInfo) {
-		String token = tokenHandler.createTokenFor(loginInfo);
-		loginInfo.setToken(token);
+		createToken(loginInfo, null);
 	}
 	
-	public String createTokenFor(LoginInfo loginInfo, Date expirationDate){
-		return tokenHandler.createTokenFor(loginInfo, expirationDate);
+	public void createTemporaryTokenFor(LoginInfo loginInfo){
+		Calendar expirationDate = Calendar.getInstance();
+		expirationDate.add(Calendar.MINUTE, ONE_DAY_IN_MINUTES_EXPIRATION_TIME);
+		createToken(loginInfo, expirationDate.getTime());
 	}
 
 	public Optional<LoginInfo> getUserFromToken(String token) {
 		return tokenHandler.parseUserFromToken(token);
+	}
+	
+	private void createToken(LoginInfo loginInfo, Date expirationDate) {
+		String token = tokenHandler.createTokenFor(loginInfo, expirationDate);
+		loginInfo.setToken(token);
 	}
 }
