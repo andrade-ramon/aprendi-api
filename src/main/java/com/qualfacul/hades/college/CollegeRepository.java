@@ -13,6 +13,4 @@ public interface CollegeRepository {
 	
 	Optional<College> findByMecId(long mecId);
 	
-	Optional<College> findByName(String name);
-	
 }

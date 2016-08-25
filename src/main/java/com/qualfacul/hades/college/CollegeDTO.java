@@ -3,17 +3,11 @@ package com.qualfacul.hades.college;
 public class CollegeDTO {
 
 	private Long id;
-
 	private String name;
-
 	private String initials;
-
 	private String phone;
-
 	private String cnpj;
-
 	private String site;
-
 	private Integer coursesCount;
 
 	public Long getId() {

@@ -3,21 +3,14 @@ package com.qualfacul.hades.college;
 public class CollegeAddressDTO {
 
 	private Long id;
-
 	private String name;
-
 	private String address;
-
 	private String cep;
-
 	private String number;
-
 	private String neighborhood;
-
 	private String city;
-
 	private String state;
-
+	
 	public Long getId() {
 		return id;
 	}
