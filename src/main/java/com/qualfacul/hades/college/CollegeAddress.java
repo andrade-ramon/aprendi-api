@@ -62,14 +62,6 @@ public class CollegeAddress {
 		joinColumns = { @JoinColumn(name = "college_address_id") }, 
 		inverseJoinColumns = { @JoinColumn(name = "course_grade_id") })
 	private List<CourseGrade> courseGrades = new ArrayList<>();
-
-	@Deprecated // Hibernate eyes only
-	public CollegeAddress() {
-	}
-	
-	public CollegeAddress(College college) {
-		this.college = college;
-	}
 	
 	public Long getId() {
 		return id;

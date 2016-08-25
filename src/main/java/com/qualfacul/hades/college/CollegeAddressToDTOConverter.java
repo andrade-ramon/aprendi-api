@@ -8,15 +8,16 @@ import com.qualfacul.hades.annotation.WebComponent;
 public class CollegeAddressToDTOConverter implements Converter<CollegeAddress, CollegeAddressDTO>{
 
 	@Override
-	public CollegeAddressDTO convert(CollegeAddress source) {
+	public CollegeAddressDTO convert(CollegeAddress from) {
 		CollegeAddressDTO collegeAddressDTO = new CollegeAddressDTO();
-		collegeAddressDTO.setId(source.getId());
-		collegeAddressDTO.setAddress(source.getAddress());
-		collegeAddressDTO.setCep(source.getCep());
-		collegeAddressDTO.setNumber(source.getNumber());
-		collegeAddressDTO.setNeighborhood(source.getNeighborhood());
-		collegeAddressDTO.setCity(source.getCity());
-		collegeAddressDTO.setState(source.getState());
+		collegeAddressDTO.setId(from.getId());
+		collegeAddressDTO.setName(from.getName());
+		collegeAddressDTO.setAddress(from.getAddress());
+		collegeAddressDTO.setCep(from.getCep());
+		collegeAddressDTO.setNumber(from.getNumber());
+		collegeAddressDTO.setNeighborhood(from.getNeighborhood());
+		collegeAddressDTO.setCity(from.getCity());
+		collegeAddressDTO.setState(from.getState());
 		return collegeAddressDTO;
 	}
 	
