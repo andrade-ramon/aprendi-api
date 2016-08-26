@@ -29,8 +29,8 @@ public class PasswordRecoveryController {
 	
 	@PublicEndpoint
 	@Post("/password/reset")
-	public void requestToken(@RequestBody @NotBlank String login) {
-		LoginInfo loginInfo = loginInfoRepository.findByLogin(login)
+	public void requestToken(@RequestBody @NotBlank PasswordChangeDTO passwordChangeDTO) {
+		LoginInfo loginInfo = loginInfoRepository.findByLogin(passwordChangeDTO.getEmail())
 						.orElseThrow(UsernameNotFoundException::new);
 
 		if (loginInfo.isFromFacebook()) {
@@ -38,11 +38,11 @@ public class PasswordRecoveryController {
 		}
 
 		tokenAuthenticationService.createTemporaryTokenFor(loginInfo);
-		String userToken = Base64Utils.encode(loginInfo.getToken()); 
-
+		
+		String userToken = Base64Utils.encode(loginInfo.getToken());
 		StringBuilder message = new StringBuilder();
 		message.append("Olá!<br/>Para redefinir sua senha, clique ");
-		message.append("<a href=\"http://dev.qualfacul.com:9000/redefinirsenha/" + userToken + "\">");
+		message.append("<a href=\"http://dev.qualfacul.com:9000/redefinir-senha/" + userToken + "\">");
 		message.append("aquí</a><br/>");
 		message.append("Este link é valido por 24h, após esse período, será necessário ");
 		message.append("solicitar um novo link através do site.");
