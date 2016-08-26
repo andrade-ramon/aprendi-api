@@ -95,7 +95,6 @@ public class MecCourseService {
 		return courseGrades;
 	}
 	
-	@SuppressWarnings("deprecation")
 	public CollegeAddress setupCourseAdresses(Element trAddress, College college, List<CourseGrade> courseGrades) {
 		Elements tdsCourse = trAddress.select("td");
 		CollegeAddress collegeAddress = new CollegeAddress();

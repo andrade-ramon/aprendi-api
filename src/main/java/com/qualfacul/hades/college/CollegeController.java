@@ -59,7 +59,7 @@ public class CollegeController {
 	}
 	
 	@PublicEndpoint
-	@Get("/search/{query}")
+	@Get("/colleges/search/{query}")
 	public PaginatedSearch<CollegeDTO> list(@PathVariable String query, @RequestParam(required = false) Integer page) {
 		
 		List<College> colleges = collegeSearch
