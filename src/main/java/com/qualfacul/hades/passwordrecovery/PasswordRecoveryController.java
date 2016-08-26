@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.qualfacul.hades.annotation.PermitEndpoint;
 import com.qualfacul.hades.annotation.Post;
+import com.qualfacul.hades.annotation.PublicEndpoint;
 import com.qualfacul.hades.configuration.security.TokenAuthenticationService;
 import com.qualfacul.hades.crypt.Base64Utils;
 import com.qualfacul.hades.exceptions.FacebookAccountException;
@@ -27,7 +27,7 @@ public class PasswordRecoveryController {
 	@Autowired
 	private SmtpEmailSender emailSender;
 	
-	@PermitEndpoint
+	@PublicEndpoint
 	@Post("/password/reset")
 	public void requestToken(@RequestBody @NotBlank String login) {
 		LoginInfo loginInfo = loginInfoRepository.findByLogin(login)
@@ -54,7 +54,7 @@ public class PasswordRecoveryController {
 
 	}
 	
-	@PermitEndpoint
+	@PublicEndpoint
 	@Post("/password/change")
 	public void changePassword(@RequestBody @Valid PasswordRecoveryDTO passwordRecoveryDTO) {
 		String token = Base64Utils.decode(passwordRecoveryDTO.getToken());

@@ -64,8 +64,6 @@ dependencies {
 	
 	//Mail delivery dependencies
 	compile 'org.apache.commons:commons-email:1.4'
-	compile 'org.thymeleaf:thymeleaf:3.0.0.RELEASE'
-	
 	
     // Tests
     compile 'org.springframework:spring-test'
