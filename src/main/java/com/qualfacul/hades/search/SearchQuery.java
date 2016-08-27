@@ -26,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class SearchQuery<T> {
 
-	public static final int MAX_RESULTS_PER_PAGE = 15;
+	public static final int MAX_RESULTS_PER_PAGE = 10;
 	private final static Logger LOGGER = LoggerFactory.getLogger(SearchQuery.class);
 
 	@PersistenceContext
