@@ -19,6 +19,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.search.annotations.Field;
+
 import com.qualfacul.hades.course.CourseGrade;
 
 @Entity
@@ -33,6 +35,7 @@ public class CollegeAddress {
 	@OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
 	private College college;
 
+	@Field
 	@Column(name = "name")
 	private String name;
 
@@ -59,14 +62,6 @@ public class CollegeAddress {
 		joinColumns = { @JoinColumn(name = "college_address_id") }, 
 		inverseJoinColumns = { @JoinColumn(name = "course_grade_id") })
 	private List<CourseGrade> courseGrades = new ArrayList<>();
-
-	@Deprecated // Hibernate eyes only
-	public CollegeAddress() {
-	}
-	
-	public CollegeAddress(College college) {
-		this.college = college;
-	}
 	
 	public Long getId() {
 		return id;

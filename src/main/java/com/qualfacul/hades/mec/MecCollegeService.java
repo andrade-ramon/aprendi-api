@@ -22,7 +22,6 @@ import com.qualfacul.hades.college.CollegeGrade;
 @TaskService
 public class MecCollegeService {
 	
-	@SuppressWarnings("deprecation")
 	public College setupBasicCollegeInformations(Document document) {
 		College college = new College();
 

@@ -1,7 +1,10 @@
 package com.qualfacul.hades.search;
 
+import static org.apache.commons.lang3.StringUtils.lowerCase;
+
 import java.lang.reflect.Field;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
@@ -12,7 +15,10 @@ import org.hibernate.Session;
 import org.hibernate.search.FullTextQuery;
 import org.hibernate.search.FullTextSession;
 import org.hibernate.search.Search;
+import org.hibernate.search.annotations.IndexedEmbedded;
 import org.hibernate.search.query.dsl.QueryBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +26,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class SearchQuery<T> {
 
-	private static final int MAX_RESULTS_PER_PAGE = 40;
+	public static final int MAX_RESULTS_PER_PAGE = 10;
+	private final static Logger LOGGER = LoggerFactory.getLogger(SearchQuery.class);
 
 	@PersistenceContext
 	private EntityManager manager;
@@ -39,12 +46,25 @@ public class SearchQuery<T> {
 
 		public SearchQueryWithThreshold forEntity(Class<?> c) {
 			clazz = c;
-			for (Field field : clazz.getDeclaredFields()) {
+			try {
+				searchInSubClasses(clazz, false);
+			} catch (ClassNotFoundException e) {
+				LOGGER.warn("Cannot index all fields of Class: {} ", clazz);
+			}
+			
+			return new SearchQueryWithThreshold();
+		}
+		
+		private void searchInSubClasses(Class<?> c, boolean isSuperClass) throws ClassNotFoundException{
+			for (Field field : c.getDeclaredFields()) {
 				if (field.isAnnotationPresent(org.hibernate.search.annotations.Field.class)) {
-					fieldNames.add(field.getName());
+					String value = isSuperClass ? lowerCase(c.getSimpleName()) + "." + field.getName() : field.getName();
+					fieldNames.add(value);
+				} else if (field.isAnnotationPresent(IndexedEmbedded.class)) {
+					Class<?> clazz = Class.forName(field.getGenericType().getTypeName());
+					searchInSubClasses(clazz, true);
 				}
 			}
-			return new SearchQueryWithThreshold();
 		}
 	}
 
@@ -75,7 +95,7 @@ public class SearchQuery<T> {
 	public class SearchQueryFactory {
 
 		@SuppressWarnings("unchecked")
-		public PaginatedSearch<T> build() {
+		public List<T> build() {
 			Session session = manager.unwrap(Session.class);
 			FullTextSession fullTextSession = Search.getFullTextSession(session);
 
@@ -95,9 +115,7 @@ public class SearchQuery<T> {
 			query.setMaxResults(MAX_RESULTS_PER_PAGE);
 			query.setFirstResult((currentPage - 1) * MAX_RESULTS_PER_PAGE);
 
-			PaginatedSearch<T> paginatedSearch = new PaginatedSearch<>(query.list(), query.getResultSize(), currentPage, MAX_RESULTS_PER_PAGE);
-
-			return paginatedSearch;
+			return query.list();
 		}
 	}
 
