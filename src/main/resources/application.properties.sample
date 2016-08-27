@@ -10,6 +10,12 @@ db.username=root
 db.password=
 db.driver=com.mysql.jdbc.Driver
 
+email.hostname=
+email.port=
+email.name=
+email.username=
+email.password=
+
 hibernate.show_sql=false
 hibernate.search.lucene.indexes=/var/lucene/indexes/
 
