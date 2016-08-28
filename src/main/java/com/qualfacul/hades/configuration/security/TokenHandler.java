@@ -16,7 +16,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 @WebComponent
 class TokenHandler {
-
+	
 	@Value("${jwt.secret}")
 	private String secret;
 
@@ -24,13 +24,19 @@ class TokenHandler {
 	private LoginInfoRepository loginInfoRepository;
 
 	public String createTokenFor(LoginInfo loginInfo, Date expirationDate){
-		return Jwts.builder().setSubject(loginInfo.getLogin()).signWith(SignatureAlgorithm.HS256, secret).setExpiration(expirationDate).compact();
+		return Jwts.builder().setSubject(loginInfo.getLogin())
+							 .signWith(SignatureAlgorithm.HS256, secret)
+							 .setExpiration(expirationDate)
+							 .compact();
 	}
 
 	public Optional<LoginInfo> parseUserFromToken(String jwtToken) {
 		String login = "";
 		try {
-			login = Jwts.parser().setSigningKey(secret).parseClaimsJws(jwtToken).getBody().getSubject();
+			login = Jwts.parser().setSigningKey(secret)
+								 .parseClaimsJws(jwtToken)
+								 .getBody()
+								 .getSubject();
 		} catch (JwtException | IllegalArgumentException e) {
 			return Optional.empty();
 		}
