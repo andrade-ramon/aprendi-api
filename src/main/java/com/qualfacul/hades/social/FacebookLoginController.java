@@ -36,8 +36,9 @@ public class FacebookLoginController {
 	@Post("/facebook/login")
 	@PublicEndpoint
 	@ResponseStatus(ACCEPTED)
-	public LoginInfoDTO login(@RequestBody String accessToken) {
+	public LoginInfoDTO login(@RequestBody FacebookLoginDTO facebookLoginDTO) {
 		Connection<Facebook> connection;
+		String accessToken = facebookLoginDTO.getAccessToken();
 		try {
 			AccessGrant accessGrant = new AccessGrant(accessToken);
 			connection = connectionFactory.createConnection(accessGrant);

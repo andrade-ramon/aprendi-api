@@ -1,40 +1,68 @@
 package com.qualfacul.hades.search;
 
+import static com.qualfacul.hades.search.SearchQuery.MAX_RESULTS_PER_PAGE;
+
 import java.util.List;
 
 public class PaginatedSearch<T> {
 
-	private Integer count;
 	private Integer page;
-	private Integer pageSize;
+	private Integer actualPageSize;
+	private Integer totalResults;
 	private Integer totalPages;
-	private List<T> searchResult;
-	
-	public PaginatedSearch(List<T> searchResult, Integer page, Integer pageSize) {
-		this.searchResult = searchResult;
-		this.count = searchResult.size();
-		this.page = page;
-		this.pageSize = pageSize;
-		this.totalPages = (Integer) ((count / pageSize) + 1);
-	}
+	private List<T> result;
 
-	public List<T> getSearchResult() {
-		return searchResult;
+	public PaginatedSearch(List<T> result, Integer page, Integer totalResults) {
+		this.page = page;
+		this.actualPageSize = result.size();
+		this.result = result;
+		this.totalResults = totalResults;
+
+		int totalPages = (int) (totalResults / MAX_RESULTS_PER_PAGE);
+		if (totalResults % MAX_RESULTS_PER_PAGE == 0) {
+			this.totalPages = totalPages;
+		} else {
+			this.totalPages = totalPages + 1;
+		}
 	}
 
 	public Integer getPage() {
 		return page;
 	}
 
-	public Integer getPageSize() {
-		return pageSize;
+	public Integer getActualPageSize() {
+		return actualPageSize;
 	}
 
-	public Integer getCount() {
-		return count;
+	public Integer getTotalResults() {
+		return totalResults;
 	}
-	
+
 	public Integer getTotalPages() {
 		return totalPages;
+	}
+
+	public List<T> getResult() {
+		return result;
+	}
+
+	public void setPage(Integer page) {
+		this.page = page;
+	}
+
+	public void setActualPageSize(Integer actualPageSize) {
+		this.actualPageSize = actualPageSize;
+	}
+
+	public void setTotalResults(Integer totalResults) {
+		this.totalResults = totalResults;
+	}
+
+	public void setTotalPages(Integer totalPages) {
+		this.totalPages = totalPages;
+	}
+
+	public void setResult(List<T> result) {
+		this.result = result;
 	}
 }

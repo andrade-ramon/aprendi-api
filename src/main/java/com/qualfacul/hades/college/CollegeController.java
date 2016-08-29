@@ -1,7 +1,5 @@
 package com.qualfacul.hades.college;
 
-import static com.qualfacul.hades.search.SearchQuery.MAX_RESULTS_PER_PAGE;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,7 +22,7 @@ public class CollegeController {
 	private static final float COLLEGE_THRESHOLD = 0.4f;
 	
 	@Autowired
-	private SearchQuery<College> collegeSearch;
+	private SearchQuery<College, CollegeDTO> collegeSearch;
 	@Autowired
 	private CollegeRepository collegeRepository;	
 	@Autowired
@@ -61,18 +59,17 @@ public class CollegeController {
 	@PublicEndpoint
 	@Get("/colleges/search/{query}")
 	public PaginatedSearch<CollegeDTO> list(@PathVariable String query, @RequestParam(required = false) Integer page) {
+		ListConverter<College, CollegeDTO> listConverter = new ListConverter<>(collegeConverter);
 		
-		List<College> colleges = collegeSearch
+		PaginatedSearch<CollegeDTO> dtos = collegeSearch
 			.builder()
 			.forEntity(College.class)
 			.withThreshold(COLLEGE_THRESHOLD)
 			.matching(query)
 			.forPage(page)
+			.withListConverter(listConverter)
 			.build();
 		
-		ListConverter<College, CollegeDTO> listConverter = new ListConverter<>(collegeConverter);
-		List<CollegeDTO> dtos = listConverter.convert(colleges);
-		
-		return new PaginatedSearch<CollegeDTO>(dtos, page, MAX_RESULTS_PER_PAGE);
+		return dtos;
 	}
 }
