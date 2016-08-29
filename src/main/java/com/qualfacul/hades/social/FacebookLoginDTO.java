@@ -1,6 +1,6 @@
 package com.qualfacul.hades.social;
 
-class FacebookLogin {
+class FacebookLoginDTO {
 	private String accessToken;
 
 	public String getAccessToken() {

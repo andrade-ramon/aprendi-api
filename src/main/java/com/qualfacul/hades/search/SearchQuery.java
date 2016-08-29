@@ -22,9 +22,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.qualfacul.hades.converter.ListConverter;
+
 @Repository
 @Transactional
-public class SearchQuery<T> {
+public class SearchQuery<F, T> {
 
 	public static final int MAX_RESULTS_PER_PAGE = 10;
 	private final static Logger LOGGER = LoggerFactory.getLogger(SearchQuery.class);
@@ -37,6 +39,7 @@ public class SearchQuery<T> {
 	private Set<String> fieldNames = new HashSet<>();
 	private Float threshold;
 	private Integer currentPage;
+	private ListConverter<F, T> listConverter;
 
 	public SearchQueryBuilder builder() {
 		return new SearchQueryBuilder();
@@ -86,16 +89,25 @@ public class SearchQuery<T> {
 
 	public class SearchQueryPagination {
 
-		public SearchQueryFactory forPage(Integer pageNum) {
+		public SearchQueryListConverter forPage(Integer pageNum) {
 			currentPage = pageNum != null && pageNum > 0 ? pageNum : 1;
-			return new SearchQueryFactory();
+			return new SearchQueryListConverter();
 		}
 	}
 
+	public class SearchQueryListConverter {
+		
+		public SearchQueryFactory withListConverter(ListConverter<F, T> converter) {
+			listConverter = converter;
+			return new SearchQueryFactory();
+		}
+	}
+	
+	
 	public class SearchQueryFactory {
-
+		
 		@SuppressWarnings("unchecked")
-		public List<T> build() {
+		public PaginatedSearch<T> build() {
 			Session session = manager.unwrap(Session.class);
 			FullTextSession fullTextSession = Search.getFullTextSession(session);
 
@@ -114,8 +126,10 @@ public class SearchQuery<T> {
 			FullTextQuery query = fullTextSession.createFullTextQuery(luceneQuery, clazz);
 			query.setMaxResults(MAX_RESULTS_PER_PAGE);
 			query.setFirstResult((currentPage - 1) * MAX_RESULTS_PER_PAGE);
-
-			return query.list();
+			
+			List<T> results = listConverter.convert(query.list());
+			
+			return new PaginatedSearch<T>(results, currentPage, query.getResultSize());
 		}
 	}
 
