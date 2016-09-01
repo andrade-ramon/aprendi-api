@@ -1,6 +1,6 @@
 package com.qualfacul.hades.login;
 
-import static com.qualfacul.hades.login.LoginOrigin.FACEBOOK;
+import static com.qualfacul.hades.login.LoginOrigin.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -97,6 +97,13 @@ public class LoginInfo {
 		this.token = token;
 	}
 
+	public boolean isFromUser(){
+		if (COLLEGE.equals(this.getLoginOrigin()) || ADMIN.equals(this.getLoginOrigin())){
+			return false;
+		}
+		return true;
+	}
+	
 	public boolean isFromFacebook() {
 		return FACEBOOK.equals(this.loginOrigin);
 	}

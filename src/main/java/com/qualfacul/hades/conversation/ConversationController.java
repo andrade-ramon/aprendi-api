@@ -1,46 +1,60 @@
 package com.qualfacul.hades.conversation;
 
-import java.util.ArrayList;
-import java.util.List;
+import static org.springframework.http.HttpStatus.CREATED;
 
-import org.hibernate.validator.constraints.NotBlank;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.qualfacul.hades.annotation.Get;
 import com.qualfacul.hades.annotation.Post;
-import com.qualfacul.hades.login.LoggedUserManager;
-import com.qualfacul.hades.login.LoginInfo;
+import com.qualfacul.hades.exceptions.ConversationNotFoundException;
 
 @RestController
 public class ConversationController {
 	
 	@Autowired
-	private LoggedUserManager loggedUserManager;
-	
-	@Autowired
-	private ConversationDTOToConversationConverter conversationConverter;
-	
-	@Autowired
-	private ConversationMessageDTOToConversationMessageConverter messageConverter;
-	
-	@Autowired
 	private ConversationRepository conversationRepository;
 	
-	@Post("/conversation/new")
-	public void newConversation(@RequestBody @NotBlank ConversationDTO conversationDTO){
-		LoginInfo loginInfo = loggedUserManager.getLoginInfo();
-		conversationDTO.setSenderId(loginInfo.getId());
-		Conversation conversation = conversationConverter.convert(conversationDTO);
-		
-		ConversationMessageDTO conversationMessageDTO = new ConversationMessageDTO();
-		conversationMessageDTO.setDefaultStudentToCollegeInfo(conversation, loginInfo.getId(), conversationDTO.getMessage());
-		ConversationMessage conversationMessage = messageConverter.convert(conversationMessageDTO);
-		//conversationMessageRepository.save(conversationMessage);
-		
-		List<ConversationMessage> messages = new ArrayList<>();
-		messages.add(conversationMessage);
-		conversation.setMessages(messages);
+	@Autowired
+	private ConversationMessageRepository messageRepository;
+	
+	@Autowired
+	private ConversationStartDTOToConversationConverter conversationStartDTOConverter;
+	
+	@Autowired
+	private ConversationToConversationDTOConverter conversationConverter;
+	
+	@Autowired
+	private ConversationMessageToConversationMessageDTOConverter conversationMessageConverter;
+	
+	@Autowired
+	private ReplyMessageDTOToConversationMessageConverter replyMessageConverter;
+	
+	@Post(value = "/conversations/new", responseStatus = CREATED)
+	public ConversationDTO newConversation(@RequestBody @Valid ConversationStartDTO conversationStartDTO){
+		Conversation conversation = conversationStartDTOConverter.convert(conversationStartDTO);
 		conversationRepository.save(conversation);
+		return conversationConverter.fromConversation(conversation).convert();
+	}
+	
+	@Post(value = "/conversations/reply/new", responseStatus = CREATED)
+	public ConversationMessageDTO newReply(@RequestBody @Valid ReplyMessageDTO replyMessageDTO){
+		ConversationMessage conversationMessage = replyMessageConverter.convert(replyMessageDTO);
+		messageRepository.save(conversationMessage);
+		return conversationMessageConverter.convert(conversationMessage);
+	}
+	
+	@Get("/conversations/{id}")
+	public ConversationDTO getConversation(@PathVariable Long id){
+		return conversationRepository.findById(id)
+				.map(conversation -> conversationConverter
+										.fromConversation(conversation)
+										.withMessages()
+										.convert())
+				.orElseThrow(ConversationNotFoundException::new);
 	}
 }

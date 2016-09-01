@@ -1,41 +1,44 @@
 package com.qualfacul.hades.conversation;
 
-import org.hibernate.validator.constraints.NotEmpty;
+import java.util.Calendar;
+import java.util.List;
+
+import com.qualfacul.hades.util.HadesDateFormat;
 
 public class ConversationDTO {
-	@NotEmpty(message = "hades.college.not.received")
-	private Long college;
-	private Long senderId;
-	@NotEmpty(message = "hades.message.not.received")
-	private String message;
+	private Long id;
+	private Long collegeId;
+	private String createdAt;
+	private List<ConversationMessageDTO> messages;
 	
-	public ConversationDTO(){
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	public Long getCollegeId() {
+		return collegeId;
+	}
+	public void setCollegeId(Long collegeId) {
+		this.collegeId = collegeId;
+	}
+	public String getCreatedAt() {
+		return createdAt;
+	}
+	private void setCreatedAt(String createdAt){
+		this.createdAt = createdAt;
+	}
+	public void setCreatedAt(Calendar createdAt) {
+		HadesDateFormat dateFormatter = new HadesDateFormat(HadesDateFormat.HADES_FULLDATE_FORMAT);
+		this.setCreatedAt(dateFormatter.format(createdAt));
+	}
+	public List<ConversationMessageDTO> getMessages() {
+		return messages;
+	}
+	public void setMessages(List<ConversationMessageDTO> messages) {
+		this.messages = messages;
 	}
 	
-	public ConversationDTO(Long college, Long senderId, String message) {
-		this.college = college;
-		this.senderId = senderId;
-		this.message = message;
-	}
 	
-	public Long getCollege() {
-		return college;
-	}
-	public void setCollege(Long college) {
-		this.college = college;
-	}
-	public Long getSenderId() {
-		return senderId;
-	}
-
-	public void setSenderId(Long senderId) {
-		this.senderId = senderId;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-	public void setMessage(String message) {
-		this.message = message;
-	}
 }

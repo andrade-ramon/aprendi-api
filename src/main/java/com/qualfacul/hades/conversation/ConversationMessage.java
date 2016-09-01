@@ -3,6 +3,7 @@ package com.qualfacul.hades.conversation;
 import java.util.Calendar;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -26,26 +27,28 @@ public class ConversationMessage {
 	private Conversation conversation;
 	
 	@NotNull
+	@Column(name = "sent_at", nullable = false)
 	private Calendar sentAt;
 	
 	@NotNull
+	@Column(name = "sender_id", nullable = false)
 	private Long senderId;
 	
 	@NotNull
+	@Column(name = "message", nullable = false)
 	private String message;
 	
 	@NotNull
 	@Enumerated(EnumType.STRING)
+	@Column(name = "direction", nullable = false)
 	private ConversationDirection direction;
 
+	@Deprecated
 	public ConversationMessage(){
 	}
 	
-	public ConversationMessage(Long id, Conversation conversation, Calendar sentAt, Long senderId, String message,
-			ConversationDirection direction) {
-		this.id = id;
+	public ConversationMessage(Conversation conversation, Long senderId, String message, ConversationDirection direction){
 		this.conversation = conversation;
-		this.sentAt = sentAt;
 		this.senderId = senderId;
 		this.message = message;
 		this.direction = direction;
@@ -68,6 +71,9 @@ public class ConversationMessage {
 	}
 	public void setSentAt(Calendar sentAt) {
 		this.sentAt = sentAt;
+	}
+	public void setSentAtWithCurrentDate(){
+		this.setSentAt(Calendar.getInstance());
 	}
 	public Long getSenderId() {
 		return senderId;
