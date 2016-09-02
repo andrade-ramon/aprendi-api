@@ -2,6 +2,8 @@ package com.qualfacul.hades.conversation;
 
 import static org.springframework.http.HttpStatus.CREATED;
 
+import java.util.Optional;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +11,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.qualfacul.hades.annotation.Delete;
 import com.qualfacul.hades.annotation.Get;
 import com.qualfacul.hades.annotation.Post;
-import com.qualfacul.hades.exceptions.ConversationMessageNotFoundException;
+import com.qualfacul.hades.exceptions.MessageNotFoundException;
 import com.qualfacul.hades.exceptions.ConversationNotFoundException;
+import com.qualfacul.hades.exceptions.UsernameNotAllowedException;
+import com.qualfacul.hades.login.LoggedUserManager;
+import com.qualfacul.hades.login.LoginInfo;
 
 @RestController
 public class ConversationController {
@@ -30,27 +36,16 @@ public class ConversationController {
 	private ConversationToConversationDTOConverter conversationConverter;
 	
 	@Autowired
-	private ConversationMessageToConversationMessageDTOConverter messageConverter;
+	private MessageToMessageDTOConverter messageConverter;
 	
 	@Autowired
-	private ReplyMessageDTOToConversationMessageConverter replyMessageConverter;
+	private ReplyMessageDTOToMessageConverter replyMessageConverter;
 	
-	@Post(value = "/conversations/new", responseStatus = CREATED)
-	public ConversationDTO newConversation(@RequestBody @Valid ConversationStartDTO conversationStartDTO){
-		Conversation conversation = conversationStartDTOConverter.convert(conversationStartDTO);
-		conversationRepository.save(conversation);
-		return conversationConverter.fromConversation(conversation).convert();
-	}
+	@Autowired
+	private LoggedUserManager loggedUserManager;
 	
-	@Post(value = "/conversations/reply/new", responseStatus = CREATED)
-	public ConversationMessageDTO newReply(@RequestBody @Valid ReplyMessageDTO replyMessageDTO){
-		ConversationMessage conversationMessage = replyMessageConverter.convert(replyMessageDTO);
-		messageRepository.save(conversationMessage);
-		return messageConverter.convert(conversationMessage);
-	}
-	
-	@Get("/conversations/{id}")
-	public ConversationDTO getConversation(@PathVariable Long id){
+	@Get(value = "/conversations/{id}")
+	public ConversationDTO getConversation(@PathVariable long id){
 		return conversationRepository.findById(id)
 				.map(conversation -> conversationConverter
 										.fromConversation(conversation)
@@ -59,10 +54,56 @@ public class ConversationController {
 				.orElseThrow(ConversationNotFoundException::new);
 	}
 	
-	@Get("/conversations/{conversationId}/message/{id}")
-	public ConversationMessageDTO getMessage(@PathVariable Long conversationId, @PathVariable Long id){
-		return messageRepository.findByConversationIdAndId(conversationId, id)
+	@Get(value = "/conversations/{conversationId}/messages/{id}")
+	public MessageDTO getMessage(@PathVariable long conversationId, @PathVariable Long id){
+		return messageRepository.findByIdAndConversationId(id, conversationId)
 				.map(conversationMessage -> messageConverter.convert(conversationMessage))
-				.orElseThrow(ConversationMessageNotFoundException::new);
+				.orElseThrow(MessageNotFoundException::new);
+	}
+	
+	@Post(value = "/conversations", responseStatus = CREATED)
+	public ConversationDTO newConversation(@RequestBody @Valid ConversationStartDTO conversationStartDTO){
+		Conversation conversation = conversationStartDTOConverter.convert(conversationStartDTO);
+		conversationRepository.save(conversation);
+		return conversationConverter.fromConversation(conversation).convert();
+	}
+	
+	@Post(value = "/conversations/reply", responseStatus = CREATED)
+	public MessageDTO newReply(@RequestBody @Valid ReplyMessageDTO replyMessageDTO){
+		Message conversationMessage = replyMessageConverter.convert(replyMessageDTO);
+		messageRepository.save(conversationMessage);
+		conversationMessage.getMessageContent();
+		return messageConverter.convert(conversationMessage);
+	}
+	
+	@Delete(value = "/conversations/{id}")
+	public void deleteConversation(@PathVariable Long id){
+		Optional<Conversation> optionalConversation = conversationRepository.findById(id);
+		if (!optionalConversation.isPresent()){
+			throw new ConversationNotFoundException();
+		}
+		Conversation conversation = optionalConversation.get();
+		LoginInfo loginInfo = loggedUserManager.getLoginInfo();
+		Message firstMessage = conversation.getAuthorMessage();
+		if (!firstMessage.isAuthor(loginInfo)){
+			throw new UsernameNotAllowedException();
+		}
+		conversation.setDeleted(true);
+		conversationRepository.save(conversation);
+	}
+	
+	@Delete(value = "conversations/{conversationId}/messages/{id}")
+	public void deleteMessage(@PathVariable Long conversationId, @PathVariable Long id){
+		Optional<Message> optionalMessage = messageRepository.findByIdAndConversationId(id, conversationId);
+		if (!optionalMessage.isPresent()){
+			throw new MessageNotFoundException();
+		}
+		Message message = optionalMessage.get();
+		LoginInfo loginInfo = loggedUserManager.getLoginInfo();
+		if (!message.isAuthor(loginInfo)){
+			throw new UsernameNotAllowedException();
+		}
+		message.setDeleted(true);
+		messageRepository.save(message);
 	}
 }

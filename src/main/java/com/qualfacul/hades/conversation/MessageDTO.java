@@ -4,18 +4,12 @@ import java.util.Calendar;
 
 import com.qualfacul.hades.util.HadesDateFormat;
 
-public class ConversationMessageDTO {
+public class MessageDTO {
 	
 	private Long id;
-	
 	private Long conversationId;
-	
 	private String sentAt;
-	
-	private Long senderId;
-	
 	private String message;
-	
 	private ConversationDirection direction;
 	
 	public Long getId() {
@@ -39,12 +33,6 @@ public class ConversationMessageDTO {
 	public void setSentAt(Calendar createdAt) {
 		HadesDateFormat dateFormatter = new HadesDateFormat(HadesDateFormat.HADES_FULLDATE_FORMAT);
 		this.setSentAt(dateFormatter.format(createdAt));
-	}
-	public Long getSenderId() {
-		return senderId;
-	}
-	public void setSenderId(Long senderId) {
-		this.senderId = senderId;
 	}
 	public String getMessage() {
 		return message;

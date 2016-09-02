@@ -9,7 +9,6 @@ public class ReplyMessageDTO {
 	}
 
 	public ReplyMessageDTO(Long conversationId, Long senderId, ConversationDirection direction, String message) {
-		super();
 		this.conversationId = conversationId;
 		this.message = message;
 	}

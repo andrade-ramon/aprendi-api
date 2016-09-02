@@ -8,7 +8,7 @@ import com.qualfacul.hades.login.LoggedUserManager;
 import com.qualfacul.hades.login.LoginInfo;
 
 @WebComponent
-public class ReplyMessageDTOToConversationMessageConverter implements Converter<ReplyMessageDTO, ConversationMessage>{
+public class ReplyMessageDTOToMessageConverter implements Converter<ReplyMessageDTO, Message>{
 
 	@Autowired
 	private LoggedUserManager loggedUserManager;
@@ -17,16 +17,13 @@ public class ReplyMessageDTOToConversationMessageConverter implements Converter<
 	private ConversationService conversationService;
 	
 	@Override
-	public ConversationMessage convert(ReplyMessageDTO source) {
+	public Message convert(ReplyMessageDTO source) {
 		Conversation conversation = new Conversation(source.getConversationId());
 		LoginInfo loginInfo = loggedUserManager.getLoginInfo();
-		conversation.setCreatedAtWithCurrentDate();
-		ConversationMessage conversationMessage = new ConversationMessage(conversation, 
-																			loginInfo.getId(), 
-																			source.getMessage(), 
-																			conversationService.getUserDirection(loginInfo));
-		conversationMessage.setSentAt(conversation.getCreatedAt());
-		return conversationMessage;
+		Message message = new Message(conversation,
+										source.getMessage(),
+										conversationService.getUserDirection(loginInfo));
+		return message;
 	}
 
 }

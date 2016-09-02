@@ -4,11 +4,10 @@ import java.util.Optional;
 
 import org.springframework.data.repository.RepositoryDefinition;
 
-@RepositoryDefinition(domainClass = ConversationMessage.class, idClass = Long.class)
+@RepositoryDefinition(domainClass = Message.class, idClass = Long.class)
 public interface ConversationMessageRepository {
 
-	ConversationMessage save(ConversationMessage conversationMessage);
+	Message save(Message conversationMessage);
 	
-	Optional<ConversationMessage> findByConversationIdAndId(long conversationId, long id);
-	
+	Optional<Message> findByIdAndConversationId(Long id, Long conversationId);
 }

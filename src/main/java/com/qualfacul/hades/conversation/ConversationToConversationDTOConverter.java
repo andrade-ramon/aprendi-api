@@ -27,10 +27,10 @@ public class ConversationToConversationDTOConverter{
 		
 		public Builder withMessages() {
 			conversation.getMessages();
-			ConversationMessageToConversationMessageDTOConverter messageConverter;
-			messageConverter = new ConversationMessageToConversationMessageDTOConverter();
-			ListConverter<ConversationMessage, ConversationMessageDTO> listConverter = new ListConverter<>(messageConverter);
-			List<ConversationMessageDTO> messages = listConverter.convert(conversation.getMessages());
+			MessageToMessageDTOConverter messageConverter;
+			messageConverter = new MessageToMessageDTOConverter();
+			ListConverter<Message, MessageDTO> listConverter = new ListConverter<>(messageConverter);
+			List<MessageDTO> messages = listConverter.convert(conversation.getMessages());
 			conversationDTO.setMessages(messages);
 			return this;
 		}
