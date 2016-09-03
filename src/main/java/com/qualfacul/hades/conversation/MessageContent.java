@@ -6,19 +6,25 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 
 @Entity
 @Table(name = "message_content")
 public class MessageContent {
 
 	@Id
-	@GeneratedValue
+    @Column(name="id")
+    @GeneratedValue(generator="gen")
+    @GenericGenerator(name="gen", strategy="foreign",parameters=@Parameter(name="property", value="message"))
 	private Long id;
-
-	@NotNull
+	
 	@OneToOne(cascade = CascadeType.MERGE)
+	@PrimaryKeyJoinColumn
 	private Message message;
 
 	@NotNull
@@ -30,16 +36,9 @@ public class MessageContent {
 	}
 
 	public MessageContent(Message message, String text) {
+		this.id = message.getId();
 		this.message = message;
 		this.text = text;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public Message getMessage() {

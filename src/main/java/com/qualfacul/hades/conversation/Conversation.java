@@ -107,7 +107,10 @@ public class Conversation {
 	}
 
 	public void setDeleted(boolean deleted) {
-		this.getMessages().forEach(message -> message.setDeleted(true));
+		List<Message> messages = this.getMessages();
+		if (messages != null){
+			messages.forEach(message -> message.setDeleted(true));
+		}
 		this.deleted = deleted;
 	}
 }
