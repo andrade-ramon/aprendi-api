@@ -17,6 +17,7 @@ import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
 import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module.Feature;
 import com.qualfacul.hades.annotation.WebComponent;
 import com.qualfacul.hades.annotation.WebConfiguration;
+import com.qualfacul.hades.interceptor.LoggedUserValidatorInterceptor;
 import com.qualfacul.hades.interceptor.StatelessAuthenticationInterceptor;
 
 @WebConfiguration
@@ -25,6 +26,8 @@ class WebConfig extends WebMvcConfigurerAdapter {
 	
 	@Autowired
 	private StatelessAuthenticationInterceptor statelessAuthenticationInterceptor;
+	@Autowired
+	private LoggedUserValidatorInterceptor loggedUserValidatorInterceptor;
 	
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
@@ -34,6 +37,7 @@ class WebConfig extends WebMvcConfigurerAdapter {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(statelessAuthenticationInterceptor);
+		registry.addInterceptor(loggedUserValidatorInterceptor);
 	}
 
 	@Override

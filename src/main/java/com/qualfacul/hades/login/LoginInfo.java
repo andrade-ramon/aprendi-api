@@ -1,5 +1,9 @@
 package com.qualfacul.hades.login;
 
+import static com.qualfacul.hades.login.LoginOrigin.ADMIN;
+import static com.qualfacul.hades.login.LoginOrigin.COLLEGE;
+import static com.qualfacul.hades.login.LoginOrigin.FACEBOOK;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -94,6 +98,16 @@ public class LoginInfo {
 		this.token = token;
 	}
 
+	public boolean isUser() {
+		if (COLLEGE == loginOrigin || ADMIN == loginOrigin) {
+			return false;
+		}
+		return true;
+	}
+	public boolean isFromFacebook() {
+		return FACEBOOK == loginOrigin;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

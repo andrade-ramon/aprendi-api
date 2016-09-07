@@ -51,7 +51,7 @@ public class StatelessAuthenticationInterceptor extends HandlerInterceptorAdapte
 			
 			String jwtToken = request.getHeader(AUTHORIZATION);
 			Optional<LoginInfo> optionalLoginInfo = tokenService.getUserFromToken(jwtToken);
-			
+				
 			if (!optionalLoginInfo.isPresent()) {
 				response.setStatus(UNAUTHORIZED.value());
 				return false;

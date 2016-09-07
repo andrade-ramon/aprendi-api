@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.qualfacul.hades.annotation.Delete;
 import com.qualfacul.hades.annotation.Get;
+import com.qualfacul.hades.annotation.OnlyStudents;
 import com.qualfacul.hades.annotation.Patch;
 import com.qualfacul.hades.annotation.Post;
 import com.qualfacul.hades.annotation.PublicEndpoint;
@@ -42,6 +43,7 @@ public class ConversationController {
 				.orElseThrow(ConversationNotFoundException::new);
 	}
 	
+	@OnlyStudents
 	@Post(value = "/conversations", responseStatus = CREATED)
 	public ConversationDTO start(@PathVariable final Long collegeId, @RequestBody String messageText) {
 		Conversation conversation = facade.createConversation(collegeId, messageText);
