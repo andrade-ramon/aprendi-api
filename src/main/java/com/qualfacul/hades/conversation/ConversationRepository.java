@@ -10,4 +10,5 @@ public interface ConversationRepository {
 	Conversation save(Conversation conversation);
 
 	Optional<Conversation> findById(Long id);
+
 }

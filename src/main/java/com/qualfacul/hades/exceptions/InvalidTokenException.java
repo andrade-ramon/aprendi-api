@@ -3,7 +3,7 @@ package com.qualfacul.hades.exceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(value = HttpStatus.FORBIDDEN, reason = "You are not allowed to perform this action")
-public class UsernameNotAllowedException extends RuntimeException{
+@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Invalid token")
+public class InvalidTokenException extends RuntimeException{
 	private static final long serialVersionUID = 1L;
 }

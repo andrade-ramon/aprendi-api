@@ -8,13 +8,12 @@ import com.qualfacul.hades.annotation.WebComponent;
 public class MessageToMessageDTOConverter implements Converter<Message, MessageDTO>{
 
 	@Override
-	public MessageDTO convert(Message source) {
+	public MessageDTO convert(Message from) {
 		MessageDTO MessageDTO = new MessageDTO();
-		MessageDTO.setId(source.getId());
-		MessageDTO.setConversationId(source.getConversation().getId());
-		MessageDTO.setSentAt(source.getSentAt());
-		MessageDTO.setMessage(source.getMessageContent().getText());;
-		MessageDTO.setDirection(source.getDirection());
+		MessageDTO.setId(from.getId());
+		MessageDTO.setSentAt(from.getSentAt());
+		MessageDTO.setMessage(from.getMessageContent().getText());;
+		MessageDTO.setDirection(from.getDirection());
 		return MessageDTO;
 	}
 

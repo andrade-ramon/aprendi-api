@@ -1,5 +1,8 @@
 package com.qualfacul.hades.configuration;
 
+import static java.util.Arrays.asList;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,12 +39,16 @@ class WebConfig extends WebMvcConfigurerAdapter {
 	@Override
 	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
 		final MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+		final JsonStringHttpMessageConverter stringConverter = new JsonStringHttpMessageConverter();
+		
 		final ObjectMapper objectMapper = new ObjectMapper();
 		final Hibernate4Module module = new Hibernate4Module();
 		
 		module.enable(Feature.FORCE_LAZY_LOADING);
 		objectMapper.registerModule(module);
 		converter.setObjectMapper(objectMapper);
+		stringConverter.setSupportedMediaTypes(asList(APPLICATION_JSON));
+		converters.add(stringConverter);
 		converters.add(converter);
 		super.configureMessageConverters(converters);
 	}

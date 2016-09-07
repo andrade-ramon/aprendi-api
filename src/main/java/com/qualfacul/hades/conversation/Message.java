@@ -11,16 +11,18 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Type;
 import org.hibernate.annotations.Where;
-
-import com.qualfacul.hades.login.LoginInfo;
 
 @Entity
 @Where(clause = "deleted = 0")
-@Table(name = "messages")
+@Table(name = "message")
 public class Message {
 
 	@Id
@@ -28,15 +30,15 @@ public class Message {
 	private Long id;
 
 	@NotNull
-	@OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+	@OneToOne(cascade = CascadeType.MERGE)
 	private Conversation conversation;
 
-	@NotNull
-	@Column(name = "sent_at", nullable = false)
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "sent_at")
 	private Calendar sentAt;
 
-	@NotNull
-	@OneToOne(mappedBy = "message", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@PrimaryKeyJoinColumn
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private MessageContent messageContent;
 
 	@NotNull
@@ -45,43 +47,21 @@ public class Message {
 	private ConversationDirection direction;
 
 	@Column(name = "deleted")
-	private boolean deleted;
+	@Type(type = "org.hibernate.type.NumericBooleanType")
+	private Boolean deleted;
 
-	@Deprecated
+	@Deprecated //Hibernate eyes only
 	public Message() {
-	}
-
-	public Message(Conversation conversation, Calendar sentAt, String message, ConversationDirection direction) {
-		this.conversation = conversation;
-		this.sentAt = sentAt;
-		this.messageContent = new MessageContent(this, message);
-		this.direction = direction;
-		this.deleted = false;
 	}
 
 	public Message(Conversation conversation, String message, ConversationDirection direction) {
 		this.conversation = conversation;
-		this.setCurrentDate();
 		this.messageContent = new MessageContent(this, message);
 		this.direction = direction;
 		this.deleted = false;
+		this.sentAt = Calendar.getInstance();
 	}
-
-	public Message(Conversation conversation, MessageContent messageContent, ConversationDirection direction) {
-		this.conversation = conversation;
-		this.messageContent = messageContent;
-		this.direction = direction;
-		this.setCurrentDate();
-	}
-
-	public boolean isAuthor(LoginInfo loginInfo) {
-		ConversationService conversationService = new ConversationService();
-		ConversationDirection direction = conversationService.getUserDirection(loginInfo);
-		boolean validOrigin = this.getDirection().equals(direction);
-		boolean validUser = this.conversation.getUser().getId() == loginInfo.getId();
-		return (validOrigin && validUser);
-	}
-
+	
 	public Long getId() {
 		return id;
 	}
@@ -100,10 +80,6 @@ public class Message {
 
 	public Calendar getSentAt() {
 		return sentAt;
-	}
-
-	public void setCurrentDate() {
-		this.setSentAt(Calendar.getInstance());
 	}
 
 	public void setSentAt(Calendar sentAt) {
@@ -130,7 +106,7 @@ public class Message {
 		return deleted;
 	}
 
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
+	public void markAsDeleted() {
+		this.deleted = true;
 	}
 }

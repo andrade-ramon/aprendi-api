@@ -1,6 +1,5 @@
 package com.qualfacul.hades.conversation;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,33 +17,37 @@ import org.hibernate.annotations.Parameter;
 public class MessageContent {
 
 	@Id
-    @Column(name="id")
-    @GeneratedValue(generator="gen")
-    @GenericGenerator(name="gen", strategy="foreign",parameters=@Parameter(name="property", value="message"))
-	private Long id;
+	@GeneratedValue(generator = "SharedPrimaryKeyGenerator")
+	@GenericGenerator(
+		name="SharedPrimaryKeyGenerator",
+		strategy="foreign",
+		parameters = @Parameter(name="property", value="message")
+	)
+	@Column(name = "message_id", unique = true, nullable = false)
+	private Long messageId;
 	
-	@OneToOne(cascade = CascadeType.MERGE)
+	@OneToOne
 	@PrimaryKeyJoinColumn
 	private Message message;
-
+	
 	@NotNull
 	@Column(name = "text", nullable = false)
 	private String text;
 
-	@Deprecated
+	@Deprecated //Hibernate eyes only
 	public MessageContent() {
 	}
 
 	public MessageContent(Message message, String text) {
-		this.id = message.getId();
 		this.message = message;
+		this.messageId = message.getId();
 		this.text = text;
 	}
-
+	
 	public Message getMessage() {
 		return message;
 	}
-
+	
 	public void setMessage(Message message) {
 		this.message = message;
 	}
@@ -56,4 +59,5 @@ public class MessageContent {
 	public void setText(String text) {
 		this.text = text;
 	}
+	
 }

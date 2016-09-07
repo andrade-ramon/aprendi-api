@@ -1,5 +1,6 @@
 package com.qualfacul.hades.conversation;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -11,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Where;
@@ -19,7 +22,6 @@ import com.qualfacul.hades.college.College;
 import com.qualfacul.hades.user.User;
 
 @Entity
-@Where(clause = "deleted = 0")
 @Table(name = "conversation")
 public class Conversation {
 	
@@ -35,31 +37,22 @@ public class Conversation {
 	@ManyToOne
 	private College college;
 	
-	@Column(name = "created_at", nullable = false)
-	private Calendar createdAt;
-	
 	@NotNull
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "created_at")
+	private Calendar createdAt = Calendar.getInstance();
+		
 	@OneToMany(mappedBy = "conversation", cascade = CascadeType.ALL)
-	@Column(name = "messages", nullable = false)
-	private List<Message> messages;
-	
-	@Column(name = "deleted", nullable = false)
-	private boolean deleted;
+	@Where(clause = "deleted = 0")
+	private List<Message> messages = new ArrayList<>();
 
-	public Conversation(){
+	@Deprecated //Hibernate eyes only
+	public Conversation() {
 	}
-	
-	public Conversation(Long id){
-		this.id = id;
-		this.deleted = false;
-	}
-	
-	public Message getAuthorMessage(){
-		return this.getMessages().get(0);
-	}
-	
-	public void setCreatedAtWithCurrentDate(){
-		this.setCreatedAt(Calendar.getInstance());
+
+	public Conversation(College college, User user) {
+		this.college = college;
+		this.user = user;
 	}
 
 	public Long getId() {
@@ -102,15 +95,8 @@ public class Conversation {
 		this.messages = messages;
 	}
 
-	public boolean isDeleted() {
-		return deleted;
+	public void addMessage(Message message) {
+		this.messages.add(message);
 	}
 
-	public void setDeleted(boolean deleted) {
-		List<Message> messages = this.getMessages();
-		if (messages != null){
-			messages.forEach(message -> message.setDeleted(true));
-		}
-		this.deleted = deleted;
-	}
 }

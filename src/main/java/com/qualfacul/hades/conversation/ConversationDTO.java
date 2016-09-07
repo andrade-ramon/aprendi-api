@@ -3,13 +3,21 @@ package com.qualfacul.hades.conversation;
 import java.util.Calendar;
 import java.util.List;
 
-import com.qualfacul.hades.util.HadesDateFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.qualfacul.hades.serialization.FullDateCalendarSerializer;
 
 public class ConversationDTO {
 	
 	private Long id;
+	
 	private Long collegeId;
-	private String createdAt;
+	
+	@JsonSerialize(using = FullDateCalendarSerializer.class)
+	private Calendar createdAt;
+	
+	@JsonInclude(Include.NON_NULL)
 	private List<MessageDTO> messages;
 
 	public Long getId() {
@@ -28,17 +36,12 @@ public class ConversationDTO {
 		this.collegeId = collegeId;
 	}
 
-	public String getCreatedAt() {
+	public Calendar getCreatedAt() {
 		return createdAt;
 	}
 
-	private void setCreatedAt(String createdAt) {
-		this.createdAt = createdAt;
-	}
-
 	public void setCreatedAt(Calendar createdAt) {
-		HadesDateFormat dateFormatter = new HadesDateFormat(HadesDateFormat.HADES_FULLDATE_FORMAT);
-		this.setCreatedAt(dateFormatter.format(createdAt));
+		this.createdAt = createdAt;
 	}
 
 	public List<MessageDTO> getMessages() {

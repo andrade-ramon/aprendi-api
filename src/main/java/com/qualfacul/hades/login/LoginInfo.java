@@ -1,7 +1,5 @@
 package com.qualfacul.hades.login;
 
-import static com.qualfacul.hades.login.LoginOrigin.*;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -46,9 +44,8 @@ public class LoginInfo {
 	}
 
 	public LoginInfo(String login, String password, LoginOrigin loginOrigin) {
-		this.login = login;
+		this(login, loginOrigin);
 		this.password = password;
-		this.loginOrigin = loginOrigin;
 	}
 
 	@PrePersist
@@ -97,14 +94,38 @@ public class LoginInfo {
 		this.token = token;
 	}
 
-	public boolean isFromUser(){
-		if (COLLEGE.equals(this.getLoginOrigin()) || ADMIN.equals(this.getLoginOrigin())){
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((login == null) ? 0 : login.hashCode());
+		result = prime * result + ((loginOrigin == null) ? 0 : loginOrigin.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
 			return false;
-		}
+		if (getClass() != obj.getClass())
+			return false;
+		LoginInfo other = (LoginInfo) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (login == null) {
+			if (other.login != null)
+				return false;
+		} else if (!login.equals(other.login))
+			return false;
+		if (loginOrigin != other.loginOrigin)
+			return false;
 		return true;
 	}
 	
-	public boolean isFromFacebook() {
-		return FACEBOOK.equals(this.loginOrigin);
-	}
 }

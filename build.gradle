@@ -54,6 +54,8 @@ dependencies {
 	compile 'com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.7.4'
 	compile 'org.hibernate:hibernate-search-orm:4.5.3.Final'
     compile 'com.fasterxml.jackson.datatype:jackson-datatype-hibernate4:2.8.0.rc1'
+    compile 'org.json:json:20160810'
+    
 	
 	//Social Dependencies
 	compile 'org.springframework.social:spring-social-core:1.1.4.RELEASE'

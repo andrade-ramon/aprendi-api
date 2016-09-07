@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.qualfacul.hades.annotation.WebComponent;
 import com.qualfacul.hades.configuration.security.TokenAuthenticationService;
+import com.qualfacul.hades.exceptions.InvalidTokenException;
 
 @WebComponent
 public class LoggedUserManager {
@@ -20,6 +21,6 @@ public class LoggedUserManager {
 	public LoginInfo getLoginInfo() {
 		String token = request.getHeader(AUTHORIZATION);
 
-		return tokenService.getUserFromToken(token).get();
+		return tokenService.getUserFromToken(token).orElseThrow(InvalidTokenException::new);
 	}
 }

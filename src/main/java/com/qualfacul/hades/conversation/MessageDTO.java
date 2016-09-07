@@ -2,14 +2,19 @@ package com.qualfacul.hades.conversation;
 
 import java.util.Calendar;
 
-import com.qualfacul.hades.util.HadesDateFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.qualfacul.hades.serialization.FullDateCalendarSerializer;
+
 
 public class MessageDTO {
 	
 	private Long id;
-	private Long conversationId;
-	private String sentAt;
+	
+	@JsonSerialize(using = FullDateCalendarSerializer.class)
+	private Calendar sentAt;
+	
 	private String message;
+	
 	private ConversationDirection direction;
 	
 	public Long getId() {
@@ -18,28 +23,21 @@ public class MessageDTO {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Long getConversationId() {
-		return conversationId;
-	}
-	public void setConversationId(Long conversationId) {
-		this.conversationId = conversationId;
-	}
-	public String getSentAt() {
+	
+	public Calendar getSentAt() {
 		return sentAt;
 	}
-	private void setSentAt(String sentAt) {
-		this.sentAt = sentAt;
-	}
 	public void setSentAt(Calendar createdAt) {
-		HadesDateFormat dateFormatter = new HadesDateFormat(HadesDateFormat.HADES_FULLDATE_FORMAT);
-		this.setSentAt(dateFormatter.format(createdAt));
+		this.sentAt = createdAt;
 	}
+	
 	public String getMessage() {
 		return message;
 	}
 	public void setMessage(String message) {
 		this.message = message;
 	}
+	
 	public ConversationDirection getDirection() {
 		return direction;
 	}
