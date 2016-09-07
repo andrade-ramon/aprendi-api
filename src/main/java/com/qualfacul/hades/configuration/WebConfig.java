@@ -18,7 +18,7 @@ import com.qualfacul.hades.interceptor.StatelessAuthenticationInterceptor;
 
 @Configuration
 @WebComponent
-class WebConfiguration extends WebMvcConfigurerAdapter {
+class WebConfig extends WebMvcConfigurerAdapter {
 	
 	@Autowired
 	private StatelessAuthenticationInterceptor statelessAuthenticationInterceptor;

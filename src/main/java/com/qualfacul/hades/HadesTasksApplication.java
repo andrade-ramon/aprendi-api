@@ -11,13 +11,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.qualfacul.hades.annotation.TaskComponent;
 import com.qualfacul.hades.annotation.WebComponent;
+import com.qualfacul.hades.annotation.WebConfiguration;
 import com.qualfacul.hades.annotation.WebService;
 
 @SpringBootApplication
 @EnableScheduling
 @TaskComponent
 @EnableAutoConfiguration(exclude = WebMvcAutoConfiguration.class)
-@ComponentScan(excludeFilters = @Filter({ RestController.class, WebComponent.class, WebService.class }) )
+@ComponentScan(excludeFilters = @Filter({ RestController.class, WebComponent.class, WebService.class, WebConfiguration.class }) )
 public class HadesTasksApplication {
 	public static void main(String[] args) {
 		new SpringApplicationBuilder(HadesTasksApplication.class).web(false).run(args);
