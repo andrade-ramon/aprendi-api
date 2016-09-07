@@ -10,8 +10,12 @@ import com.qualfacul.hades.login.LoginInfo;
 @WebComponent
 public class ConversationSecurityAnalyser {
 	
-	@Autowired
 	private LoggedUserManager loggedUserManager;
+	
+	@Autowired
+	public ConversationSecurityAnalyser(LoggedUserManager loggedUserManager) {
+		this.loggedUserManager = loggedUserManager;
+	}
 
 	public void validate(Message message) {
 		LoginInfo loginInfo = loggedUserManager.getLoginInfo();
@@ -25,6 +29,7 @@ public class ConversationSecurityAnalyser {
 		throw new UnauthorizedConversationSecurityException();
 	}
 	
+
 	public void validate(Conversation conversation) {
 		LoginInfo loginInfo = loggedUserManager.getLoginInfo();
 		boolean validUser = conversation.getUser().getLoginInfo().equals(loginInfo);
