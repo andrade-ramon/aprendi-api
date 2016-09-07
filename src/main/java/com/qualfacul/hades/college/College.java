@@ -1,9 +1,8 @@
 package com.qualfacul.hades.college;
 
-import static javax.persistence.CascadeType.ALL;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -42,10 +41,6 @@ public class College {
 	@Boost(3.0f)
 	private String initials;
 
-	@IndexedEmbedded
-	@OneToMany(mappedBy = "college", cascade = CascadeType.MERGE)
-	private List<CollegeAddress> collegeAdresses = new ArrayList<>();
-
 	@Field
 	@Column(name = "phone")
 	@Boost(0.5f)
@@ -59,79 +54,95 @@ public class College {
 	@Column(name = "site")
 	@Boost(0.7f)
 	private String site;
-	
-	@OneToMany(mappedBy = "college", cascade = ALL)
+
+	@IndexedEmbedded
+	@OneToMany(cascade = CascadeType.MERGE, mappedBy = "college")
+	private List<CollegeAddress> adresses = new ArrayList<>();
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "college")
 	private List<CollegeGrade> grades = new ArrayList<>();
-	
+
 	public Long getId() {
 		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public long getMecId() {
 		return mecId;
 	}
 
-	public void setMecId(long mecId) {
-		this.mecId = mecId;
-	}
-
 	public String getName() {
 		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public String getInitials() {
 		return initials;
 	}
 
-	public void setInitials(String initials) {
-		this.initials = initials;
-	}
-
-	public List<CollegeAddress> getCollegeAdresses() {
-		return collegeAdresses;
-	}
-
-	public void setCollegeAdresses(List<CollegeAddress> collegeAdresses) {
-		this.collegeAdresses = collegeAdresses;
-	}
-
 	public String getPhone() {
 		return phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
 	}
 
 	public String getCnpj() {
 		return cnpj;
 	}
 
-	public void setCnpj(String cnpj) {
-		this.cnpj = cnpj;
-	}
-
 	public String getSite() {
 		return site;
 	}
 
-	public void setSite(String site) {
-		this.site = site;
+	public List<CollegeAddress> getAdresses() {
+		return adresses;
 	}
 
 	public List<CollegeGrade> getGrades() {
 		return grades;
 	}
 
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setMecId(long mecId) {
+		this.mecId = mecId;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setInitials(String initials) {
+		this.initials = initials;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public void setCnpj(String cnpj) {
+		this.cnpj = cnpj;
+	}
+
+	public void setSite(String site) {
+		this.site = site;
+	}
+
+	public void setAdresses(List<CollegeAddress> adresses) {
+		this.adresses = adresses;
+	}
+
 	public void setGrades(List<CollegeGrade> grades) {
 		this.grades = grades;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!(obj instanceof College))
+			return false;
+
+		College other = (College) obj;
+		return Objects.equals(this.id, other.id);
+	}
+	
 }

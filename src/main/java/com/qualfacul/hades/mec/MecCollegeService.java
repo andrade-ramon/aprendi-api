@@ -14,13 +14,17 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.jsoup.nodes.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.mysql.jdbc.StringUtils;
 import com.qualfacul.hades.annotation.TaskService;
 import com.qualfacul.hades.college.College;
 import com.qualfacul.hades.college.CollegeGrade;
 
 @TaskService
 public class MecCollegeService {
+	private static final Logger LOGGER = LoggerFactory.getLogger(MecCollegeService.class);
 	
 	public College setupBasicCollegeInformations(Document document) {
 		College college = new College();
@@ -36,6 +40,10 @@ public class MecCollegeService {
 				if (tdText.indexOf("-") == tdText.lastIndexOf("-") && tdText.lastIndexOf("-") < tdText.length() - 1) {
 					name = tdText.substring(tdText.indexOf(")") + 2, tdText.indexOf("-"));
 					initials = tdText.substring(tdText.lastIndexOf('-') + 2, tdText.length());
+				}
+				
+				if(StringUtils.isNullOrEmpty(name)){
+					LOGGER.info("EMPTY COLLEGE NAME FOUND: {}", tdText);
 				}
 
 				college.setName(abbreviate(name, 255));
@@ -53,14 +61,15 @@ public class MecCollegeService {
 			}
 		});
 		
+		setupCollegeGrades(document, college);
 		return college;
 	}
 	
-	@SuppressWarnings("deprecation")
-	public void setupCollegeGrades(College college, Document document) {
+	private void setupCollegeGrades(Document document, College college) {
 		List<CollegeGrade> grades = new ArrayList<>();
 		
 		document.select("table#listar-ies-cadastro > tbody tr").forEach((tr) -> {
+			@SuppressWarnings("deprecation")
 			CollegeGrade collegeGrade = new CollegeGrade();
 
 			String elementValue = tr.select("td").get(1).text();
@@ -89,8 +98,6 @@ public class MecCollegeService {
 			
 			grades.add(collegeGrade);
 		});
-		
 		college.setGrades(grades);
 	}
-	
 }

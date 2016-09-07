@@ -1,17 +1,15 @@
 package com.qualfacul.hades.course;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -36,26 +34,23 @@ public class CourseGrade {
 	@OneToOne(optional = true)
 	private User user;
 
-	@ManyToMany(mappedBy = "courseGrades", fetch = FetchType.EAGER)
-	private List<CollegeAddress> collegeAdresses = new ArrayList<>();
-
-	@OneToOne(fetch = FetchType.EAGER)
+	@ManyToOne
 	private Course course;
 
+	@ManyToOne
+	@JoinColumn(name = "college_address_id", unique = false)
+	private CollegeAddress collegeAddress;
+
+	// Hibernate eyes only
 	@Deprecated
-	public CourseGrade() { // Hibernate eyes only
+	public CourseGrade() {
 	}
 
-	public CourseGrade(CourseGradeOrigin gradeOrigin, Double value, Course course) {
+	public CourseGrade(CourseGradeOrigin gradeOrigin, Double value, Course course, CollegeAddress collegeAddress) {
 		this.gradeOrigin = gradeOrigin;
 		this.value = value;
 		this.course = course;
-	}
-
-	public CourseGrade(CourseGradeOrigin gradeOrigin, Double value, List<CollegeAddress> collegeAdresses) {
-		this.gradeOrigin = gradeOrigin;
-		this.value = value;
-		this.collegeAdresses = collegeAdresses;
+		this.collegeAddress = collegeAddress;
 	}
 
 	public Long getId() {
@@ -74,12 +69,12 @@ public class CourseGrade {
 		return user;
 	}
 
-	public List<CollegeAddress> getCollegeAdresses() {
-		return collegeAdresses;
-	}
-
 	public Course getCourse() {
 		return course;
+	}
+
+	public CollegeAddress getCollegeAddress() {
+		return collegeAddress;
 	}
 
 	public void setId(Long id) {
@@ -98,14 +93,14 @@ public class CourseGrade {
 		this.user = user;
 	}
 
-	public void setCollegeAdresses(List<CollegeAddress> collegeAdresses) {
-		this.collegeAdresses = collegeAdresses;
-	}
-
 	public void setCourse(Course course) {
 		this.course = course;
 	}
-	
+
+	public void setCollegeAddress(CollegeAddress collegeAddress) {
+		this.collegeAddress = collegeAddress;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -114,6 +109,10 @@ public class CourseGrade {
 			return false;
 
 		CourseGrade other = (CourseGrade) obj;
-		return Objects.equals(this.id, other.id);
+		return Objects.equals(this.gradeOrigin, other.gradeOrigin) &&
+		Objects.equals(this.value, other.value) &&
+		Objects.equals(this.collegeAddress, other.collegeAddress) &&
+		Objects.equals(this.course, other.course);
+//		return Objects.equals(this.id, other.id);
 	}
 }

@@ -11,29 +11,28 @@ import java.util.Optional;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
+import com.qualfacul.hades.annotation.TaskService;
 import com.qualfacul.hades.college.College;
 import com.qualfacul.hades.college.CollegeAddress;
 import com.qualfacul.hades.college.CollegeAddressRepository;
 import com.qualfacul.hades.course.Course;
 import com.qualfacul.hades.course.CourseDegree;
 import com.qualfacul.hades.course.CourseGrade;
+//import com.qualfacul.hades.course.CourseGrade;
 import com.qualfacul.hades.course.CourseGradeOrigin;
-import com.qualfacul.hades.course.CourseGradeRepository;
+//import com.qualfacul.hades.course.CourseGradeRepository;
 import com.qualfacul.hades.course.CourseModality;
 
-@Service
+@TaskService
 public class MecCourseService {
 
 	private static final List<String> INVALID_COURSES_NAME = Arrays.asList("Suspensão de Ingresso:",
 			"Vedação de Aumento de Vagas", "Em Desativação/Extinção voluntária", "Medida Cautelar: Suspensão de",
 			": Curso autorizado por ", "CPC 2014 não divulgado");
-	
+
 	@Autowired
-	private CollegeAddressRepository collegeAddressRepository;	
-	@Autowired
-	private CourseGradeRepository courseGradeRepository;
+	private CollegeAddressRepository collegeAddressRepository;
 	
 	@SuppressWarnings("deprecation")
 	public Course setupCourseInfo(Elements tds) {
@@ -69,7 +68,7 @@ public class MecCourseService {
 		return course;
 	}
 
-	public List<CourseGrade> setupCourseGrades(Elements tds, Course course) {
+	public List<CourseGrade> setupCourseGrades(Elements tds, Course course, CollegeAddress collegeAddress) {
 		String cc = tds.get(4).text().trim();
 		Double valueCC = null;
 		if (!equalsIgnoreCase(cc, "-") && !equalsIgnoreCase(cc, "SC")) {
@@ -88,15 +87,16 @@ public class MecCourseService {
 			valueENADE = parseDouble(enade);
 		}
 		List<CourseGrade> courseGrades = new ArrayList<>();
-		courseGrades.add(new CourseGrade(CourseGradeOrigin.CC, valueCC, course));
-		courseGrades.add(new CourseGrade(CourseGradeOrigin.CPC, valueCPC, course));
-		courseGrades.add(new CourseGrade(CourseGradeOrigin.ENADE, valueENADE, course));
+		courseGrades.add(new CourseGrade(CourseGradeOrigin.CC, valueCC, course, collegeAddress));
+		courseGrades.add(new CourseGrade(CourseGradeOrigin.CPC, valueCPC, course, collegeAddress));
+		courseGrades.add(new CourseGrade(CourseGradeOrigin.ENADE, valueENADE, course, collegeAddress));
 
 		return courseGrades;
 	}
 	
-	public CollegeAddress setupCourseAdresses(Element trAddress, College college, List<CourseGrade> courseGrades) {
+	public CollegeAddress setupCourseAddress(Element trAddress, College college, Course course) {
 		Elements tdsCourse = trAddress.select("td");
+		@SuppressWarnings("deprecation")
 		CollegeAddress collegeAddress = new CollegeAddress();
 		collegeAddress.setAddress(tdsCourse.get(0).text().trim());
 		collegeAddress.setCep(tdsCourse.get(1).text().trim());
@@ -109,15 +109,16 @@ public class MecCourseService {
 		
 		if(optionalAddress.isPresent()) {
 			collegeAddress = optionalAddress.get();
+		} else {
+//			collegeAddressRepository.save(collegeAddress);
 		}
+			
+		List<Course> courses = new ArrayList<>();
+		courses.add(course);
+		collegeAddress.setCourses(courses);
+		collegeAddressRepository.save(collegeAddress);
 		
-		courseGrades.forEach(course -> {
-			courseGradeRepository.save(course);
-		});
 		
-		if(!collegeAddress.getCourseGrades().containsAll(courseGrades)){
-			collegeAddress.getCourseGrades().addAll(courseGrades);
-		}
 		return collegeAddress;
 	}
 
