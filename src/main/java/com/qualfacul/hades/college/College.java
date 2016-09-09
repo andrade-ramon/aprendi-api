@@ -63,6 +63,60 @@ public class College {
 	@OneToMany(mappedBy = "college", cascade = ALL)
 	private List<CollegeGrade> grades = new ArrayList<>();
 	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		College other = (College) obj;
+		if (cnpj == null) {
+			if (other.cnpj != null)
+				return false;
+		} else if (!cnpj.equals(other.cnpj))
+			return false;
+		if (collegeAdresses == null) {
+			if (other.collegeAdresses != null)
+				return false;
+		} else if (!collegeAdresses.equals(other.collegeAdresses))
+			return false;
+		if (grades == null) {
+			if (other.grades != null)
+				return false;
+		} else if (!grades.equals(other.grades))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (initials == null) {
+			if (other.initials != null)
+				return false;
+		} else if (!initials.equals(other.initials))
+			return false;
+		if (mecId != other.mecId)
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (phone == null) {
+			if (other.phone != null)
+				return false;
+		} else if (!phone.equals(other.phone))
+			return false;
+		if (site == null) {
+			if (other.site != null)
+				return false;
+		} else if (!site.equals(other.site))
+			return false;
+		return true;
+	}
+
 	public Long getId() {
 		return id;
 	}
