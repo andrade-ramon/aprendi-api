@@ -1,12 +1,26 @@
 package com.qualfacul.hades.post;
 
+import java.util.Calendar;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.qualfacul.hades.college.CollegeDTO;
+import com.qualfacul.hades.serialization.FullDateCalendarSerializer;
 
 public class CollegePostDTO {
+	
 	private Long id;
+	
 	private CollegeDTO college;
-	private String createdAt;
-	private String updatedAt;
+	
+	@JsonSerialize(using = FullDateCalendarSerializer.class)
+	private Calendar createdAt;
+	
+	@JsonSerialize(using = FullDateCalendarSerializer.class)
+	@JsonInclude(Include.NON_NULL)
+	private Calendar updatedAt;
+	
 	private String postContent;
 	
 	public Long getId() {
@@ -21,16 +35,16 @@ public class CollegePostDTO {
 	public void setCollege(CollegeDTO college) {
 		this.college = college;
 	}
-	public String getCreatedAt() {
+	public Calendar getCreatedAt() {
 		return createdAt;
 	}
-	public void setCreatedAt(String createdAt) {
+	public void setCreatedAt(Calendar createdAt) {
 		this.createdAt = createdAt;
 	}
-	public String getUpdatedAt() {
+	public Calendar getUpdatedAt() {
 		return updatedAt;
 	}
-	public void setUpdatedAt(String updatedAt) {
+	public void setUpdatedAt(Calendar updatedAt) {
 		this.updatedAt = updatedAt;
 	}
 	public String getPostContent() {
