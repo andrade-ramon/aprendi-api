@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.qualfacul.hades.annotation.Get;
 import com.qualfacul.hades.annotation.PublicEndpoint;
 import com.qualfacul.hades.converter.ListConverter;
+import com.qualfacul.hades.course.CourseDTO;
+import com.qualfacul.hades.course.CourseToDTOConverter;
 import com.qualfacul.hades.exceptions.CollegeNotFoundException;
 import com.qualfacul.hades.search.PaginatedSearch;
 import com.qualfacul.hades.search.SearchQuery;
@@ -31,6 +33,8 @@ public class CollegeController {
 	private CollegeAddressToDTOConverter addressConverter;
 	@Autowired
 	private CollegeToCollegeDTOConverter collegeConverter;
+	@Autowired
+	private CourseToDTOConverter courseConverter;
 	
 	@PublicEndpoint
 	@Get("/colleges/{id}")
@@ -53,6 +57,15 @@ public class CollegeController {
 	public List<CollegeAddressDTO> collegeAddressesSearch(@PathVariable Long collegeId){
 		return collegeAddressRepository.findAllByCollegeId(collegeId).stream()
 				.map(collegeAddress -> addressConverter.convert(collegeAddress))
+				.collect(Collectors.toList());
+	}
+	
+	@PublicEndpoint
+	@Get("/colleges/{collegeId}/courses")
+	public List<CourseDTO> listAllCourses(@PathVariable Long collegeId){
+		return collegeAddressRepository.findAllByCollegeId(collegeId).stream()
+				.flatMap(address -> address.getCourses().stream())
+				.map(course -> courseConverter.convert(course))
 				.collect(Collectors.toList());
 	}
 	
