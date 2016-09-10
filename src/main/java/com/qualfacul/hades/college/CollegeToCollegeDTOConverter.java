@@ -17,8 +17,8 @@ public class CollegeToCollegeDTOConverter implements Converter<College, CollegeD
 		collegeDTO.setCnpj(from.getCnpj());
 		collegeDTO.setSite(from.getSite());
 		
-		Integer collegesCount = from.getCollegeAdresses().stream()
-				.map(collegeAddress -> collegeAddress.getCourseGrades().size())
+		Integer collegesCount = from.getAdresses().stream()
+				.map(collegeAddress -> collegeAddress.getCourses().size())
 				.mapToInt(i -> i.intValue()).sum();
 		
 		

@@ -23,3 +23,5 @@ jwt.secret=
 
 facebook.clientId=
 facebook.clientSecret=
+
+tasks.threads.number=80

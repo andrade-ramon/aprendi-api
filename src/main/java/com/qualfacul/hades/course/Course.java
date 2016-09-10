@@ -3,6 +3,7 @@ package com.qualfacul.hades.course;
 import static javax.persistence.EnumType.STRING;
 import static org.apache.commons.lang3.StringUtils.stripAccents;
 
+import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.Column;
@@ -10,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
@@ -33,6 +35,9 @@ public class Course {
 	@Column(name = "degree", nullable = false, length = 15)
 	private CourseDegree degree;
 
+	@OneToMany(mappedBy = "course")
+	private List<CourseGrade> courseGrades;
+
 	@Deprecated
 	public Course() { // Hibernate eyes only
 	}
@@ -53,6 +58,10 @@ public class Course {
 		return degree;
 	}
 
+	public List<CourseGrade> getCourseGrades() {
+		return courseGrades;
+	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -67,6 +76,10 @@ public class Course {
 
 	public void setDegree(CourseDegree degree) {
 		this.degree = degree;
+	}
+
+	public void setCourseGrades(List<CourseGrade> courseGrades) {
+		this.courseGrades = courseGrades;
 	}
 
 	@Override
@@ -87,7 +100,9 @@ public class Course {
 			return false;
 
 		Course other = (Course) obj;
-		return Objects.equals(stripAccents(this.name), stripAccents(other.name));
+		return Objects.equals(stripAccents(this.name), stripAccents(other.name)) &&
+				Objects.equals(this.degree, other.degree) &&
+				Objects.equals(this.modality, other.modality);
 	}
 
 }

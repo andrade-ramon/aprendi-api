@@ -9,11 +9,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.annotation.Configuration;
 
-@Configuration
+import com.qualfacul.hades.annotation.WebConfiguration;
+
+@WebConfiguration
 class SearchIndexInitializer implements ApplicationListener<ApplicationReadyEvent> {
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(SearchIndexInitializer.class);
 
 	@PersistenceContext
