@@ -113,6 +113,5 @@ public class CourseGrade {
 		Objects.equals(this.value, other.value) &&
 		Objects.equals(this.collegeAddress, other.collegeAddress) &&
 		Objects.equals(this.course, other.course);
-//		return Objects.equals(this.id, other.id);
 	}
 }
