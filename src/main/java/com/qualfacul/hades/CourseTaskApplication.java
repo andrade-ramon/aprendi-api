@@ -23,7 +23,7 @@ import com.qualfacul.hades.task.MecCourseTask;
 @ComponentScan(excludeFilters = @Filter({ RestController.class, WebComponent.class, WebService.class, WebConfiguration.class }) )
 public class CourseTaskApplication {
 	public static void main(String[] args) {
-		ConfigurableApplicationContext context = new SpringApplicationBuilder(CollegeTaskApplication.class).web(false).run(args);
+		ConfigurableApplicationContext context = new SpringApplicationBuilder(CourseTaskApplication.class).web(false).run(args);
 		MecCourseTask bean = context.getBean(MecCourseTask.class);
 		bean.getAllCourses();
 	}

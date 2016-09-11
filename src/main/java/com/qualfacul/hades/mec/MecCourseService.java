@@ -21,6 +21,7 @@ import com.qualfacul.hades.course.CourseDegree;
 import com.qualfacul.hades.course.CourseGrade;
 //import com.qualfacul.hades.course.CourseGrade;
 import com.qualfacul.hades.course.CourseGradeOrigin;
+import com.qualfacul.hades.course.CourseGradeRepository;
 //import com.qualfacul.hades.course.CourseGradeRepository;
 import com.qualfacul.hades.course.CourseModality;
 
@@ -33,6 +34,8 @@ public class MecCourseService {
 
 	@Autowired
 	private CollegeAddressRepository collegeAddressRepository;
+	@Autowired
+	private CourseGradeRepository courseGradeRepository;
 	
 	@SuppressWarnings("deprecation")
 	public Course setupCourseInfo(Elements tds) {
@@ -69,28 +72,42 @@ public class MecCourseService {
 	}
 
 	public List<CourseGrade> setupCourseGrades(Elements tds, Course course, CollegeAddress collegeAddress) {
+		List<CourseGrade> courseGrades = new ArrayList<>();
+		
+		
 		String cc = tds.get(4).text().trim();
 		Double valueCC = null;
 		if (!equalsIgnoreCase(cc, "-") && !equalsIgnoreCase(cc, "SC")) {
 			valueCC = parseDouble(cc);
 		}
-
+		CourseGrade courseGradeCC = new CourseGrade(CourseGradeOrigin.CC, valueCC, course, collegeAddress);
+		if(!courseGradeRepository.findByCollegeAddressAndCourseAndGradeOrigin(collegeAddress, course, CourseGradeOrigin.CC).isPresent()) {
+			courseGrades.add(courseGradeCC);
+		}
+		
+		
 		String cpc = tds.get(5).text().trim();
 		Double valueCPC = null;
 		if (!equalsIgnoreCase(cpc, "-") && !equalsIgnoreCase(cpc, "SC")) {
 			valueCPC = parseDouble(cpc);
 		}
-
+		CourseGrade courseGradeCPC = new CourseGrade(CourseGradeOrigin.CPC, valueCPC, course, collegeAddress);
+		if(!courseGradeRepository.findByCollegeAddressAndCourseAndGradeOrigin(collegeAddress, course, CourseGradeOrigin.CPC).isPresent()) {
+			courseGrades.add(courseGradeCPC);
+		}
+	
+		
+		
 		String enade = tds.get(6).text().trim();
 		Double valueENADE = null;
 		if (!equalsIgnoreCase(enade, "-") && !equalsIgnoreCase(enade, "SC")) {
 			valueENADE = parseDouble(enade);
 		}
-		List<CourseGrade> courseGrades = new ArrayList<>();
-		courseGrades.add(new CourseGrade(CourseGradeOrigin.CC, valueCC, course, collegeAddress));
-		courseGrades.add(new CourseGrade(CourseGradeOrigin.CPC, valueCPC, course, collegeAddress));
-		courseGrades.add(new CourseGrade(CourseGradeOrigin.ENADE, valueENADE, course, collegeAddress));
-
+		CourseGrade courseGradeENADE = new CourseGrade(CourseGradeOrigin.ENADE, valueENADE, course, collegeAddress);
+		if(!courseGradeRepository.findByCollegeAddressAndCourseAndGradeOrigin(collegeAddress, course, CourseGradeOrigin.ENADE).isPresent()) {
+			courseGrades.add(courseGradeENADE);
+		}
+		
 		return courseGrades;
 	}
 	
@@ -109,15 +126,17 @@ public class MecCourseService {
 		
 		if(optionalAddress.isPresent()) {
 			collegeAddress = optionalAddress.get();
-		} else {
-//			collegeAddressRepository.save(collegeAddress);
 		}
 			
+		
 		List<Course> courses = new ArrayList<>();
 		courses.add(course);
-		collegeAddress.setCourses(courses);
+		if (collegeAddress.getCourses() == null) {
+			collegeAddress.setCourses(courses);
+		} else if (!collegeAddress.getCourses().contains(course)) {
+			collegeAddress.getCourses().add(course);
+		}
 		collegeAddressRepository.save(collegeAddress);
-		
 		
 		return collegeAddress;
 	}

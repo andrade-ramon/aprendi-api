@@ -34,14 +34,12 @@ public class MecCollegeTask {
 		LOGGER.info("STARTED TASK GETALLCOLLEGES");
 
 		ExecutorService executor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
-
-		Document collegeList = Jsoup.parse(mecRequester.requestCollegeList());
+		
+		Document collegeList = Jsoup.parse(mecRequester.requestCollegeList(1));
 		int totalPages = Integer.parseInt(
 				collegeList.select("select#paginationControlItemdiv_listar_consulta_avancada option").last().text());
-		int page = 2;
+		int page = 1;
 		do {
-			LOGGER.info("REQUESTING PAGE " + (page - 1) + " OF " + totalPages);
-
 			collegeList.select("tbody#tbyDados > tr").forEach(tr -> {
 				tr.children().last().remove();
 				String id = tr.attr("onclick");
@@ -51,8 +49,9 @@ public class MecCollegeTask {
 						collegeRepository);
 				executor.execute(collegeWorker);
 			});
-
-			collegeList = Jsoup.parse(mecRequester.requestCollegeList(page++));
+			
+			LOGGER.info("REQUESTING PAGE " + page + " OF " + totalPages);
+			collegeList = Jsoup.parse(mecRequester.requestCollegeList(++page));
 		} while (page <= totalPages);
 
 		executor.shutdown();
