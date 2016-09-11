@@ -2,6 +2,7 @@ package com.qualfacul.hades.interceptor;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.springframework.http.HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS;
+import static org.springframework.http.HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS;
 import static org.springframework.http.HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN;
 import static org.springframework.http.HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
@@ -69,6 +70,10 @@ public class StatelessAuthenticationInterceptor extends HandlerInterceptorAdapte
 	}
 
 	private void prepareResponseHeader(HttpServletResponse response, String tokenAuthenticated) {
+		if (response.getHeader(ACCESS_CONTROL_ALLOW_METHODS) == null) {
+			response.addHeader(ACCESS_CONTROL_ALLOW_METHODS , "GET, POST, PUT, PATCH, OPTIONS, DELETE");
+		}
+		
 		if (response.getHeader(ACCESS_CONTROL_ALLOW_ORIGIN) == null) {
 			response.addHeader(ACCESS_CONTROL_ALLOW_ORIGIN, "*");
 		}

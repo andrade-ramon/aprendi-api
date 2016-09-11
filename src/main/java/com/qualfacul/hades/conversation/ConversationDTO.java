@@ -20,6 +20,10 @@ public class ConversationDTO {
 	@JsonInclude(Include.NON_NULL)
 	private List<MessageDTO> messages;
 
+	private String studentName;
+
+	private Long studentId;
+
 	public Long getId() {
 		return id;
 	}
@@ -50,6 +54,22 @@ public class ConversationDTO {
 
 	public void setMessages(List<MessageDTO> messages) {
 		this.messages = messages;
+	}
+
+	public String getStudentName() {
+		return studentName;
+	}
+
+	public void setStudentName(String studentName) {
+		this.studentName = studentName;
+	}
+
+	public Long getStudentId() {
+		return studentId;
+	}
+	
+	public void setStudentId(Long studentId) {
+		this.studentId = studentId;
 	}
 
 }

@@ -28,7 +28,7 @@ public class LoggedUserValidatorInterceptor extends HandlerInterceptorAdapter{
 		if (handler instanceof HandlerMethod) {
 			HandlerMethod handlerMethod = (HandlerMethod) handler;
 			boolean onlyStudentsCanPass = handlerMethod.getMethod().isAnnotationPresent(OnlyStudents.class);
-			boolean isNotUser = !loggedUserManager.getLoginInfo().isUser();
+			boolean isNotUser = loggedUserManager.getLoginInfo() != null && !loggedUserManager.getLoginInfo().isUser();
 			
 			if (onlyStudentsCanPass && isNotUser) {
 				throw new OnlyStudentsCanAccessException();

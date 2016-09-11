@@ -2,6 +2,9 @@ package com.qualfacul.hades.conversation;
 
 import static org.springframework.http.HttpStatus.CREATED;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,11 +29,32 @@ public class ConversationController {
 	@Autowired
 	private MessageRepository messagesRepository;
 	@Autowired
-	private ConversationToConversationDTOConverter conversationConverter;
+	private ConversationToDTOConverter conversationConverter;
 	@Autowired
-	private MessageToMessageDTOConverter messageConverter;
+	private MessageToDTOConverter messageConverter;
 	@Autowired
 	private ConversationFacade facade;
+	
+	@PublicEndpoint
+	@Get("/conversations")
+	public List<ConversationDTO> listAll(@PathVariable final Long collegeId){
+		return conversationRepository.findAllByCollegeId(collegeId)
+									 .stream()
+									 .map(conversation -> conversationConverter
+										.fromConversation(conversation)
+										.withMessages()
+										.convert())
+									 .collect(Collectors.toList());
+	}
+	
+	@OnlyStudents
+	@Post(value = "/conversations", responseStatus = CREATED)
+	public ConversationDTO start(@PathVariable final Long collegeId, @RequestBody String messageText) {
+		Conversation conversation = facade.createConversation(collegeId, messageText);
+		return conversationConverter.fromConversation(conversation)
+									.withMessages()
+									.convert();
+	}
 	
 	@PublicEndpoint
 	@Get("/conversations/{conversationId}")
@@ -41,15 +65,6 @@ public class ConversationController {
 										.withMessages()
 										.convert())
 				.orElseThrow(ConversationNotFoundException::new);
-	}
-	
-	@OnlyStudents
-	@Post(value = "/conversations", responseStatus = CREATED)
-	public ConversationDTO start(@PathVariable final Long collegeId, @RequestBody String messageText) {
-		Conversation conversation = facade.createConversation(collegeId, messageText);
-		return conversationConverter.fromConversation(conversation)
-									.withMessages()
-									.convert();
 	}
 	
 	@Patch(value = "/conversations/{conversationId}", responseStatus = CREATED)

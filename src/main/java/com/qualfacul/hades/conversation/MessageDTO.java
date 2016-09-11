@@ -13,7 +13,7 @@ public class MessageDTO {
 	@JsonSerialize(using = FullDateCalendarSerializer.class)
 	private Calendar sentAt;
 	
-	private String message;
+	private String content;
 	
 	private ConversationDirection direction;
 	
@@ -31,11 +31,11 @@ public class MessageDTO {
 		this.sentAt = createdAt;
 	}
 	
-	public String getMessage() {
-		return message;
+	public String getContent() {
+		return content;
 	}
-	public void setMessage(String message) {
-		this.message = message;
+	public void setContent(String content) {
+		this.content = content;
 	}
 	
 	public ConversationDirection getDirection() {
