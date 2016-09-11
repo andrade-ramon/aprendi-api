@@ -128,11 +128,15 @@ public class MecCourseService {
 			collegeAddress = optionalAddress.get();
 		}
 			
+		
 		List<Course> courses = new ArrayList<>();
 		courses.add(course);
-		collegeAddress.setCourses(courses);
+		if (collegeAddress.getCourses() == null) {
+			collegeAddress.setCourses(courses);
+		} else if (!collegeAddress.getCourses().contains(course)) {
+			collegeAddress.getCourses().add(course);
+		}
 		collegeAddressRepository.save(collegeAddress);
-		
 		
 		return collegeAddress;
 	}

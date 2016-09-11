@@ -56,7 +56,7 @@ public class CollegeAddress {
 	@Column(name = "state")
 	private String state;
 
-	@ManyToMany	
+	@ManyToMany(fetch = FetchType.EAGER)	
 	@JoinTable(name = "college_address_course", 
 		joinColumns = { @JoinColumn(name = "college_address_id") }, 
 		inverseJoinColumns = { @JoinColumn(name = "course_id") })
