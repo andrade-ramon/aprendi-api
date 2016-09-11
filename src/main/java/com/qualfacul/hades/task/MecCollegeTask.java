@@ -35,7 +35,7 @@ public class MecCollegeTask {
 
 		ExecutorService executor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 		
-		Document collegeList = Jsoup.parse(mecRequester.requestCollegeList(28));
+		Document collegeList = Jsoup.parse(mecRequester.requestCollegeList(1));
 		int totalPages = Integer.parseInt(
 				collegeList.select("select#paginationControlItemdiv_listar_consulta_avancada option").last().text());
 		int page = 1;
