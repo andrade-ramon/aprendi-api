@@ -12,6 +12,7 @@ public class CollegeAddressToDTOConverterTest {
 	public void shouldConvert() {
 		subject = new CollegeAddressToDTOConverter();
 		
+		@SuppressWarnings("deprecation")
 		CollegeAddress from = new CollegeAddress();
 		from.setId(123L);
 		from.setName("AnyCampus");
