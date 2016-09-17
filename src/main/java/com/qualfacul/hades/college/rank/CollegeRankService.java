@@ -1,7 +1,6 @@
 package com.qualfacul.hades.college.rank;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -18,17 +17,14 @@ public class CollegeRankService {
 	public void saveCollegeRankingFor(List<CollegeGrade> grades, CollegeRankType rankType, College college) {
 		RankCalculatorResult calculatorResult = rankType.getRankingCalcultor().calculate(grades);
 		
-		Optional<CollegeRank> optionalCollegeRank = collegeRankRepository.findByCollegeAndRankType(college, rankType);
+		CollegeRank generalRanking = collegeRankRepository.findByCollegeAndRankType(college, rankType)
+				.map(collegeRank -> {
+					collegeRank.setGrade(calculatorResult.getFinalGrade());
+					collegeRank.setGradesQuantity(calculatorResult.getTotalGrades());
+					return collegeRank;
+				})
+				.orElse(new CollegeRank(college, calculatorResult.getFinalGrade(),rankType, calculatorResult.getTotalGrades()));
 		
-		CollegeRank generalRanking;
-		if (optionalCollegeRank.isPresent()) {
-			generalRanking = optionalCollegeRank.get();
-			generalRanking.setGrade(calculatorResult.getGrade());
-			generalRanking.setGradesQuantity(calculatorResult.getNumberOfGrades());
-		} else {
-			generalRanking = new CollegeRank(college, calculatorResult.getGrade(), rankType,
-					calculatorResult.getNumberOfGrades());
-		}
 		collegeRankRepository.save(generalRanking);
 	}
 }

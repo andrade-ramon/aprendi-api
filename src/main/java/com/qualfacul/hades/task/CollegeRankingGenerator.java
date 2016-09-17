@@ -1,6 +1,7 @@
 package com.qualfacul.hades.task;
 
-import java.util.Arrays;
+import static java.util.Arrays.stream;
+
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -30,7 +31,7 @@ public class CollegeRankingGenerator {
 			LOGGER.info("GENERATING RANKING GRADE TO COLLEGE {}", college.getId());
 			List<CollegeGrade> grades = college.getGrades();
 
-			Arrays.stream(CollegeRankType.values()).forEach(rankType -> {
+			stream(CollegeRankType.values()).forEach(rankType -> {
 				collegeRankService.saveCollegeRankingFor(grades, rankType, college);
 			});
 		});
