@@ -32,13 +32,13 @@ public class CollegeToCollegeDTOConverterTest {
 		from.setCnpj("21-2302-202-2");
 		from.setSite("www.college.com");
 		
-		from.setCollegeAdresses(asList(collegeAddress1, collegeAddress2));
+		from.setAdresses(asList(collegeAddress1, collegeAddress2));
 		
 		Integer coursesCount1 = 2;
 		Integer coursesCount2 = 3;
 		
-		when(collegeAddress1.getCourseGrades().size()).thenReturn(coursesCount1);
-		when(collegeAddress2.getCourseGrades().size()).thenReturn(coursesCount2);
+		when(collegeAddress1.getCourses().size()).thenReturn(coursesCount1);
+		when(collegeAddress2.getCourses().size()).thenReturn(coursesCount2);
 		
 		CollegeDTO converted = subject.convert(from);
 		

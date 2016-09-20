@@ -2,7 +2,6 @@ package com.qualfacul.hades.college;
 
 import static org.apache.commons.lang3.StringUtils.stripAccents;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -15,13 +14,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.search.annotations.Field;
 
-import com.qualfacul.hades.course.CourseGrade;
+import com.qualfacul.hades.course.Course;
 
 @Entity
 @Table(name = "college_address")
@@ -32,7 +31,7 @@ public class CollegeAddress {
 	private Long id;
 
 	@NotNull
-	@OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+	@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
 	private College college;
 
 	@Field
@@ -56,12 +55,15 @@ public class CollegeAddress {
 
 	@Column(name = "state")
 	private String state;
-	
-	@ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-	@JoinTable(name = "college_course", 
+
+	@ManyToMany(fetch = FetchType.EAGER)	
+	@JoinTable(name = "college_address_course", 
 		joinColumns = { @JoinColumn(name = "college_address_id") }, 
-		inverseJoinColumns = { @JoinColumn(name = "course_grade_id") })
-	private List<CourseGrade> courseGrades = new ArrayList<>();
+		inverseJoinColumns = { @JoinColumn(name = "course_id") })
+	private List<Course> courses;
+	
+	@Deprecated // Hibernate eyes only
+	public CollegeAddress(){}
 	
 	public Long getId() {
 		return id;
@@ -99,8 +101,8 @@ public class CollegeAddress {
 		return state;
 	}
 
-	public List<CourseGrade> getCourseGrades() {
-		return courseGrades;
+	public List<Course> getCourses() {
+		return courses;
 	}
 
 	public void setId(Long id) {
@@ -139,8 +141,8 @@ public class CollegeAddress {
 		this.state = state;
 	}
 
-	public void setCourseGrades(List<CourseGrade> courseGrades) {
-		this.courseGrades = courseGrades;
+	public void setCourses(List<Course> courses) {
+		this.courses = courses;
 	}
 	
 	@Override
@@ -151,11 +153,8 @@ public class CollegeAddress {
 			return false;
 
 		CollegeAddress other = (CollegeAddress) obj;
-		
 		return Objects.equals(stripAccents(this.address), stripAccents(other.address)) &&
-				Objects.equals(stripAccents(this.cep), stripAccents(other.cep)) &&
-				Objects.equals(stripAccents(this.city), stripAccents(other.city)) &&
-				Objects.equals(stripAccents(this.state), stripAccents(other.state));
+				Objects.equals(this.cep, other.cep);
 	}
 
 }

@@ -3,7 +3,6 @@ package com.qualfacul.hades.configuration;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -14,11 +13,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
 import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module.Feature;
 import com.qualfacul.hades.annotation.WebComponent;
+import com.qualfacul.hades.annotation.WebConfiguration;
 import com.qualfacul.hades.interceptor.StatelessAuthenticationInterceptor;
 
-@Configuration
+@WebConfiguration
 @WebComponent
-class WebConfiguration extends WebMvcConfigurerAdapter {
+class WebConfig extends WebMvcConfigurerAdapter {
 	
 	@Autowired
 	private StatelessAuthenticationInterceptor statelessAuthenticationInterceptor;
