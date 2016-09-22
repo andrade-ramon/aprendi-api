@@ -20,10 +20,10 @@ public class CollegeRankService {
 		CollegeRank generalRanking = collegeRankRepository.findByCollegeAndRankType(college, rankType)
 				.map(collegeRank -> {
 					collegeRank.setGrade(calculatorResult.getFinalGrade());
-					collegeRank.setGradesQuantity(calculatorResult.getTotalGrades());
+					collegeRank.setGradesQuantity(calculatorResult.getTotalNumberOfGrades());
 					return collegeRank;
 				})
-				.orElse(new CollegeRank(college, calculatorResult.getFinalGrade(),rankType, calculatorResult.getTotalGrades()));
+				.orElse(new CollegeRank(college, calculatorResult.getFinalGrade(),rankType, calculatorResult.getTotalNumberOfGrades()));
 		
 		collegeRankRepository.save(generalRanking);
 	}

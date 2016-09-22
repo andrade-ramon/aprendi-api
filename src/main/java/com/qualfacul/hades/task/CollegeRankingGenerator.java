@@ -28,7 +28,7 @@ public class CollegeRankingGenerator {
 	@Transactional
 	public void generateRanking() {
 		collegeRepository.findAll().forEach(college -> {
-			LOGGER.info("GENERATING RANKING GRADE TO COLLEGE {}", college.getId());
+			LOGGER.info("Generating ranking grade to college {}", college.getId());
 			List<CollegeGrade> grades = college.getGrades();
 
 			stream(CollegeRankType.values()).forEach(rankType -> {
@@ -36,5 +36,4 @@ public class CollegeRankingGenerator {
 			});
 		});
 	}
-
 }

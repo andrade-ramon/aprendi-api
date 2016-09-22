@@ -19,20 +19,20 @@ public class CollegeRank {
 
 	@Id
 	@GeneratedValue
-	private long id;
+	private Long id;
 
 	@ManyToOne
 	private College college;
 
 	@Column(name = "grade")
-	private double grade;
+	private Double grade;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "rank_type")
 	private CollegeRankType rankType;
 
 	@Column(name = "grades_quantity")
-	private int gradesQuantity;
+	private Integer gradesQuantity;
 
 	@Column(name = "created_at")
 	private LocalDate createdAt = LocalDate.now();
@@ -41,7 +41,7 @@ public class CollegeRank {
 	CollegeRank() {
 	}
 
-	public CollegeRank(College college, double grade, CollegeRankType rankType, int gradesQuantity) {
+	public CollegeRank(College college, Double grade, CollegeRankType rankType, Integer gradesQuantity) {
 		this.college = college;
 		this.grade = grade;
 		this.rankType = rankType;
@@ -49,11 +49,11 @@ public class CollegeRank {
 		this.createdAt = LocalDate.now();
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -65,11 +65,11 @@ public class CollegeRank {
 		this.college = college;
 	}
 
-	public double getGrade() {
+	public Double getGrade() {
 		return grade;
 	}
 
-	public void setGrade(double grade) {
+	public void setGrade(Double grade) {
 		this.grade = grade;
 	}
 
@@ -81,11 +81,11 @@ public class CollegeRank {
 		this.rankType = rankType;
 	}
 
-	public int getGradesQuantity() {
+	public Integer getGradesQuantity() {
 		return gradesQuantity;
 	}
 
-	public void setGradesQuantity(int gradesQuantity) {
+	public void setGradesQuantity(Integer gradesQuantity) {
 		this.gradesQuantity = gradesQuantity;
 	}
 

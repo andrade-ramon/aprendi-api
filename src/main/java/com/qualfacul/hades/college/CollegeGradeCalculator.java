@@ -7,19 +7,19 @@ import com.qualfacul.hades.college.rank.RankCalculatorResult;
 
 public class CollegeGradeCalculator {
 
-	private final int MAX_NEGATIVE_GRADE = 4;
+	public static final int MAX_NEGATIVE_GRADE = 4;
 
 	public RankCalculatorResult calculate(List<CollegeGrade> grades) {
 		List<Double> negativeGrades = new ArrayList<>();
 		List<Double> positiveGrades = new ArrayList<>();
 		
 		grades.stream()
-			  .filter(grade -> grade.getValue() > MAX_NEGATIVE_GRADE)
-			  .map(grade -> positiveGrades.add(grade.getValue()));
+			.filter(grade -> grade.getValue() > MAX_NEGATIVE_GRADE)
+			.forEach(grade -> positiveGrades.add(grade.getValue()));
 		
 		grades.stream()
-		  .filter(grade -> grade.getValue() < MAX_NEGATIVE_GRADE)
-		  .map(grade -> positiveGrades.add(grade.getValue()));
+			.filter(grade -> grade.getValue() <= MAX_NEGATIVE_GRADE)
+			.forEach(grade -> negativeGrades.add(grade.getValue()));
 		
 		return new RankCalculatorResult().builder()
 			.withSize(grades.size())

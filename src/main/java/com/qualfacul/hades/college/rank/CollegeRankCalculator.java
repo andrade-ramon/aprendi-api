@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.qualfacul.hades.college.CollegeGrade;
 
-interface CollegeRankCalculator {
+public interface CollegeRankCalculator {
 
 	RankCalculatorResult calculate(List<CollegeGrade> grades);
 	

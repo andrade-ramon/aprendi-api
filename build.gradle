@@ -88,7 +88,8 @@ task getCourses(type: org.springframework.boot.gradle.run.BootRunTask) {
     classpath = sourceSets.main.runtimeClasspath
 }
 
-task generateCollegeRank(type: org.springframework.boot.gradle.run.BootRunTask) {
+task generateCollegeRank(type:JavaExec) {
+	systemProperties System.properties
+    classpath = sourceSets.main.runtimeClasspath
 	main = 'com.qualfacul.hades.CollegeRankingTaskApplication'
-	classpath = sourceSets.main.runtimeClasspath
 }
