@@ -1,6 +1,6 @@
 package com.qualfacul.hades.conversation;
 
-import java.util.Calendar;
+import java.time.LocalDateTime;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,8 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Type;
@@ -33,9 +31,8 @@ public class Message {
 	@OneToOne(cascade = CascadeType.MERGE)
 	private Conversation conversation;
 
-	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "sent_at")
-	private Calendar sentAt;
+	private LocalDateTime sentAt;
 
 	@PrimaryKeyJoinColumn
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -59,7 +56,7 @@ public class Message {
 		this.messageContent = new MessageContent(this, message);
 		this.direction = direction;
 		this.deleted = false;
-		this.sentAt = Calendar.getInstance();
+		this.sentAt = LocalDateTime.now();
 	}
 	
 	public Long getId() {
@@ -78,11 +75,11 @@ public class Message {
 		this.conversation = conversation;
 	}
 
-	public Calendar getSentAt() {
+	public LocalDateTime getSentAt() {
 		return sentAt;
 	}
 
-	public void setSentAt(Calendar sentAt) {
+	public void setSentAt(LocalDateTime sentAt) {
 		this.sentAt = sentAt;
 	}
 

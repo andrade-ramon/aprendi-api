@@ -1,17 +1,17 @@
 package com.qualfacul.hades.conversation;
 
-import java.util.Calendar;
+import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.qualfacul.hades.serialization.FullDateCalendarSerializer;
+import com.qualfacul.hades.serialization.LocalDateTimeSerializer;
 
 
 public class MessageDTO {
 	
 	private Long id;
 	
-	@JsonSerialize(using = FullDateCalendarSerializer.class)
-	private Calendar sentAt;
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
+	private LocalDateTime sentAt;
 	
 	private String content;
 	
@@ -24,10 +24,10 @@ public class MessageDTO {
 		this.id = id;
 	}
 	
-	public Calendar getSentAt() {
+	public LocalDateTime getSentAt() {
 		return sentAt;
 	}
-	public void setSentAt(Calendar createdAt) {
+	public void setSentAt(LocalDateTime createdAt) {
 		this.sentAt = createdAt;
 	}
 	

@@ -8,11 +8,15 @@ import com.qualfacul.hades.annotation.WebComponent;
 import com.qualfacul.hades.converter.ListConverter;
 
 @WebComponent
-public class ConversationToDTOConverter{
+public class ConversationToDTOConverter {
 	
-	@Autowired
 	private MessageToDTOConverter messageConverter;
 	
+	@Autowired
+	public ConversationToDTOConverter(MessageToDTOConverter messageConverter) {
+		this.messageConverter = messageConverter;
+	}
+
 	public Builder fromConversation(Conversation conversation) {
 		return new Builder(conversation);
 	}
@@ -30,6 +34,7 @@ public class ConversationToDTOConverter{
 			dto.setCollegeId(conversation.getCollege().getId());
 			dto.setStudentId(conversation.getUser().getId());
 			dto.setStudentName(conversation.getUser().getName());
+			
 		}
 		
 		public Builder withMessages() {

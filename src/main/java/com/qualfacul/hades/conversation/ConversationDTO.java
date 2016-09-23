@@ -1,12 +1,12 @@
 package com.qualfacul.hades.conversation;
 
-import java.util.Calendar;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.qualfacul.hades.serialization.FullDateCalendarSerializer;
+import com.qualfacul.hades.serialization.LocalDateTimeSerializer;
 
 public class ConversationDTO {
 	
@@ -14,8 +14,8 @@ public class ConversationDTO {
 	
 	private Long collegeId;
 	
-	@JsonSerialize(using = FullDateCalendarSerializer.class)
-	private Calendar createdAt;
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
+	private LocalDateTime createdAt;
 	
 	@JsonInclude(Include.NON_NULL)
 	private List<MessageDTO> messages;
@@ -40,11 +40,11 @@ public class ConversationDTO {
 		this.collegeId = collegeId;
 	}
 
-	public Calendar getCreatedAt() {
+	public LocalDateTime getCreatedAt() {
 		return createdAt;
 	}
 
-	public void setCreatedAt(Calendar createdAt) {
+	public void setCreatedAt(LocalDateTime createdAt) {
 		this.createdAt = createdAt;
 	}
 

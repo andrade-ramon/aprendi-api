@@ -1,7 +1,7 @@
 package com.qualfacul.hades.conversation;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -12,8 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Where;
@@ -38,9 +36,8 @@ public class Conversation {
 	private College college;
 	
 	@NotNull
-	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "created_at")
-	private Calendar createdAt = Calendar.getInstance();
+	private LocalDateTime createdAt = LocalDateTime.now();
 		
 	@OneToMany(mappedBy = "conversation", cascade = CascadeType.ALL)
 	@Where(clause = "deleted = 0")
@@ -79,11 +76,11 @@ public class Conversation {
 		this.college = college;
 	}
 
-	public Calendar getCreatedAt() {
+	public LocalDateTime getCreatedAt() {
 		return createdAt;
 	}
 
-	public void setCreatedAt(Calendar createdAt) {
+	public void setCreatedAt(LocalDateTime createdAt) {
 		this.createdAt = createdAt;
 	}
 

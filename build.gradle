@@ -71,6 +71,7 @@ dependencies {
     compile 'org.springframework:spring-test'
     compile 'junit:junit'
     compile 'org.mockito:mockito-all:1.8.4'
+    compile 'org.hamcrest:hamcrest-all:1.3'
 }
 
 task(runWeb, dependsOn: 'classes', type: JavaExec) {

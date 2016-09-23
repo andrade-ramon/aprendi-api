@@ -51,7 +51,7 @@ public class LoggedUserValidatorInterceptorTest {
 	}
 	
 	@Test(expected = OnlyStudentsCanAccessException.class)
-	public void shouldNotAccessWhenLoggedUserIsNotAUser() throws Exception {
+	public void shouldNotAccessWhenLoggedUserIsNotAStudent() throws Exception {
 		when(loggedUserManager.getLoginInfo().isUser()).thenReturn(false);
 		
 		Method method = stream(ConversationController.class.getMethods())
