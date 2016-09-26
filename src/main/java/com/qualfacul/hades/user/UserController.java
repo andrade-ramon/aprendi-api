@@ -12,10 +12,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.qualfacul.hades.annotation.Get;
 import com.qualfacul.hades.annotation.Post;
 import com.qualfacul.hades.annotation.PublicEndpoint;
 import com.qualfacul.hades.configuration.security.TokenAuthenticationService;
 import com.qualfacul.hades.exceptions.EmailAlreadyInUseException;
+import com.qualfacul.hades.exceptions.UsernameNotFoundException;
+import com.qualfacul.hades.login.LoggedUserManager;
 import com.qualfacul.hades.login.LoginInfo;
 import com.qualfacul.hades.login.LoginInfoDTO;
 
@@ -24,6 +27,8 @@ public class UserController {
 
 	@Autowired
 	private UserRepository userRepository;
+	@Autowired
+	private LoggedUserManager loggedUserManager;
 
 	@Autowired
 	private TokenAuthenticationService tokenService;
@@ -51,6 +56,11 @@ public class UserController {
 		LoginInfo loginInfo = user.getLoginInfo();
 		tokenService.createTokenFor(loginInfo);
 		return new LoginInfoDTO().from(loginInfo);
+	}
+	
+	@Get("/users/current")
+	public User getCurrentUser() {
+		return userRepository.findByEmail(loggedUserManager.getLoginInfo().getLogin()).orElseThrow(UsernameNotFoundException::new);
 	}
 
 }

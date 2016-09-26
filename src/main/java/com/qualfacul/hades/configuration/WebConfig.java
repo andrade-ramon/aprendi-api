@@ -1,5 +1,8 @@
 package com.qualfacul.hades.configuration;
 
+import static java.util.Arrays.asList;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +17,7 @@ import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
 import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module.Feature;
 import com.qualfacul.hades.annotation.WebComponent;
 import com.qualfacul.hades.annotation.WebConfiguration;
+import com.qualfacul.hades.interceptor.LoggedUserValidatorInterceptor;
 import com.qualfacul.hades.interceptor.StatelessAuthenticationInterceptor;
 
 @WebConfiguration
@@ -22,6 +26,8 @@ class WebConfig extends WebMvcConfigurerAdapter {
 	
 	@Autowired
 	private StatelessAuthenticationInterceptor statelessAuthenticationInterceptor;
+	@Autowired
+	private LoggedUserValidatorInterceptor loggedUserValidatorInterceptor;
 	
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
@@ -31,17 +37,22 @@ class WebConfig extends WebMvcConfigurerAdapter {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(statelessAuthenticationInterceptor);
+		registry.addInterceptor(loggedUserValidatorInterceptor);
 	}
 
 	@Override
 	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
 		final MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+		final JsonStringHttpMessageConverter stringConverter = new JsonStringHttpMessageConverter();
+		
 		final ObjectMapper objectMapper = new ObjectMapper();
 		final Hibernate4Module module = new Hibernate4Module();
 		
 		module.enable(Feature.FORCE_LAZY_LOADING);
 		objectMapper.registerModule(module);
 		converter.setObjectMapper(objectMapper);
+		stringConverter.setSupportedMediaTypes(asList(APPLICATION_JSON));
+		converters.add(stringConverter);
 		converters.add(converter);
 		super.configureMessageConverters(converters);
 	}

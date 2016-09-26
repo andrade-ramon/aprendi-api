@@ -2,6 +2,8 @@ package com.qualfacul.hades.login;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
+import java.util.Optional;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +21,11 @@ public class LoggedUserManager {
 
 	public LoginInfo getLoginInfo() {
 		String token = request.getHeader(AUTHORIZATION);
-
-		return tokenService.getUserFromToken(token).get();
+		
+		Optional<LoginInfo> loginInfo = tokenService.getUserFromToken(token);
+		if (loginInfo.isPresent()) {
+			return loginInfo.get();
+		}
+		return null;
 	}
 }

@@ -61,7 +61,7 @@ public class College {
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "college")
 	private List<CollegeGrade> grades = new ArrayList<>();
-
+	
 	public Long getId() {
 		return id;
 	}
