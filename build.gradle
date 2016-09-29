@@ -54,6 +54,10 @@ dependencies {
 	compile 'com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.7.4'
 	compile 'org.hibernate:hibernate-search-orm:4.5.3.Final'
     compile 'com.fasterxml.jackson.datatype:jackson-datatype-hibernate4:2.8.0.rc1'
+    compile 'org.json:json:20160810'
+    compile 'org.hibernate:hibernate-java8:5.2.2.Final'
+    
+    
 	
 	//Social Dependencies
 	compile 'org.springframework.social:spring-social-core:1.1.4.RELEASE'
@@ -69,6 +73,7 @@ dependencies {
     compile 'org.springframework:spring-test'
     compile 'junit:junit'
     compile 'org.mockito:mockito-all:1.8.4'
+    compile 'org.hamcrest:hamcrest-all:1.3'
 }
 
 task(runWeb, dependsOn: 'classes', type: JavaExec) {
