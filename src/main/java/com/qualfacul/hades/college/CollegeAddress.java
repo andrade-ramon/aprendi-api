@@ -1,5 +1,7 @@
 package com.qualfacul.hades.college;
 
+import static javax.persistence.CascadeType.MERGE;
+import static javax.persistence.FetchType.EAGER;
 import static org.apache.commons.lang3.StringUtils.stripAccents;
 
 import java.util.List;
@@ -15,12 +17,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.search.annotations.Field;
 
 import com.qualfacul.hades.course.Course;
+import com.qualfacul.hades.user.address.UserCollegeAddress;
 
 @Entity
 @Table(name = "college_address")
@@ -61,6 +65,9 @@ public class CollegeAddress {
 		joinColumns = { @JoinColumn(name = "college_address_id") }, 
 		inverseJoinColumns = { @JoinColumn(name = "course_id") })
 	private List<Course> courses;
+	
+	@OneToMany(fetch = EAGER, mappedBy = "id.user", cascade = MERGE)
+	private List<UserCollegeAddress> userCollegeAddress;
 	
 	@Deprecated // Hibernate eyes only
 	public CollegeAddress(){}
@@ -145,6 +152,14 @@ public class CollegeAddress {
 		this.courses = courses;
 	}
 	
+	public List<UserCollegeAddress> getUserCollegeAddress() {
+		return userCollegeAddress;
+	}
+	
+	public void setUserCollegeAddress(List<UserCollegeAddress> userCollegeAddress) {
+		this.userCollegeAddress = userCollegeAddress;
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -156,5 +171,4 @@ public class CollegeAddress {
 		return Objects.equals(stripAccents(this.address), stripAccents(other.address)) &&
 				Objects.equals(this.cep, other.cep);
 	}
-
 }

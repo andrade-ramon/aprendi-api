@@ -57,7 +57,7 @@ public class College {
 
 	@IndexedEmbedded
 	@OneToMany(cascade = CascadeType.MERGE, mappedBy = "college")
-	private List<CollegeAddress> adresses = new ArrayList<>();
+	private List<CollegeAddress> addresses = new ArrayList<>();
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "college")
 	private List<CollegeGrade> grades = new ArrayList<>();
@@ -90,8 +90,8 @@ public class College {
 		return site;
 	}
 
-	public List<CollegeAddress> getAdresses() {
-		return adresses;
+	public List<CollegeAddress> getAddresses() {
+		return addresses;
 	}
 
 	public List<CollegeGrade> getGrades() {
@@ -127,7 +127,7 @@ public class College {
 	}
 
 	public void setAdresses(List<CollegeAddress> adresses) {
-		this.adresses = adresses;
+		this.addresses = adresses;
 	}
 
 	public void setGrades(List<CollegeGrade> grades) {
