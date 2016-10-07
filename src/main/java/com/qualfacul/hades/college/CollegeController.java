@@ -80,13 +80,13 @@ public class CollegeController {
 	}
 	
 	@OnlyStudents
-	@Post("/colleges/{collegeId}/asign")
-	public void asignStudent(@RequestBody UserCollegeAddressDTO dto) {
+	@Post("/colleges/{collegeId}/assign")
+	public void assignStudent(@RequestBody UserCollegeAddressDTO dto) {
 		CollegeAddress collegeAddress = collegeAddressRepository.findByIdAndCollegeId(dto.getCollegeAddressId(), dto.getCollegeId())
 						.orElseThrow(CollegeAddressNotFoundException::new);
 		User student = userRepository.findByEmail(loggedUserManager.getLoginInfo().getLogin()).orElseThrow(UsernameNotFoundException::new);
 		
-		student.asignCollege(collegeAddress, dto.getStudentRa());
+		student.assignCollege(collegeAddress, dto.getStudentRa());
 		userRepository.save(student);
 	}
 	

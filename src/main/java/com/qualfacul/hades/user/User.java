@@ -96,7 +96,7 @@ public class User {
 		this.userCollegeAddress = userCollegeAddress;
 	}
 
-	public void asignCollege(CollegeAddress collegeAddress, String studentRa) {
+	public void assignCollege(CollegeAddress collegeAddress, String studentRa) {
 		UserCollegeAddressId userCollegeAddressId = new UserCollegeAddressId(collegeAddress, this);
 		this.userCollegeAddress.add(new UserCollegeAddress(userCollegeAddressId, studentRa));
 	}
