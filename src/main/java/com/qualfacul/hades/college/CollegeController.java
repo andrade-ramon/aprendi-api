@@ -5,18 +5,24 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.qualfacul.hades.annotation.Get;
+import com.qualfacul.hades.annotation.OnlyStudents;
+import com.qualfacul.hades.annotation.Post;
 import com.qualfacul.hades.annotation.PublicEndpoint;
 import com.qualfacul.hades.converter.ListConverter;
 import com.qualfacul.hades.course.CourseDTO;
 import com.qualfacul.hades.course.CourseToDTOConverter;
 import com.qualfacul.hades.exceptions.CollegeNotFoundException;
+import com.qualfacul.hades.exceptions.UsernameNotFoundException;
+import com.qualfacul.hades.login.LoggedUserManager;
 import com.qualfacul.hades.search.PaginatedSearch;
 import com.qualfacul.hades.search.SearchQuery;
-
+import com.qualfacul.hades.user.User;
+import com.qualfacul.hades.user.UserRepository;
 
 @RestController
 public class CollegeController {
@@ -35,6 +41,10 @@ public class CollegeController {
 	private CollegeToCollegeDTOConverter collegeConverter;
 	@Autowired
 	private CourseToDTOConverter courseConverter;
+	@Autowired
+	private LoggedUserManager loggedUserManager;
+	@Autowired
+	private UserRepository userRepository;
 	
 	@PublicEndpoint
 	@Get("/colleges/{id}")
@@ -69,6 +79,17 @@ public class CollegeController {
 				.collect(Collectors.toList());
 	}
 	
+	@OnlyStudents
+	@Post("/colleges/{collegeId}/assign")
+	public void assignStudent(@RequestBody UserCollegeAddressDTO dto) {
+		CollegeAddress collegeAddress = collegeAddressRepository.findByIdAndCollegeId(dto.getCollegeAddressId(), dto.getCollegeId())
+						.orElseThrow(CollegeAddressNotFoundException::new);
+		User student = userRepository.findByEmail(loggedUserManager.getLoginInfo().getLogin()).orElseThrow(UsernameNotFoundException::new);
+		
+		student.assignCollege(collegeAddress, dto.getStudentRa());
+		userRepository.save(student);
+	}
+	
 	@PublicEndpoint
 	@Get("/colleges/search/{query}")
 	public PaginatedSearch<CollegeDTO> list(@PathVariable String query, @RequestParam(required = false) Integer page) {
@@ -85,4 +106,5 @@ public class CollegeController {
 		
 		return dtos;
 	}
+	
 }

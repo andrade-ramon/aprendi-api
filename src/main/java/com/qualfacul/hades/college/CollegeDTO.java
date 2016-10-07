@@ -9,6 +9,7 @@ public class CollegeDTO {
 	private String cnpj;
 	private String site;
 	private Integer coursesCount;
+	private Integer studentsCount;
 
 	public Long getId() {
 		return id;
@@ -64,6 +65,14 @@ public class CollegeDTO {
 
 	public void setCoursesCount(Integer coursesCount) {
 		this.coursesCount = coursesCount;
+	}
+
+	public Integer getStudentsCount() {
+		return studentsCount;
+	}
+
+	public void setStudentsCount(Integer studentsCount) {
+		this.studentsCount = studentsCount;
 	}
 	
 }
