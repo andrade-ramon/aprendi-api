@@ -42,10 +42,6 @@ public class CollegeGrade {
 	@OneToOne(optional = true)
 	private User user;
 	
-	@Deprecated //Hibernate eyes only
-	public CollegeGrade() {
-	}
-	
 	public Long getId() {
 		return id;
 	}
@@ -93,5 +89,43 @@ public class CollegeGrade {
 	public void setUser(User user) {
 		this.user = user;
 	}
-
+	
+	public Builder builder() {
+		return new Builder();
+	}
+	
+	public class Builder {
+		
+		private CollegeGrade collegeGrade = new CollegeGrade(); 
+		
+		public WithOrigin from(User student) {
+			collegeGrade.user = student;
+			return new WithOrigin();
+		}
+		
+		public final class WithOrigin {
+			public WithValue withOrigin(CollegeGradeOrigin origin) {
+				collegeGrade.gradeOrigin = origin;
+				return new WithValue();
+			}
+		}
+		public final class WithValue {
+			public ToCollege withValue(Double value) {
+				collegeGrade.value = value;
+				return new ToCollege();
+			}
+		}
+		public final class ToCollege {
+			public ToCollege to(College college) {
+				collegeGrade.college = college;
+				return this;
+			}
+			
+			public CollegeGrade build() {
+				collegeGrade.setDate(Calendar.getInstance());
+				return collegeGrade;
+			}
+		}
+	}
+	
 }
