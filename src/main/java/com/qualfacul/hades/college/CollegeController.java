@@ -1,6 +1,7 @@
 package com.qualfacul.hades.college;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,6 +18,7 @@ import com.qualfacul.hades.annotation.PublicEndpoint;
 import com.qualfacul.hades.college.rank.CollegeRank;
 import com.qualfacul.hades.college.rank.CollegeRankDTO;
 import com.qualfacul.hades.college.rank.CollegeRankRepository;
+import com.qualfacul.hades.college.rank.CollegeRankToCollegeRankDTOConverter;
 import com.qualfacul.hades.college.rank.CollegeRankType;
 import com.qualfacul.hades.converter.ListConverter;
 import com.qualfacul.hades.course.CourseDTO;
@@ -44,6 +46,8 @@ public class CollegeController {
 	private CollegeAddressToDTOConverter addressConverter;
 	@Autowired
 	private CollegeToCollegeDTOConverter collegeConverter;
+	@Autowired
+	private CollegeRankToCollegeRankDTOConverter collegeRankConverter;
 	@Autowired
 	private CourseToDTOConverter courseConverter;
 	@Autowired
@@ -117,22 +121,16 @@ public class CollegeController {
 	@PublicEndpoint
 	@Get("/colleges/rank/{rankType}")
 	public List<CollegeRankDTO> listCollegeRank(@PathVariable CollegeRankType rankType) {
-		List<CollegeRank> collegesRank = collegeRankRepository
+		List<CollegeRank> list = collegeRankRepository
 				.findByRankTypeAndGradesQuantityGreaterThanOrderByGradeDesc(rankType, 5);
 
 		List<CollegeRankDTO> dtos = new ArrayList<>();
+		
 		int i = 1;
-		for (CollegeRank collegeRank : collegesRank) {
-			CollegeRankDTO dto = new CollegeRankDTO();
-			
-			dto.setPosition(i);
-			dto.setCollegeId(collegeRank.getCollege().getId());
-			dto.setCollegeName(collegeRank.getCollege().getName());
-			dto.setGrade(collegeRank.getGrade());
-			dto.setLastUpdate(collegeRank.getCreatedAt());
-			dto.setTotalGrades(collegeRank.getGradesQuantity());
+		for (CollegeRank collegeRank : list) {
+			CollegeRankDTO dto = collegeRankConverter.convert(collegeRank);
+			dto.setPosition(i++);
 			dtos.add(dto);
-			i++;
 		}
 		return dtos;
 	}
