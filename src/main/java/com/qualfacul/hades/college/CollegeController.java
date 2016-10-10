@@ -45,6 +45,8 @@ public class CollegeController {
 	private LoggedUserManager loggedUserManager;
 	@Autowired
 	private UserRepository userRepository;
+	@Autowired
+	private CollegeGradeToDTOConverter gradeConverter;
 	
 	@PublicEndpoint
 	@Get("/colleges/{id}")
@@ -84,10 +86,29 @@ public class CollegeController {
 	public void assignStudent(@RequestBody UserCollegeAddressDTO dto) {
 		CollegeAddress collegeAddress = collegeAddressRepository.findByIdAndCollegeId(dto.getCollegeAddressId(), dto.getCollegeId())
 						.orElseThrow(CollegeAddressNotFoundException::new);
-		User student = userRepository.findByEmail(loggedUserManager.getLoginInfo().getLogin()).orElseThrow(UsernameNotFoundException::new);
+		User student = loggedUserManager.getStudent().orElseThrow(UsernameNotFoundException::new);
 		
 		student.assignCollege(collegeAddress, dto.getStudentRa());
 		userRepository.save(student);
+	}
+	
+	@OnlyStudents
+	@Get("/colleges/{collegeId}/ratings")
+	public List<CollegeGradeDTO> listRatings(@PathVariable Long collegeId) {
+		return collegeRepository.findById(collegeId).orElseThrow(CollegeNotFoundException::new)
+						.getGrades().stream()
+						.filter(college -> college.getGradeOrigin().isFromStudent())
+						.map(gradeConverter::convert)
+						.collect(Collectors.toList());
+	}
+	
+	@OnlyStudents
+	@Post("/colleges/{collegeId}/ratings")
+	public void rate(@PathVariable Long collegeId, @RequestBody SimpleCollegeGradeDTO dto) {
+		User student = loggedUserManager.getStudent().orElseThrow(UsernameNotFoundException::new);
+		College college = collegeRepository.findById(collegeId).orElseThrow(CollegeNotFoundException::new);
+		college.rate(student, dto.getOrigin(), dto.getValue());
+		collegeRepository.save(college);
 	}
 	
 	@PublicEndpoint
