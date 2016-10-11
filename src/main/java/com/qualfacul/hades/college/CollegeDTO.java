@@ -1,5 +1,9 @@
 package com.qualfacul.hades.college;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 public class CollegeDTO {
 
 	private Long id;
@@ -11,6 +15,7 @@ public class CollegeDTO {
 	private Integer coursesCount;
 	private Integer studentsCount;
 	private Integer ratingsCount;
+	@JsonInclude(NON_NULL)
 	private Boolean alreadyRated;
 
 	public Long getId() {

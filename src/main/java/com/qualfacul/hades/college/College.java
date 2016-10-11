@@ -147,6 +147,12 @@ public class College {
 		grades.add(collegeGrade);
 	}
 	
+	public boolean isAssigned(User student) {
+		return addresses.stream()
+				 .flatMap(address -> address.getUserCollegeAddress().stream())
+				 .anyMatch(userCollegeAddress -> userCollegeAddress.getId().getUser() == student);
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

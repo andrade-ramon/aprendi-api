@@ -10,17 +10,14 @@ import org.springframework.core.convert.converter.Converter;
 import com.qualfacul.hades.annotation.WebComponent;
 import com.qualfacul.hades.login.LoggedUserManager;
 import com.qualfacul.hades.user.User;
-import com.qualfacul.hades.user.address.UserCollegeAddressRepository;
 
 @WebComponent
 public class CollegeToCollegeDTOConverter implements Converter<College, CollegeDTO>{
 	
-	private UserCollegeAddressRepository userCollegeAddressRepository;
 	private LoggedUserManager loggedUserManager;
 
 	@Autowired
-	public CollegeToCollegeDTOConverter(UserCollegeAddressRepository userCollegeAddressRepository,LoggedUserManager loggedUserManager) {
-		this.userCollegeAddressRepository = userCollegeAddressRepository;
+	public CollegeToCollegeDTOConverter(LoggedUserManager loggedUserManager) {
 		this.loggedUserManager = loggedUserManager;
 	}
 
@@ -39,8 +36,8 @@ public class CollegeToCollegeDTOConverter implements Converter<College, CollegeD
 				.mapToInt(i -> i.intValue()).sum();
 		
 		Integer studentsCount = from.getAddresses().stream()
-			.map(collegeAddress -> userCollegeAddressRepository.findByIdCollegeAddress(collegeAddress).size())
-			.mapToInt(i -> i.intValue()).sum();
+						.map(collegeAddress -> collegeAddress.getUserCollegeAddress().size())
+						.mapToInt(i -> i.intValue()).sum();
 		
 		Map<User, List<CollegeGrade>> gradesGroupByUser = from.getGrades().stream()
 			.filter(grade -> grade.getGradeOrigin().isFromStudent())
@@ -51,7 +48,9 @@ public class CollegeToCollegeDTOConverter implements Converter<College, CollegeD
 		dto.setRatingsCount(gradesGroupByUser.keySet().size());
 		
 		loggedUserManager.getStudent().ifPresent(user -> {
-			dto.setAlreadyRated(gradesGroupByUser.containsKey(user));
+			if (from.isAssigned(user)) {
+				dto.setAlreadyRated(gradesGroupByUser.containsKey(user));
+			}
 		});
 		
 		return dto;
