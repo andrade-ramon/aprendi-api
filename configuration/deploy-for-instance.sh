@@ -23,4 +23,4 @@ cd $HADES_PROD_DIR
 
 ./gradlew runWeb &
 
-rm -rfv $HADES_PROD_DIR
+rm -rfv $HADES_TEMP_DIR
