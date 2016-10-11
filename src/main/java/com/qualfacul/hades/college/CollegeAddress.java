@@ -39,7 +39,7 @@ public class CollegeAddress {
 	private College college;
 
 	@Field
-	@Column(name = "name", length = 15, nullable = true)
+	@Column(name = "name", length = 60, nullable = true)
 	private String name;
 
 	@Column(name = "address", length = 150, nullable = false)
