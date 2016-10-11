@@ -14,12 +14,12 @@ import java.util.Optional;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.qualfacul.hades.login.LoggedUserManager;
 import com.qualfacul.hades.user.User;
-import com.qualfacul.hades.user.address.UserCollegeAddressRepository;
+import com.qualfacul.hades.user.address.UserCollegeAddress;
+import com.qualfacul.hades.user.address.UserCollegeAddressId;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CollegeToCollegeDTOConverterTest {
@@ -30,8 +30,6 @@ public class CollegeToCollegeDTOConverterTest {
 	private CollegeAddress collegeAddress1;
 	@Mock(answer = RETURNS_DEEP_STUBS)
 	private CollegeAddress collegeAddress2;
-	@Mock(answer = RETURNS_DEEP_STUBS)
-	private UserCollegeAddressRepository userCollegeAddressRepository;
 	@Mock(answer = RETURNS_DEEP_STUBS)
 	private CollegeGrade grade1;
 	@Mock(answer = RETURNS_DEEP_STUBS)
@@ -49,7 +47,7 @@ public class CollegeToCollegeDTOConverterTest {
 
 	@Test
 	public void shouldConvert() {
-		subject = new CollegeToCollegeDTOConverter(userCollegeAddressRepository, loggedUserManager);
+		subject = new CollegeToCollegeDTOConverter(loggedUserManager);
 		
 		College from = new College();
 		from.setId(123L);
@@ -58,6 +56,10 @@ public class CollegeToCollegeDTOConverterTest {
 		from.setPhone("23928392");
 		from.setCnpj("21-2302-202-2");
 		from.setSite("www.college.com");
+		
+		UserCollegeAddressId anyId = new UserCollegeAddressId(collegeAddress1, someUser);
+		
+		UserCollegeAddress someUserCollegeAddress = new UserCollegeAddress(anyId, "");
 		
 		from.setAdresses(asList(collegeAddress1, collegeAddress2));
 		from.setGrades(asList(grade1, grade2, grade3, grade4));
@@ -69,7 +71,8 @@ public class CollegeToCollegeDTOConverterTest {
 		
 		when(collegeAddress1.getCourses().size()).thenReturn(coursesCount1);
 		when(collegeAddress2.getCourses().size()).thenReturn(coursesCount2);
-		when(userCollegeAddressRepository.findByIdCollegeAddress(Mockito.any(CollegeAddress.class)).size()).thenReturn(studentsCount);
+		when(collegeAddress1.getUserCollegeAddress()).thenReturn(asList(someUserCollegeAddress, someUserCollegeAddress));
+		when(collegeAddress2.getUserCollegeAddress()).thenReturn(asList(someUserCollegeAddress));
 		when(grade1.getGradeOrigin()).thenReturn(STUDENT_INFRA);
 		when(grade1.getUser()).thenReturn(someUser);
 		when(grade2.getGradeOrigin()).thenReturn(STUDENT_PRICE);
@@ -88,7 +91,7 @@ public class CollegeToCollegeDTOConverterTest {
 		assertEquals(from.getCnpj(), converted.getCnpj());
 		assertEquals(from.getSite(), converted.getSite());
 		assertEquals(Integer.valueOf(coursesCount1 + coursesCount2), converted.getCoursesCount());
-		assertEquals(Integer.valueOf(studentsCount * 2), converted.getStudentsCount());
+		assertEquals(Integer.valueOf(studentsCount), converted.getStudentsCount());
 		assertEquals(studentsRatingsCount, converted.getRatingsCount());
 		assertTrue(converted.isAlreadyRated());
 	}
