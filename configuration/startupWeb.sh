@@ -30,6 +30,8 @@ ln -sf /opt/app/configuration/nginx.conf /etc/nginx/nginx.conf
 
 # Gradle release
 cd /opt/app
+
+mkdir /var/lucene
 ./gradlew runWeb &
 
 systemctl restart nginx
