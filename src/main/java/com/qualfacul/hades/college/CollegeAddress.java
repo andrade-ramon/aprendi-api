@@ -66,7 +66,7 @@ public class CollegeAddress {
 		inverseJoinColumns = { @JoinColumn(name = "course_id") })
 	private List<Course> courses;
 	
-	@OneToMany(fetch = EAGER, mappedBy = "id.user", cascade = MERGE)
+	@OneToMany(fetch = EAGER, mappedBy = "id.collegeAddress", cascade = MERGE)
 	private List<UserCollegeAddress> userCollegeAddress;
 	
 	@Deprecated // Hibernate eyes only

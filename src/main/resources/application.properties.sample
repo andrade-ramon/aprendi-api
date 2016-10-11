@@ -10,6 +10,7 @@ db.username=root
 db.password=
 db.driver=com.mysql.jdbc.Driver
 
+email.debug=false
 email.hostname=
 email.port=
 email.name=

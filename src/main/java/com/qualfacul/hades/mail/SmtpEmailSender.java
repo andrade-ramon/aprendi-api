@@ -15,6 +15,9 @@ public class SmtpEmailSender {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SmtpEmailSender.class);
 	private static final String UTF_8_CHARSET = "UTF-8";
 
+	@Value("${email.debug}")
+	private boolean emailDebug;
+	
 	@Value("${email.hostname}")
 	private String hostName;
 
@@ -56,9 +59,9 @@ public class SmtpEmailSender {
 	}
 	
 	public class Sender {
-		
 		public void send() {
 			HtmlEmail htmlEmail = new HtmlEmail();
+			htmlEmail.setDebug(emailDebug);
 			htmlEmail.setSSLOnConnect(true);
 			htmlEmail.setHostName(hostName);
 			htmlEmail.setSslSmtpPort(port);
