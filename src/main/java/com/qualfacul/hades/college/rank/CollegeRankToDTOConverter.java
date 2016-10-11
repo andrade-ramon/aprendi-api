@@ -5,7 +5,7 @@ import org.springframework.core.convert.converter.Converter;
 import com.qualfacul.hades.annotation.WebComponent;
 
 @WebComponent
-public class CollegeRankToCollegeRankDTOConverter implements Converter<CollegeRank, CollegeRankDTO>{
+public class CollegeRankToDTOConverter implements Converter<CollegeRank, CollegeRankDTO>{
 
 	@Override
 	public CollegeRankDTO convert(CollegeRank source) {

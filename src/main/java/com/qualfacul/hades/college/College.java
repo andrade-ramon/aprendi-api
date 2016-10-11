@@ -7,6 +7,7 @@ import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -17,6 +18,8 @@ import org.hibernate.search.annotations.Boost;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.IndexedEmbedded;
+
+import com.qualfacul.hades.user.User;
 
 @Indexed
 @Entity
@@ -59,7 +62,7 @@ public class College {
 	@OneToMany(cascade = CascadeType.MERGE, mappedBy = "college")
 	private List<CollegeAddress> addresses = new ArrayList<>();
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "college")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "college", fetch = FetchType.EAGER)
 	private List<CollegeGrade> grades = new ArrayList<>();
 	
 	public Long getId() {
@@ -134,6 +137,22 @@ public class College {
 		this.grades = grades;
 	}
 	
+	public void rate(User student, CollegeGradeOrigin origin, Double gradeValue) {
+		CollegeGrade collegeGrade = new CollegeGrade().builder()
+						.from(student)
+						.withOrigin(origin)
+						.withValue(gradeValue)
+						.to(this)
+						.build();
+		grades.add(collegeGrade);
+	}
+	
+	public boolean isAssigned(User student) {
+		return addresses.stream()
+				 .flatMap(address -> address.getUserCollegeAddress().stream())
+				 .anyMatch(userCollegeAddress -> userCollegeAddress.getId().getUser() == student);
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -144,5 +163,5 @@ public class College {
 		College other = (College) obj;
 		return Objects.equals(this.id, other.id);
 	}
-	
+
 }
