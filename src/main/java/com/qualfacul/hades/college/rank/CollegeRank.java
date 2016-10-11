@@ -24,17 +24,17 @@ public class CollegeRank {
 	@ManyToOne
 	private College college;
 
-	@Column(name = "grade")
+	@Column(name = "grade", nullable = false)
 	private Double grade;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "rank_type")
+	@Column(name = "rank_type", length = 12, nullable = false)
 	private CollegeRankType rankType;
 
 	@Column(name = "grades_quantity")
 	private Integer gradesQuantity;
 
-	@Column(name = "created_at")
+	@Column(name = "created_at", nullable = false)
 	private LocalDate createdAt = LocalDate.now();
 
 	@Deprecated // Hibernate eyes

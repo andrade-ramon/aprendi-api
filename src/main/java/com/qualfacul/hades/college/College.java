@@ -31,30 +31,30 @@ public class College {
 	private Long id;
 
 	@NotNull
-	@Column(name = "mec_id", unique = true)
+	@Column(name = "mec_id", nullable = false, unique = true)
 	private long mecId;
 
 	@Field
-	@Column(name = "name", nullable = false)
+	@Column(name = "name", length = 300, nullable = false)
 	@Boost(2.5f)
 	private String name;
 
 	@Field
-	@Column(name = "initials", length = 30)
+	@Column(name = "initials", length = 30, nullable = true)
 	@Boost(3.0f)
 	private String initials;
 
 	@Field
-	@Column(name = "phone")
+	@Column(name = "phone", length = 11, nullable = true)
 	@Boost(0.5f)
 	private String phone;
 
 	@Field
-	@Column(name = "cnpj")
+	@Column(name = "cnpj", length = 14, nullable = false)
 	private String cnpj;
 
 	@Field
-	@Column(name = "site")
+	@Column(name = "site", length = 60, nullable = true)
 	@Boost(0.7f)
 	private String site;
 

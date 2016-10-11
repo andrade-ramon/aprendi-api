@@ -24,10 +24,11 @@ public class Admin {
 	private Long id;
 
 	@NotBlank
+	@Column(name = "name", length = 80, nullable = false)
 	private String name;
 
 	@NotBlank
-	@Column(unique = true)
+	@Column(name = "email", length = 50, nullable = false, unique = true)
 	@Email
 	private String email;
 	

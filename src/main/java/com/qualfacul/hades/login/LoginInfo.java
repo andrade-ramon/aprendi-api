@@ -27,12 +27,14 @@ public class LoginInfo {
 	private Long id;
 
 	@NotEmpty(message = "Informe seu login")
-	@Column(unique = true)
+	@Column(name = "login", length = 50, unique = true)
 	private String login;
+	
+	@Column(name = "password", length = 65, nullable = true)
 	private String password;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "origin", nullable = false)
+	@Column(name = "origin", length = 15, nullable = false)
 	private LoginOrigin loginOrigin;
 
 	@Transient

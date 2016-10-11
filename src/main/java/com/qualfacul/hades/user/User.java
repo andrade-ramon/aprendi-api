@@ -32,10 +32,11 @@ public class User {
 	private Long id;
 
 	@NotNull
+	@Column(name = "name", length = 80, nullable = false)
 	private String name;
 
 	@NotNull
-	@Column(unique = true)
+	@Column(name = "email", length = 50, nullable = false, unique = true)
 	private String email;
 
 	@OneToOne(cascade = ALL)
