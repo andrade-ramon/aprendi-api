@@ -1,5 +1,6 @@
 package com.qualfacul.hades.college;
 
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,14 +20,13 @@ import com.qualfacul.hades.course.CourseToDTOConverter;
 import com.qualfacul.hades.exceptions.CollegeNotFoundException;
 import com.qualfacul.hades.exceptions.UsernameNotFoundException;
 import com.qualfacul.hades.login.LoggedUserManager;
-import com.qualfacul.hades.search.PaginatedSearch;
+import com.qualfacul.hades.search.PaginatedResult;
 import com.qualfacul.hades.search.SearchQuery;
 import com.qualfacul.hades.user.User;
 import com.qualfacul.hades.user.UserRepository;
 
 @RestController
 public class CollegeController {
-	
 	private static final float COLLEGE_THRESHOLD = 0.4f;
 	
 	@Autowired
@@ -113,10 +113,10 @@ public class CollegeController {
 	
 	@PublicEndpoint
 	@Get("/colleges/search/{query}")
-	public PaginatedSearch<CollegeDTO> list(@PathVariable String query, @RequestParam(required = false) Integer page) {
+	public PaginatedResult<CollegeDTO> list(@PathVariable String query, @RequestParam(required = false) Integer page) {
 		ListConverter<College, CollegeDTO> listConverter = new ListConverter<>(collegeConverter);
 		
-		PaginatedSearch<CollegeDTO> dtos = collegeSearch
+		PaginatedResult<CollegeDTO> dtos = collegeSearch
 			.builder()
 			.forEntity(College.class)
 			.withThreshold(COLLEGE_THRESHOLD)

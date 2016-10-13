@@ -1,10 +1,8 @@
 package com.qualfacul.hades.search;
 
-import static com.qualfacul.hades.search.SearchQuery.MAX_RESULTS_PER_PAGE;
-
 import java.util.List;
 
-public class PaginatedSearch<T> {
+public class PaginatedResult<T> {
 
 	private Integer page;
 	private Integer actualPageSize;
@@ -12,14 +10,14 @@ public class PaginatedSearch<T> {
 	private Integer totalPages;
 	private List<T> result;
 
-	public PaginatedSearch(List<T> result, Integer page, Integer totalResults) {
+	public PaginatedResult(List<T> result, Integer page, Integer totalResults, int maxResultsPerPage) {
 		this.page = page;
 		this.actualPageSize = result.size();
 		this.result = result;
 		this.totalResults = totalResults;
 
-		int totalPages = (int) (totalResults / MAX_RESULTS_PER_PAGE);
-		if (totalResults % MAX_RESULTS_PER_PAGE == 0) {
+		int totalPages = (int) (totalResults / maxResultsPerPage);
+		if (totalResults % maxResultsPerPage == 0) {
 			this.totalPages = totalPages;
 		} else {
 			this.totalPages = totalPages + 1;
