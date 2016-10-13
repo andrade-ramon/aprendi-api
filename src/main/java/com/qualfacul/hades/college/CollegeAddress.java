@@ -39,25 +39,25 @@ public class CollegeAddress {
 	private College college;
 
 	@Field
-	@Column(name = "name")
+	@Column(name = "name", length = 60, nullable = true)
 	private String name;
 
-	@Column(name = "address")
+	@Column(name = "address", length = 150, nullable = false)
 	private String address;
 
-	@Column(name = "cep")
+	@Column(name = "cep", length = 8, nullable = false)
 	private String cep;
 
-	@Column(name = "number")
+	@Column(name = "number", length = 20, nullable = true)
 	private String number;
 
-	@Column(name = "neighborhood")
+	@Column(name = "neighborhood", length = 55, nullable = true)
 	private String neighborhood;
 
-	@Column(name = "city")
+	@Column(name = "city", length = 33, nullable = false)
 	private String city;
 
-	@Column(name = "state")
+	@Column(name = "state", length = 2, nullable = false)
 	private String state;
 
 	@ManyToMany(fetch = FetchType.EAGER)	

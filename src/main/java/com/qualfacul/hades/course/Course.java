@@ -24,15 +24,15 @@ public class Course {
 	@GeneratedValue
 	private Long id;
 
-	@Column(name = "name", nullable = false, length = 400)
+	@Column(name = "name", length = 400, nullable = false)
 	private String name;
 
 	@Enumerated(STRING)
-	@Column(name = "modality", nullable = false, length = 15)
+	@Column(name = "modality", length = 15, nullable = false)
 	private CourseModality modality;
 
 	@Enumerated(STRING)
-	@Column(name = "degree", nullable = false, length = 15)
+	@Column(name = "degree", length = 15, nullable = false)
 	private CourseDegree degree;
 
 	@OneToMany(mappedBy = "course")

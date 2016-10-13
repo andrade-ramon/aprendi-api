@@ -19,7 +19,7 @@ public class UserCollegeAddress {
 	@EmbeddedId
 	private UserCollegeAddressId id;
 	
-	@Column(name = "student_ra", nullable = false, length = 20)
+	@Column(name = "student_ra", length = 20, nullable = false)
 	private String studentRa;
 	
 	@Deprecated
