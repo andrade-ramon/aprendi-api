@@ -41,6 +41,7 @@ public class LoggedUserValidatorInterceptorTest {
 	@Test
 	public void shouldAccessWhenLoggedUserIsAUser() throws Exception {
 		when(loggedUserManager.getLoginInfo().isUser()).thenReturn(true);
+		when(loggedUserManager.getLoginInfo().isAdmin()).thenReturn(false);
 		
 		Method method = stream(ConversationController.class.getMethods())
 						.filter(m -> m.isAnnotationPresent(OnlyStudents.class))

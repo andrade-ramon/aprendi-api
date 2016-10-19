@@ -25,9 +25,7 @@ import com.qualfacul.hades.exceptions.CollegeNotFoundException;
 import com.qualfacul.hades.exceptions.CollegeWithoutLoginAccessException;
 import com.qualfacul.hades.exceptions.UsernameNotFoundException;
 import com.qualfacul.hades.login.LoggedUserManager;
-import com.qualfacul.hades.login.LoginInfo;
 import com.qualfacul.hades.login.LoginInfoRepository;
-import com.qualfacul.hades.login.LoginOrigin;
 import com.qualfacul.hades.search.PaginatedResult;
 import com.qualfacul.hades.search.SearchQuery;
 import com.qualfacul.hades.user.User;
@@ -126,11 +124,10 @@ public class CollegeController {
 	@Post("/colleges/{collegeId}/login")
 	public void createLoginInfo(@PathVariable Long collegeId, @Valid @RequestBody CollegeLoginDTO dto){
 		College college = collegeRepository.findById(collegeId).orElseThrow(CollegeNotFoundException::new);
-		if (college.getLoginInfo() != null){
+		if (college.getLoginInfo().isPresent()){
 			throw new CollegeAlreadyHaveLoginException();
 		}
-		college.setLoginInfo(new LoginInfo(college.getCnpj(), dto.getPassword(), LoginOrigin.COLLEGE));
-		collegeRepository.save(college);
+		college.createLogin(collegeRepository, dto.getPassword());
 	}
 	
 	@OnlyAdmin
@@ -140,10 +137,7 @@ public class CollegeController {
 		if (!college.getLoginInfo().isPresent()){
 			throw new CollegeWithoutLoginAccessException();
 		}
-		LoginInfo loginInfo = college.getLoginInfo().get();
-		loginInfoRepository.delete(loginInfo);
-		college.setLoginInfo(null);
-		collegeRepository.save(college);
+		college.removeLogin(loginInfoRepository, collegeRepository);
 	}
 	
 	@PublicEndpoint
