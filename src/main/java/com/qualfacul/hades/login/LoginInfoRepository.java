@@ -10,5 +10,7 @@ public interface LoginInfoRepository {
 	LoginInfo save(LoginInfo loginInfo);
 
 	Optional<LoginInfo> findByLogin(String login);
+	
+	void delete(LoginInfo loginInfo);
 
 }

@@ -1,4 +1,4 @@
-package com.qualfacul.hades.passwordrecovery;
+package com.qualfacul.hades.password.recovery;
 
 public class PasswordChangeDTO {
 	private String email;
