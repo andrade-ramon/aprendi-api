@@ -1,4 +1,4 @@
-package com.qualfacul.hades.password.recovery;
+package com.qualfacul.hades.passwordrecovery;
 
 import javax.validation.Valid;
 

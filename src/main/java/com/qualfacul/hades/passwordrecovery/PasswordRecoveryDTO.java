@@ -1,4 +1,4 @@
-package com.qualfacul.hades.password.recovery;
+package com.qualfacul.hades.passwordrecovery;
 
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
