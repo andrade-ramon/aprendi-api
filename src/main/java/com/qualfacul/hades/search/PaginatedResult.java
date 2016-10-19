@@ -5,14 +5,14 @@ import java.util.List;
 public class PaginatedResult<T> {
 
 	private Integer page;
-	private Integer actualPageSize;
+	private Integer currentPageSize;
 	private Integer totalResults;
 	private Integer totalPages;
 	private List<T> result;
 
 	public PaginatedResult(List<T> result, Integer page, Integer totalResults, int maxResultsPerPage) {
 		this.page = page;
-		this.actualPageSize = result.size();
+		this.currentPageSize = result.size();
 		this.result = result;
 		this.totalResults = totalResults;
 
@@ -28,8 +28,8 @@ public class PaginatedResult<T> {
 		return page;
 	}
 
-	public Integer getActualPageSize() {
-		return actualPageSize;
+	public Integer getCurrentPageSize() {
+		return currentPageSize;
 	}
 
 	public Integer getTotalResults() {
@@ -48,8 +48,8 @@ public class PaginatedResult<T> {
 		this.page = page;
 	}
 
-	public void setActualPageSize(Integer actualPageSize) {
-		this.actualPageSize = actualPageSize;
+	public void setCurrentPageSize(Integer currentPageSize) {
+		this.currentPageSize = currentPageSize;
 	}
 
 	public void setTotalResults(Integer totalResults) {
