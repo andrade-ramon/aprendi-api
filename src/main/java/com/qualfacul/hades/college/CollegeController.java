@@ -123,7 +123,7 @@ public class CollegeController {
 	}
 	
 	@OnlyAdmin
-	@Post("/colleges/{collegeId}/logininfo")
+	@Post("/colleges/{collegeId}/login")
 	public void createLoginInfo(@PathVariable Long collegeId, @Valid @RequestBody CollegeLoginDTO dto){
 		College college = collegeRepository.findById(collegeId).orElseThrow(CollegeNotFoundException::new);
 		if (college.getLoginInfo() != null){
@@ -134,13 +134,13 @@ public class CollegeController {
 	}
 	
 	@OnlyAdmin
-	@Delete("/colleges/{collegeId}/logininfo")
+	@Delete("/colleges/{collegeId}/login")
 	public void deleteLoginInfo(@PathVariable Long collegeId){
 		College college = collegeRepository.findById(collegeId).orElseThrow(CollegeNotFoundException::new);
-		if (college.getLoginInfo() == null){
+		if (!college.getLoginInfo().isPresent()){
 			throw new CollegeWithoutLoginAccessException();
 		}
-		LoginInfo loginInfo = college.getLoginInfo();
+		LoginInfo loginInfo = college.getLoginInfo().get();
 		loginInfoRepository.delete(loginInfo);
 		college.setLoginInfo(null);
 		collegeRepository.save(college);

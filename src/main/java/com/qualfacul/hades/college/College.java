@@ -5,6 +5,7 @@ import static javax.persistence.CascadeType.ALL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -138,8 +139,11 @@ public class College {
 		this.site = site;
 	}
 
-	public LoginInfo getLoginInfo() {
-		return loginInfo;
+	public Optional<LoginInfo> getLoginInfo() {
+		if (loginInfo == null){
+			return Optional.empty();
+		}
+		return Optional.of(loginInfo);
 	}
 
 	public void setLoginInfo(LoginInfo loginInfo) {
@@ -148,10 +152,6 @@ public class College {
 
 	public void setAddresses(List<CollegeAddress> addresses) {
 		this.addresses = addresses;
-	}
-
-	public void setAdresses(List<CollegeAddress> adresses) {
-		this.addresses = adresses;
 	}
 
 	public void setGrades(List<CollegeGrade> grades) {

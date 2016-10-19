@@ -61,7 +61,7 @@ public class CollegeToCollegeDTOConverterTest {
 		
 		UserCollegeAddress someUserCollegeAddress = new UserCollegeAddress(anyId, "");
 		
-		from.setAdresses(asList(collegeAddress1, collegeAddress2));
+		from.setAddresses(asList(collegeAddress1, collegeAddress2));
 		from.setGrades(asList(grade1, grade2, grade3, grade4));
 		
 		Integer coursesCount1 = 2;
