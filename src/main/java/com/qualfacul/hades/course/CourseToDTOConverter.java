@@ -15,11 +15,6 @@ public class CourseToDTOConverter implements Converter<Course, CourseDTO> {
 		dto.setModality(from.getModality());
 		dto.setDegree(from.getDegree());
 		
-		from.getCourseGrades().forEach(grade -> {
-			CourseGradeDTO gradeDTO = new CourseGradeDTO();
-			gradeDTO.setValue(grade.getValue());
-			gradeDTO.setOrigin(grade.getGradeOrigin());
-		});
 		return dto;
 	}
 

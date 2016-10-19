@@ -15,7 +15,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.hibernate.search.annotations.Boost;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Indexed;
 
+@Indexed
 @Entity
 @Table(name = "course")
 public class Course {
@@ -23,7 +27,9 @@ public class Course {
 	@Id
 	@GeneratedValue
 	private Long id;
-
+	
+	@Field
+	@Boost(1f)
 	@Column(name = "name", length = 400, nullable = false)
 	private String name;
 
