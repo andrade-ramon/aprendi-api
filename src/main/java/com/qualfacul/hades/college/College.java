@@ -142,14 +142,7 @@ public class College {
 	}
 
 	public Optional<LoginInfo> getLoginInfo() {
-		if (loginInfo == null){
-			return Optional.empty();
-		}
-		return Optional.of(loginInfo);
-	}
-
-	public void setLoginInfo(LoginInfo loginInfo) {
-		this.loginInfo = loginInfo;
+		return Optional.ofNullable(loginInfo);
 	}
 
 	public void setAddresses(List<CollegeAddress> addresses) {
@@ -184,8 +177,8 @@ public class College {
 	public void removeLogin(LoginInfoRepository loginInfoRepository, CollegeRepository collegeRepository) {
 		LoginInfo loginInfo = this.loginInfo;
 		this.loginInfo = null;
-	    collegeRepository.save(this);
-	    loginInfoRepository.delete(loginInfo);
+		collegeRepository.save(this);
+		loginInfoRepository.delete(loginInfo);
 	}
 	
 	@Override
