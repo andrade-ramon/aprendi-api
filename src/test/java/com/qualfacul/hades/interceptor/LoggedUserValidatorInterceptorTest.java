@@ -16,8 +16,11 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.method.HandlerMethod;
 
+import com.qualfacul.hades.annotation.OnlyAdmin;
 import com.qualfacul.hades.annotation.OnlyStudents;
+import com.qualfacul.hades.college.CollegeController;
 import com.qualfacul.hades.conversation.ConversationController;
+import com.qualfacul.hades.exceptions.OnlyAdminsCanAccessException;
 import com.qualfacul.hades.exceptions.OnlyStudentsCanAccessException;
 import com.qualfacul.hades.login.LoggedUserManager;
 
@@ -38,6 +41,7 @@ public class LoggedUserValidatorInterceptorTest {
 	@Test
 	public void shouldAccessWhenLoggedUserIsAUser() throws Exception {
 		when(loggedUserManager.getLoginInfo().isUser()).thenReturn(true);
+		when(loggedUserManager.getLoginInfo().isAdmin()).thenReturn(false);
 		
 		Method method = stream(ConversationController.class.getMethods())
 						.filter(m -> m.isAnnotationPresent(OnlyStudents.class))
@@ -53,12 +57,26 @@ public class LoggedUserValidatorInterceptorTest {
 	@Test(expected = OnlyStudentsCanAccessException.class)
 	public void shouldNotAccessWhenLoggedUserIsNotAStudent() throws Exception {
 		when(loggedUserManager.getLoginInfo().isUser()).thenReturn(false);
+		when(loggedUserManager.getLoginInfo().isAdmin()).thenReturn(false);
 		
 		Method method = stream(ConversationController.class.getMethods())
 						.filter(m -> m.isAnnotationPresent(OnlyStudents.class))
 						.findFirst().get();
 		
 		HandlerMethod handler = new HandlerMethod(ConversationController.class, method);
+		
+		subject.preHandle(request, response, handler);
+	}
+	
+	@Test(expected = OnlyAdminsCanAccessException.class)
+	public void shouldNotAccessWhenLoggedUserIsNotAnAdmin() throws Exception {
+		when(loggedUserManager.getLoginInfo().isUser()).thenReturn(false);
+		
+		Method method = stream(CollegeController.class.getMethods())
+						.filter(m -> m.isAnnotationPresent(OnlyAdmin.class))
+						.findFirst().get();
+		
+		HandlerMethod handler = new HandlerMethod(CollegeController.class, method);
 		
 		subject.preHandle(request, response, handler);
 	}

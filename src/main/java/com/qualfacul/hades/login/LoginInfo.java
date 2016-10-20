@@ -106,6 +106,11 @@ public class LoginInfo {
 		}
 		return true;
 	}
+	
+	public boolean isAdmin(){
+		return ADMIN == loginOrigin;
+	}
+	
 	public boolean isFromFacebook() {
 		return FACEBOOK == loginOrigin;
 	}

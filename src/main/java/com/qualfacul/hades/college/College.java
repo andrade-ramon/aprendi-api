@@ -1,8 +1,11 @@
 package com.qualfacul.hades.college;
 
+import static javax.persistence.CascadeType.ALL;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -10,7 +13,9 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -19,6 +24,9 @@ import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.IndexedEmbedded;
 
+import com.qualfacul.hades.login.LoginInfo;
+import com.qualfacul.hades.login.LoginInfoRepository;
+import com.qualfacul.hades.login.LoginOrigin;
 import com.qualfacul.hades.user.User;
 
 @Indexed
@@ -57,6 +65,10 @@ public class College {
 	@Column(name = "site", length = 60, nullable = true)
 	@Boost(0.7f)
 	private String site;
+	
+	@OneToOne(cascade = ALL)
+	@JoinColumn(name = "login_info_id", referencedColumnName = "id", nullable = true)
+	private LoginInfo loginInfo;
 
 	@IndexedEmbedded
 	@OneToMany(cascade = CascadeType.MERGE, mappedBy = "college")
@@ -129,8 +141,12 @@ public class College {
 		this.site = site;
 	}
 
-	public void setAdresses(List<CollegeAddress> adresses) {
-		this.addresses = adresses;
+	public Optional<LoginInfo> getLoginInfo() {
+		return Optional.ofNullable(loginInfo);
+	}
+
+	public void setAddresses(List<CollegeAddress> addresses) {
+		this.addresses = addresses;
 	}
 
 	public void setGrades(List<CollegeGrade> grades) {
@@ -151,6 +167,18 @@ public class College {
 		return addresses.stream()
 				 .flatMap(address -> address.getUserCollegeAddress().stream())
 				 .anyMatch(userCollegeAddress -> userCollegeAddress.getId().getUser() == student);
+	}
+	
+	public void createLogin(CollegeRepository collegeRepository, String password) {
+	    this.loginInfo = new LoginInfo(this.cnpj, password, LoginOrigin.COLLEGE);
+	    collegeRepository.save(this);
+	}
+	
+	public void removeLogin(LoginInfoRepository loginInfoRepository, CollegeRepository collegeRepository) {
+		LoginInfo loginInfo = this.loginInfo;
+		this.loginInfo = null;
+		collegeRepository.save(this);
+		loginInfoRepository.delete(loginInfo);
 	}
 	
 	@Override

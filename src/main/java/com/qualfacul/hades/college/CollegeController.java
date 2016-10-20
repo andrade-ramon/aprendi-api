@@ -1,8 +1,9 @@
 package com.qualfacul.hades.college;
 
-
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,16 +11,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.qualfacul.hades.annotation.Delete;
 import com.qualfacul.hades.annotation.Get;
+import com.qualfacul.hades.annotation.OnlyAdmin;
 import com.qualfacul.hades.annotation.OnlyStudents;
 import com.qualfacul.hades.annotation.Post;
 import com.qualfacul.hades.annotation.PublicEndpoint;
 import com.qualfacul.hades.converter.ListConverter;
 import com.qualfacul.hades.course.CourseDTO;
 import com.qualfacul.hades.course.CourseToDTOConverter;
+import com.qualfacul.hades.exceptions.CollegeAlreadyHaveLoginException;
 import com.qualfacul.hades.exceptions.CollegeNotFoundException;
+import com.qualfacul.hades.exceptions.CollegeWithoutLoginAccessException;
 import com.qualfacul.hades.exceptions.UsernameNotFoundException;
 import com.qualfacul.hades.login.LoggedUserManager;
+import com.qualfacul.hades.login.LoginInfoRepository;
 import com.qualfacul.hades.search.PaginatedResult;
 import com.qualfacul.hades.search.SearchQuery;
 import com.qualfacul.hades.user.User;
@@ -27,6 +33,7 @@ import com.qualfacul.hades.user.UserRepository;
 
 @RestController
 public class CollegeController {
+	
 	private static final float COLLEGE_THRESHOLD = 0.4f;
 	
 	@Autowired
@@ -45,6 +52,8 @@ public class CollegeController {
 	private LoggedUserManager loggedUserManager;
 	@Autowired
 	private UserRepository userRepository;
+	@Autowired
+	private LoginInfoRepository loginInfoRepository;
 	@Autowired
 	private CollegeGradeToDTOConverter gradeConverter;
 	
@@ -109,6 +118,26 @@ public class CollegeController {
 		College college = collegeRepository.findById(collegeId).orElseThrow(CollegeNotFoundException::new);
 		college.rate(student, dto.getOrigin(), dto.getValue());
 		collegeRepository.save(college);
+	}
+	
+	@OnlyAdmin
+	@Post("/colleges/{collegeId}/login")
+	public void createLoginInfo(@PathVariable Long collegeId, @Valid @RequestBody CollegeLoginDTO dto){
+		College college = collegeRepository.findById(collegeId).orElseThrow(CollegeNotFoundException::new);
+		if (college.getLoginInfo().isPresent()){
+			throw new CollegeAlreadyHaveLoginException();
+		}
+		college.createLogin(collegeRepository, dto.getPassword());
+	}
+	
+	@OnlyAdmin
+	@Delete("/colleges/{collegeId}/login")
+	public void deleteLoginInfo(@PathVariable Long collegeId){
+		College college = collegeRepository.findById(collegeId).orElseThrow(CollegeNotFoundException::new);
+		if (!college.getLoginInfo().isPresent()){
+			throw new CollegeWithoutLoginAccessException();
+		}
+		college.removeLogin(loginInfoRepository, collegeRepository);
 	}
 	
 	@PublicEndpoint
