@@ -7,10 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import com.qualfacul.hades.annotation.OnlyAdmin;
+import com.qualfacul.hades.annotation.OnlyAdmins;
+import com.qualfacul.hades.annotation.OnlyColleges;
 import com.qualfacul.hades.annotation.OnlyStudents;
 import com.qualfacul.hades.annotation.WebComponent;
 import com.qualfacul.hades.exceptions.OnlyAdminsCanAccessException;
+import com.qualfacul.hades.exceptions.OnlyCollegesCanAccessException;
 import com.qualfacul.hades.exceptions.OnlyStudentsCanAccessException;
 import com.qualfacul.hades.login.LoggedUserManager;
 
@@ -36,11 +38,18 @@ public class LoggedUserValidatorInterceptor extends HandlerInterceptorAdapter{
 				throw new OnlyStudentsCanAccessException();
 			}
 			
-			boolean onlyAdminCanPass = handlerMethod.getMethod().isAnnotationPresent(OnlyAdmin.class);
+			boolean onlyAdminsCanPass = handlerMethod.getMethod().isAnnotationPresent(OnlyAdmins.class);
 			boolean isNotAdmin = loggedUserManager.getLoginInfo() != null && !loggedUserManager.getLoginInfo().isAdmin();
 			
-			if (onlyAdminCanPass && isNotAdmin){
+			if (onlyAdminsCanPass && isNotAdmin){
 				throw new OnlyAdminsCanAccessException();
+			}
+			
+			boolean onlyCollegesCanPass = handlerMethod.getMethod().isAnnotationPresent(OnlyColleges.class);
+			boolean isNotCollege = loggedUserManager.getLoginInfo() != null && !loggedUserManager.getLoginInfo().isCollege();
+			
+			if (onlyCollegesCanPass && isNotCollege){
+				throw new OnlyCollegesCanAccessException();
 			}
 		}
 		return true;

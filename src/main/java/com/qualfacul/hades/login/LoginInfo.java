@@ -111,6 +111,10 @@ public class LoginInfo {
 		return ADMIN == loginOrigin;
 	}
 	
+	public boolean isCollege(){
+		return COLLEGE == loginOrigin;
+	}
+	
 	public boolean isFromFacebook() {
 		return FACEBOOK == loginOrigin;
 	}

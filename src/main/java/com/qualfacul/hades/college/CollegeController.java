@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,7 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.qualfacul.hades.annotation.Delete;
 import com.qualfacul.hades.annotation.Get;
-import com.qualfacul.hades.annotation.OnlyAdmin;
+import com.qualfacul.hades.annotation.OnlyAdmins;
+import com.qualfacul.hades.annotation.OnlyColleges;
 import com.qualfacul.hades.annotation.OnlyStudents;
 import com.qualfacul.hades.annotation.Post;
 import com.qualfacul.hades.annotation.PublicEndpoint;
@@ -22,6 +24,7 @@ import com.qualfacul.hades.course.CourseDTO;
 import com.qualfacul.hades.course.CourseToDTOConverter;
 import com.qualfacul.hades.exceptions.CollegeAlreadyHaveLoginException;
 import com.qualfacul.hades.exceptions.CollegeNotFoundException;
+import com.qualfacul.hades.exceptions.CollegeUpdateAccessDeniedException;
 import com.qualfacul.hades.exceptions.CollegeWithoutLoginAccessException;
 import com.qualfacul.hades.exceptions.UsernameNotFoundException;
 import com.qualfacul.hades.login.LoggedUserManager;
@@ -35,6 +38,7 @@ import com.qualfacul.hades.user.UserRepository;
 public class CollegeController {
 	
 	private static final float COLLEGE_THRESHOLD = 0.4f;
+	private static final String REGEXP_ONLY_NUMBERS = "[^0-9]";
 	
 	@Autowired
 	private SearchQuery<College, CollegeDTO> collegeSearch;
@@ -120,7 +124,7 @@ public class CollegeController {
 		collegeRepository.save(college);
 	}
 	
-	@OnlyAdmin
+	@OnlyAdmins
 	@Post("/colleges/{collegeId}/login")
 	public void createLoginInfo(@PathVariable Long collegeId, @Valid @RequestBody CollegeLoginDTO dto){
 		College college = collegeRepository.findById(collegeId).orElseThrow(CollegeNotFoundException::new);
@@ -130,7 +134,7 @@ public class CollegeController {
 		college.createLogin(collegeRepository, dto.getPassword());
 	}
 	
-	@OnlyAdmin
+	@OnlyAdmins
 	@Delete("/colleges/{collegeId}/login")
 	public void deleteLoginInfo(@PathVariable Long collegeId){
 		College college = collegeRepository.findById(collegeId).orElseThrow(CollegeNotFoundException::new);
@@ -138,6 +142,31 @@ public class CollegeController {
 			throw new CollegeWithoutLoginAccessException();
 		}
 		college.removeLogin(loginInfoRepository, collegeRepository);
+	}
+	
+	@OnlyColleges
+	@Post("/colleges/{collegeId}/update")
+	public void updateCollege(@PathVariable Long collegeId, @RequestBody CollegeDTO collegeDTO){
+		College college = collegeRepository.findById(collegeId).orElseThrow(CollegeNotFoundException::new);
+		if (!college.getLoginInfo().isPresent()){
+			throw new CollegeUpdateAccessDeniedException();
+		}
+		if (college.getLoginInfo().get().getId() != loggedUserManager.getLoginInfo().getId()){
+			throw new CollegeUpdateAccessDeniedException();
+		}
+		if (!StringUtils.isEmpty(collegeDTO.getName()))
+			college.setName(collegeDTO.getName());
+		
+		if (!StringUtils.isEmpty(collegeDTO.getPhone()))
+			college.setPhone(collegeDTO.getPhone().replaceAll(REGEXP_ONLY_NUMBERS, ""));
+		
+		if (!StringUtils.isEmpty(collegeDTO.getCnpj()))
+			college.setCnpj(collegeDTO.getCnpj().replaceAll(REGEXP_ONLY_NUMBERS, ""));
+		
+		if (!StringUtils.isEmpty(collegeDTO.getSite()))
+			college.setSite(collegeDTO.getSite());
+		
+		collegeRepository.save(college);
 	}
 	
 	@PublicEndpoint
@@ -156,5 +185,5 @@ public class CollegeController {
 		
 		return dtos;
 	}
-	
+
 }
