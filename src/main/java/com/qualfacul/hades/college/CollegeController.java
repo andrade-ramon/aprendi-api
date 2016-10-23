@@ -145,7 +145,7 @@ public class CollegeController {
 	}
 	
 	@OnlyColleges
-	@Post("/colleges/{collegeId}/update")
+	@Post("/colleges/{collegeId}")
 	public void updateCollege(@PathVariable Long collegeId, @RequestBody CollegeDTO collegeDTO){
 		College college = collegeRepository.findById(collegeId).orElseThrow(CollegeNotFoundException::new);
 		if (!college.getLoginInfo().isPresent()){
