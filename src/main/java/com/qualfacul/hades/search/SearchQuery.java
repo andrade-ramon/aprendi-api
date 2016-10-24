@@ -36,12 +36,13 @@ public class SearchQuery<F, T> {
 
 	private String match;
 	private Class<?> clazz;
-	private Set<String> fieldNames = new HashSet<>();
+	private Set<String> fieldNames;
 	private Float threshold;
 	private Integer currentPage;
 	private ListConverter<F, T> listConverter;
 
 	public SearchQueryBuilder builder() {
+		fieldNames = new HashSet<>();
 		return new SearchQueryBuilder();
 	}
 
