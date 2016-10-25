@@ -1,5 +1,6 @@
 package com.qualfacul.hades.college;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,7 +56,7 @@ public class CollegeController {
 	@Autowired
 	private LoginInfoRepository loginInfoRepository;
 	@Autowired
-	private CollegeGradeToDTOConverter gradeConverter;
+	private CollegeGradeToStudentCollegeGradeDTOConverter gradeConverter;
 	
 	@PublicEndpoint
 	@Get("/colleges/{id}")
@@ -101,14 +102,14 @@ public class CollegeController {
 		userRepository.save(student);
 	}
 	
-	@OnlyStudents
+	@PublicEndpoint
 	@Get("/colleges/{collegeId}/ratings")
-	public List<CollegeGradeDTO> listRatings(@PathVariable Long collegeId) {
+	public Collection<List<StudentCollegeGradeDTO>> listRatings(@PathVariable Long collegeId) {
 		return collegeRepository.findById(collegeId).orElseThrow(CollegeNotFoundException::new)
 						.getGrades().stream()
 						.filter(college -> college.getGradeOrigin().isFromStudent())
 						.map(gradeConverter::convert)
-						.collect(Collectors.toList());
+						.collect(Collectors.groupingBy(StudentCollegeGradeDTO::getStudentName)).values();
 	}
 	
 	@OnlyStudents
