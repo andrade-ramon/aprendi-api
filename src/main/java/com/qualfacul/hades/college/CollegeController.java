@@ -17,6 +17,7 @@ import com.qualfacul.hades.annotation.Get;
 import com.qualfacul.hades.annotation.OnlyAdmins;
 import com.qualfacul.hades.annotation.OnlyColleges;
 import com.qualfacul.hades.annotation.OnlyStudents;
+import com.qualfacul.hades.annotation.Patch;
 import com.qualfacul.hades.annotation.Post;
 import com.qualfacul.hades.annotation.PublicEndpoint;
 import com.qualfacul.hades.converter.ListConverter;
@@ -145,7 +146,7 @@ public class CollegeController {
 	}
 	
 	@OnlyColleges
-	@Post("/colleges/{collegeId}")
+	@Patch("/colleges/{collegeId}")
 	public void updateCollege(@PathVariable Long collegeId, @RequestBody CollegeDTO collegeDTO){
 		College college = collegeRepository.findById(collegeId).orElseThrow(CollegeNotFoundException::new);
 		if (!college.getLoginInfo().isPresent()){
