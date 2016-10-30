@@ -27,7 +27,7 @@ public class Course {
 	@Id
 	@GeneratedValue
 	private Long id;
-	
+
 	@Field
 	@Boost(1f)
 	@Column(name = "name", length = 400, nullable = false)
@@ -106,9 +106,8 @@ public class Course {
 			return false;
 
 		Course other = (Course) obj;
-		return Objects.equals(stripAccents(this.name), stripAccents(other.name)) &&
-				Objects.equals(this.degree, other.degree) &&
-				Objects.equals(this.modality, other.modality);
+		return Objects.equals(stripAccents(this.name), stripAccents(other.name))
+				&& Objects.equals(this.degree, other.degree) && Objects.equals(this.modality, other.modality);
 	}
 
 }
