@@ -13,6 +13,7 @@ public class CollegeGradeToStudentCollegeGradeDTOConverter implements Converter<
 		StudentCollegeGradeDTO dto = new StudentCollegeGradeDTO();
 		dto.setCollegeId(from.getCollege().getId());
 		dto.setStudentName(from.getUser().getName());
+		dto.setStudentId(from.getUser().getId());
 		dto.setValue(from.getValue());
 		dto.setOrigin(from.getGradeOrigin());
 		dto.setDate(LocalDateUtils.from(from.getDate()));

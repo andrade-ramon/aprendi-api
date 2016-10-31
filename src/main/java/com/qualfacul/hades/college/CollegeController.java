@@ -1,5 +1,7 @@
 package com.qualfacul.hades.college;
 
+import static java.util.stream.Collectors.groupingBy;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -109,7 +111,7 @@ public class CollegeController {
 						.getGrades().stream()
 						.filter(college -> college.getGradeOrigin().isFromStudent())
 						.map(gradeConverter::convert)
-						.collect(Collectors.groupingBy(StudentCollegeGradeDTO::getStudentName)).values();
+						.collect(groupingBy(StudentCollegeGradeDTO::getStudentId)).values();
 	}
 	
 	@OnlyStudents

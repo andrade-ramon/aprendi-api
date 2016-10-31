@@ -9,6 +9,7 @@ public class StudentCollegeGradeDTO {
 
 	private Double value;
 	private Long collegeId;
+	private Long studentId;
 	private String studentName;
 	private CollegeGradeOrigin origin;
 	
@@ -54,6 +55,13 @@ public class StudentCollegeGradeDTO {
 	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
+	
+	public Long getStudentId() {
+		return studentId;
+	}
 
+	public void setStudentId(Long studentId) {
+		this.studentId = studentId;
+	}
 
 }
