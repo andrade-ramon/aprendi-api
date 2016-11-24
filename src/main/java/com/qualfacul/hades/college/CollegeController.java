@@ -20,6 +20,11 @@ import com.qualfacul.hades.annotation.OnlyAdmin;
 import com.qualfacul.hades.annotation.OnlyStudents;
 import com.qualfacul.hades.annotation.Post;
 import com.qualfacul.hades.annotation.PublicEndpoint;
+import com.qualfacul.hades.college.rank.CollegeRankDTO;
+import com.qualfacul.hades.college.rank.CollegeRankNotFoundException;
+import com.qualfacul.hades.college.rank.CollegeRankRepository;
+import com.qualfacul.hades.college.rank.CollegeRankToDTOConverter;
+import com.qualfacul.hades.college.rank.CollegeRankType;
 import com.qualfacul.hades.converter.ListConverter;
 import com.qualfacul.hades.course.CourseDTO;
 import com.qualfacul.hades.course.CourseToDTOConverter;
@@ -59,6 +64,10 @@ public class CollegeController {
 	private LoginInfoRepository loginInfoRepository;
 	@Autowired
 	private CollegeGradeToStudentCollegeGradeDTOConverter gradeConverter;
+	@Autowired
+	private CollegeRankRepository collegeRankRepository;
+	@Autowired
+	private CollegeRankToDTOConverter rankingConverter;
 	
 	@PublicEndpoint
 	@Get("/colleges/{id}")
@@ -158,6 +167,15 @@ public class CollegeController {
 			.build();
 		
 		return dtos;
+	}
+	
+	@PublicEndpoint
+	@Get("/colleges/{collegeId}/ranking")
+	public CollegeRankDTO generalRanking(@PathVariable Long collegeId, @RequestParam CollegeRankType type) {
+		College college = collegeRepository.findById(collegeId).orElseThrow(CollegeNotFoundException::new);
+		return collegeRankRepository.findByCollegeAndRankType(college, type)
+									.map(collegeRank -> rankingConverter.convert(collegeRank))
+									.orElseThrow(CollegeRankNotFoundException::new);
 	}
 	
 }
