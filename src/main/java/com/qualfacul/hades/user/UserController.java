@@ -7,15 +7,19 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.qualfacul.hades.annotation.Get;
+import com.qualfacul.hades.annotation.Patch;
 import com.qualfacul.hades.annotation.Post;
 import com.qualfacul.hades.annotation.PublicEndpoint;
 import com.qualfacul.hades.configuration.security.TokenAuthenticationService;
+import com.qualfacul.hades.exceptions.AccessDeniedException;
 import com.qualfacul.hades.exceptions.EmailAlreadyInUseException;
 import com.qualfacul.hades.exceptions.UsernameNotFoundException;
 import com.qualfacul.hades.login.LoggedUserManager;
@@ -56,6 +60,25 @@ public class UserController {
 		LoginInfo loginInfo = user.getLoginInfo();
 		tokenService.createTokenFor(loginInfo);
 		return new LoginInfoDTO().from(loginInfo);
+	}
+	
+	@Patch("/users/{id}")
+	public void updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO){
+		User user = userRepository.findById(id).orElseThrow(UsernameNotFoundException::new);
+		if (user.getLoginInfo().getId() != loggedUserManager.getLoginInfo().getId()){
+			throw new AccessDeniedException();
+		}
+		if (!StringUtils.isEmpty(userDTO.getEmail())){
+			if (userRepository.findByEmail(userDTO.getEmail()).isPresent()){
+				throw new EmailAlreadyInUseException();
+			}
+			user.setEmail(userDTO.getEmail());
+			user.getLoginInfo().setLogin(userDTO.getEmail());
+		}
+		if (!StringUtils.isEmpty(userDTO.getPassword())){
+			user.getLoginInfo().setPassword(userDTO.getPassword());
+		}
+		userRepository.save(user);
 	}
 	
 	@Get("/users/current")
