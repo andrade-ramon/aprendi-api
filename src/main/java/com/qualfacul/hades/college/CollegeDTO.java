@@ -2,6 +2,9 @@ package com.qualfacul.hades.college;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 public class CollegeDTO {
@@ -15,6 +18,9 @@ public class CollegeDTO {
 	private Integer coursesCount;
 	private Integer studentsCount;
 	private Integer ratingsCount;
+	private List<String> states = new ArrayList<>();
+	private Double mecGrade;
+	
 	@JsonInclude(NON_NULL)
 	private Boolean alreadyRated;
 
@@ -61,6 +67,10 @@ public class CollegeDTO {
 	public String getSite() {
 		return site;
 	}
+	
+	public Double getMecGrade() {
+		return mecGrade;
+	}
 
 	public void setSite(String site) {
 		this.site = site;
@@ -68,6 +78,10 @@ public class CollegeDTO {
 
 	public Integer getCoursesCount() {
 		return coursesCount;
+	}
+	
+	public List<String> getStates() {
+		return states;
 	}
 
 	public void setCoursesCount(Integer coursesCount) {
@@ -98,4 +112,11 @@ public class CollegeDTO {
 		this.alreadyRated = alreadyRated;
 	}
 	
+	public void setStates(List<String> states) {
+		this.states = states;
+	}
+	
+	public void setMecGrade(Double mecGrade) {
+		this.mecGrade = mecGrade;
+	}
 }

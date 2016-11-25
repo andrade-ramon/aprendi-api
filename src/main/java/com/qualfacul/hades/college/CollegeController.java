@@ -34,6 +34,7 @@ import com.qualfacul.hades.exceptions.CollegeWithoutLoginAccessException;
 import com.qualfacul.hades.exceptions.UsernameNotFoundException;
 import com.qualfacul.hades.login.LoggedUserManager;
 import com.qualfacul.hades.login.LoginInfoRepository;
+import com.qualfacul.hades.search.CollegeSearchFilter;
 import com.qualfacul.hades.search.PaginatedResult;
 import com.qualfacul.hades.search.SearchQuery;
 import com.qualfacul.hades.user.User;
@@ -154,8 +155,13 @@ public class CollegeController {
 	
 	@PublicEndpoint
 	@Get("/colleges/search/{query}")
-	public PaginatedResult<CollegeDTO> list(@PathVariable String query, @RequestParam(required = false) Integer page) {
+	public PaginatedResult<CollegeDTO> list(@PathVariable String query, 
+			@RequestParam(required = false) Integer page,
+			@RequestParam(required = false) String state,
+			@RequestParam(required = false) Integer mecGrade) {
 		ListConverter<College, CollegeDTO> listConverter = new ListConverter<>(collegeConverter);
+		
+		CollegeSearchFilter filter = new CollegeSearchFilter(state, mecGrade); 
 		
 		PaginatedResult<CollegeDTO> dtos = collegeSearch
 			.builder()
@@ -164,8 +170,8 @@ public class CollegeController {
 			.matching(query)
 			.forPage(page)
 			.withListConverter(listConverter)
+			.withFilter(filter)
 			.build();
-		
 		return dtos;
 	}
 	
