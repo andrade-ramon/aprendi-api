@@ -10,7 +10,6 @@ import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -62,23 +61,25 @@ public class UserController {
 		return new LoginInfoDTO().from(loginInfo);
 	}
 	
-	@Patch("/users/{id}")
-	public void updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO){
-		User user = userRepository.findById(id).orElseThrow(UsernameNotFoundException::new);
+	@Patch("/user/preferences")
+	public void updateUser(@Valid @RequestBody UserSettingsDTO userSettingsDTO){
+		User user = userRepository.findByLoginInfo(loggedUserManager.getLoginInfo())
+									.orElseThrow(UsernameNotFoundException::new);
+		boolean hasChanges = false;
 		if (user.getLoginInfo().getId() != loggedUserManager.getLoginInfo().getId()){
 			throw new AccessDeniedException();
 		}
-		if (!StringUtils.isEmpty(userDTO.getEmail())){
-			if (userRepository.findByEmail(userDTO.getEmail()).isPresent()){
-				throw new EmailAlreadyInUseException();
-			}
-			user.setEmail(userDTO.getEmail());
-			user.getLoginInfo().setLogin(userDTO.getEmail());
+		if (!StringUtils.isEmpty(userSettingsDTO.getName())){
+			user.setName(userSettingsDTO.getName());
+			hasChanges = true;
 		}
-		if (!StringUtils.isEmpty(userDTO.getPassword())){
-			user.getLoginInfo().setPassword(userDTO.getPassword());
+		if (!StringUtils.isEmpty(userSettingsDTO.getPassword())){
+			user.getLoginInfo().setPassword(userSettingsDTO.getPassword());
+			hasChanges = true;
 		}
-		userRepository.save(user);
+		if (hasChanges){
+			userRepository.save(user);
+		}
 	}
 	
 	@Get("/users/current")
