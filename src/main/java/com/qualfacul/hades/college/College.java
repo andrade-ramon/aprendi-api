@@ -191,5 +191,4 @@ public class College {
 		College other = (College) obj;
 		return Objects.equals(this.id, other.id);
 	}
-
 }
