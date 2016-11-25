@@ -13,6 +13,7 @@ import com.qualfacul.hades.annotation.Delete;
 import com.qualfacul.hades.annotation.Get;
 import com.qualfacul.hades.annotation.Post;
 import com.qualfacul.hades.annotation.PublicEndpoint;
+import com.qualfacul.hades.annotation.Put;
 import com.qualfacul.hades.college.CollegeRepository;
 import com.qualfacul.hades.converter.ListConverter;
 import com.qualfacul.hades.exceptions.CollegePostNotFoundException;
@@ -51,17 +52,17 @@ public class CollegePostController {
 		return listConverter.convert(collegeList);
 	}
 	
-	@Post("/posts")
-	public CollegePostDTO publishPost(@RequestBody @Valid PostPublishDTO postPublishDTO){
-		return postDTOConverter.convert(collegePostFacade.create(postPublishDTO));
+	@Post("/colleges/{collegeId}/posts")
+	public CollegePostDTO publishPost(@RequestBody @Valid CollegePostPublishDTO collegePostPublishDTO){
+		return postDTOConverter.convert(collegePostFacade.create(collegePostPublishDTO));
 	}
 	
-	@Post("/posts/{id}/update")
-	public CollegePostDTO updatePost(@PathVariable Long id, @RequestBody @Valid PostPublishDTO postPublishDTO){
+	@Put("/colleges/{collegeId}/posts/{postId}")
+	public CollegePostDTO updatePost(@PathVariable Long id, @RequestBody @Valid CollegePostPublishDTO postPublishDTO){
 		return postDTOConverter.convert(collegePostFacade.update(id, postPublishDTO));
 	}
 	
-	@Delete("/posts/{id}")
+	@Delete("/colleges/{collegeId}/posts/{id}")
 	public void deletePost(@PathVariable Long id){
 		collegePostFacade.delete(id);
 	}

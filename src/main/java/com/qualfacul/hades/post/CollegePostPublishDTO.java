@@ -2,7 +2,8 @@ package com.qualfacul.hades.post;
 
 import javax.validation.constraints.NotNull;
 
-public class PostPublishDTO {
+public class CollegePostPublishDTO {
+	
 	@NotNull(message = "hades.message.notreceived")
 	private String message;
 

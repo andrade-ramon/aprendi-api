@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.qualfacul.hades.annotation.WebComponent;
+import com.qualfacul.hades.college.College;
+import com.qualfacul.hades.college.CollegeRepository;
 import com.qualfacul.hades.configuration.security.TokenAuthenticationService;
 import com.qualfacul.hades.user.User;
 import com.qualfacul.hades.user.UserRepository;
@@ -22,6 +24,8 @@ public class LoggedUserManager {
 	private HttpServletRequest request;
 	@Autowired
 	private UserRepository userRepository;
+	@Autowired
+	private CollegeRepository collegeRepository;
 
 	public LoginInfo getLoginInfo() {
 		return loginInfo();
@@ -43,5 +47,13 @@ public class LoggedUserManager {
 			return loginInfo.get();
 		}
 		return null;
+	}
+
+	public Optional<College> getCollege() {
+		LoginInfo loginInfo = loginInfo();
+		if(loginInfo() != null) {
+			return collegeRepository.findByLoginInfo(loginInfo);
+		}
+		return Optional.empty();
 	}
 }
