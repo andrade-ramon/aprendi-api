@@ -15,7 +15,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.hibernate.search.annotations.Boost;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Indexed;
 
+@Indexed
 @Entity
 @Table(name = "course")
 public class Course {
@@ -24,15 +28,17 @@ public class Course {
 	@GeneratedValue
 	private Long id;
 
-	@Column(name = "name", nullable = false, length = 400)
+	@Field
+	@Boost(1f)
+	@Column(name = "name", length = 400, nullable = false)
 	private String name;
 
 	@Enumerated(STRING)
-	@Column(name = "modality", nullable = false, length = 15)
+	@Column(name = "modality", length = 15, nullable = false)
 	private CourseModality modality;
 
 	@Enumerated(STRING)
-	@Column(name = "degree", nullable = false, length = 15)
+	@Column(name = "degree", length = 15, nullable = false)
 	private CourseDegree degree;
 
 	@OneToMany(mappedBy = "course")
@@ -100,9 +106,8 @@ public class Course {
 			return false;
 
 		Course other = (Course) obj;
-		return Objects.equals(stripAccents(this.name), stripAccents(other.name)) &&
-				Objects.equals(this.degree, other.degree) &&
-				Objects.equals(this.modality, other.modality);
+		return Objects.equals(stripAccents(this.name), stripAccents(other.name))
+				&& Objects.equals(this.degree, other.degree) && Objects.equals(this.modality, other.modality);
 	}
 
 }

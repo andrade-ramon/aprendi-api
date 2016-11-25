@@ -1,14 +1,21 @@
 package com.qualfacul.hades.college;
 
+import static javax.persistence.CascadeType.ALL;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -16,6 +23,11 @@ import org.hibernate.search.annotations.Boost;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.IndexedEmbedded;
+
+import com.qualfacul.hades.login.LoginInfo;
+import com.qualfacul.hades.login.LoginInfoRepository;
+import com.qualfacul.hades.login.LoginOrigin;
+import com.qualfacul.hades.user.User;
 
 @Indexed
 @Entity
@@ -27,94 +39,44 @@ public class College {
 	private Long id;
 
 	@NotNull
-	@Column(name = "mec_id", unique = true)
+	@Column(name = "mec_id", nullable = false, unique = true)
 	private long mecId;
 
 	@Field
-	@Column(name = "name", nullable = false)
+	@Column(name = "name", length = 300, nullable = false)
 	@Boost(2.5f)
 	private String name;
 
 	@Field
-	@Column(name = "initials", length = 30)
+	@Column(name = "initials", length = 30, nullable = true)
 	@Boost(3.0f)
 	private String initials;
 
 	@Field
-	@Column(name = "phone")
+	@Column(name = "phone", length = 11, nullable = true)
 	@Boost(0.5f)
 	private String phone;
 
 	@Field
-	@Column(name = "cnpj")
+	@Column(name = "cnpj", length = 14, nullable = false)
 	private String cnpj;
 
 	@Field
-	@Column(name = "site")
+	@Column(name = "site", length = 60, nullable = true)
 	@Boost(0.7f)
 	private String site;
+	
+	@OneToOne(cascade = ALL)
+	@JoinColumn(name = "login_info_id", referencedColumnName = "id", nullable = true)
+	private LoginInfo loginInfo;
 
 	@IndexedEmbedded
 	@OneToMany(cascade = CascadeType.MERGE, mappedBy = "college")
-	private List<CollegeAddress> adresses = new ArrayList<>();
+	private List<CollegeAddress> addresses = new ArrayList<>();
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "college")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "college", fetch = FetchType.EAGER)
 	private List<CollegeGrade> grades = new ArrayList<>();
 	
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		College other = (College) obj;
-		if (cnpj == null) {
-			if (other.cnpj != null)
-				return false;
-		} else if (!cnpj.equals(other.cnpj))
-			return false;
-		if (adresses == null) {
-			if (other.adresses != null)
-				return false;
-		} else if (!adresses.equals(other.adresses))
-			return false;
-		if (grades == null) {
-			if (other.grades != null)
-				return false;
-		} else if (!grades.equals(other.grades))
-			return false;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		if (initials == null) {
-			if (other.initials != null)
-				return false;
-		} else if (!initials.equals(other.initials))
-			return false;
-		if (mecId != other.mecId)
-			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (phone == null) {
-			if (other.phone != null)
-				return false;
-		} else if (!phone.equals(other.phone))
-			return false;
-		if (site == null) {
-			if (other.site != null)
-				return false;
-		} else if (!site.equals(other.site))
-			return false;
-		return true;
-	}
-
 	public Long getId() {
 		return id;
 	}
@@ -143,8 +105,8 @@ public class College {
 		return site;
 	}
 
-	public List<CollegeAddress> getAdresses() {
-		return adresses;
+	public List<CollegeAddress> getAddresses() {
+		return addresses;
 	}
 
 	public List<CollegeGrade> getGrades() {
@@ -179,12 +141,54 @@ public class College {
 		this.site = site;
 	}
 
-	public void setAdresses(List<CollegeAddress> adresses) {
-		this.adresses = adresses;
+	public Optional<LoginInfo> getLoginInfo() {
+		return Optional.ofNullable(loginInfo);
+	}
+
+	public void setAddresses(List<CollegeAddress> addresses) {
+		this.addresses = addresses;
 	}
 
 	public void setGrades(List<CollegeGrade> grades) {
 		this.grades = grades;
 	}
 	
+	public void rate(User student, CollegeGradeOrigin origin, Double gradeValue) {
+		CollegeGrade collegeGrade = new CollegeGrade().builder()
+						.from(student)
+						.withOrigin(origin)
+						.withValue(gradeValue)
+						.to(this)
+						.build();
+		grades.add(collegeGrade);
+	}
+	
+	public boolean isAssigned(User student) {
+		return addresses.stream()
+				 .flatMap(address -> address.getUserCollegeAddress().stream())
+				 .anyMatch(userCollegeAddress -> userCollegeAddress.getId().getUser() == student);
+	}
+	
+	public void createLogin(CollegeRepository collegeRepository, String password) {
+	    this.loginInfo = new LoginInfo(this.cnpj, password, LoginOrigin.COLLEGE);
+	    collegeRepository.save(this);
+	}
+	
+	public void removeLogin(LoginInfoRepository loginInfoRepository, CollegeRepository collegeRepository) {
+		LoginInfo loginInfo = this.loginInfo;
+		this.loginInfo = null;
+		collegeRepository.save(this);
+		loginInfoRepository.delete(loginInfo);
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!(obj instanceof College))
+			return false;
+
+		College other = (College) obj;
+		return Objects.equals(this.id, other.id);
+	}
 }

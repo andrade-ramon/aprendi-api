@@ -1,25 +1,23 @@
 package com.qualfacul.hades.search;
 
-import static com.qualfacul.hades.search.SearchQuery.MAX_RESULTS_PER_PAGE;
+import java.util.Collection;
 
-import java.util.List;
-
-public class PaginatedSearch<T> {
+public class PaginatedResult<T> {
 
 	private Integer page;
-	private Integer actualPageSize;
+	private Integer currentPageSize;
 	private Integer totalResults;
 	private Integer totalPages;
-	private List<T> result;
+	private Collection<T> result;
 
-	public PaginatedSearch(List<T> result, Integer page, Integer totalResults) {
+	public PaginatedResult(Collection<T> result, int page, int totalResults, int maxResultsPerPage) {
 		this.page = page;
-		this.actualPageSize = result.size();
+		this.currentPageSize = result.size();
 		this.result = result;
 		this.totalResults = totalResults;
 
-		int totalPages = (int) (totalResults / MAX_RESULTS_PER_PAGE);
-		if (totalResults % MAX_RESULTS_PER_PAGE == 0) {
+		int totalPages = (int) (totalResults / maxResultsPerPage);
+		if (totalResults % maxResultsPerPage == 0) {
 			this.totalPages = totalPages;
 		} else {
 			this.totalPages = totalPages + 1;
@@ -30,8 +28,8 @@ public class PaginatedSearch<T> {
 		return page;
 	}
 
-	public Integer getActualPageSize() {
-		return actualPageSize;
+	public Integer getCurrentPageSize() {
+		return currentPageSize;
 	}
 
 	public Integer getTotalResults() {
@@ -42,7 +40,7 @@ public class PaginatedSearch<T> {
 		return totalPages;
 	}
 
-	public List<T> getResult() {
+	public Collection<T> getResult() {
 		return result;
 	}
 
@@ -50,8 +48,8 @@ public class PaginatedSearch<T> {
 		this.page = page;
 	}
 
-	public void setActualPageSize(Integer actualPageSize) {
-		this.actualPageSize = actualPageSize;
+	public void setCurrentPageSize(Integer currentPageSize) {
+		this.currentPageSize = currentPageSize;
 	}
 
 	public void setTotalResults(Integer totalResults) {
@@ -62,7 +60,7 @@ public class PaginatedSearch<T> {
 		this.totalPages = totalPages;
 	}
 
-	public void setResult(List<T> result) {
+	public void setResult(Collection<T> result) {
 		this.result = result;
 	}
 }

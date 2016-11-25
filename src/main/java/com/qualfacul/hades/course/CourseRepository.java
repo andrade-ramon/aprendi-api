@@ -13,5 +13,6 @@ public interface CourseRepository {
 	Course save(Course course);
 	
 	List<Course> findAll();
-
+	
+	Optional<Course> findById(Long courseId);
 }

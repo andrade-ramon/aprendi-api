@@ -8,4 +8,8 @@ public enum CollegeGradeOrigin {
 	STUDENT_PRICE,
 	STUDENT_TEACH
 	;
+	
+	public boolean isFromStudent() {
+		return this == STUDENT_INFRA || this == STUDENT_PRICE || this == STUDENT_TEACH; 
+	}
 }

@@ -31,7 +31,7 @@ public class Message {
 	@OneToOne(cascade = CascadeType.MERGE)
 	private Conversation conversation;
 
-	@Column(name = "sent_at")
+	@Column(name = "sent_at", nullable = false)
 	private LocalDateTime sentAt;
 
 	@PrimaryKeyJoinColumn
@@ -40,7 +40,7 @@ public class Message {
 
 	@NotNull
 	@Enumerated(EnumType.STRING)
-	@Column(name = "direction", nullable = false)
+	@Column(name = "direction", length = 20, nullable = false)
 	private ConversationDirection direction;
 
 	@Column(name = "deleted")

@@ -1,5 +1,9 @@
 package com.qualfacul.hades.college;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 public class CollegeDTO {
 
 	private Long id;
@@ -9,6 +13,10 @@ public class CollegeDTO {
 	private String cnpj;
 	private String site;
 	private Integer coursesCount;
+	private Integer studentsCount;
+	private Integer ratingsCount;
+	@JsonInclude(NON_NULL)
+	private Boolean alreadyRated;
 
 	public Long getId() {
 		return id;
@@ -64,6 +72,30 @@ public class CollegeDTO {
 
 	public void setCoursesCount(Integer coursesCount) {
 		this.coursesCount = coursesCount;
+	}
+
+	public Integer getStudentsCount() {
+		return studentsCount;
+	}
+
+	public void setStudentsCount(Integer studentsCount) {
+		this.studentsCount = studentsCount;
+	}
+
+	public Integer getRatingsCount() {
+		return ratingsCount;
+	}
+
+	public void setRatingsCount(Integer ratingsCount) {
+		this.ratingsCount = ratingsCount;
+	}
+
+	public Boolean isAlreadyRated() {
+		return alreadyRated;
+	}
+
+	public void setAlreadyRated(Boolean alreadyRated) {
+		this.alreadyRated = alreadyRated;
 	}
 	
 }

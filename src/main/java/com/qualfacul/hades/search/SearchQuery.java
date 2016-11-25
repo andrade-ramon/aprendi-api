@@ -36,12 +36,13 @@ public class SearchQuery<F, T> {
 
 	private String match;
 	private Class<?> clazz;
-	private Set<String> fieldNames = new HashSet<>();
+	private Set<String> fieldNames;
 	private Float threshold;
 	private Integer currentPage;
 	private ListConverter<F, T> listConverter;
 
 	public SearchQueryBuilder builder() {
+		fieldNames = new HashSet<>();
 		return new SearchQueryBuilder();
 	}
 
@@ -107,7 +108,7 @@ public class SearchQuery<F, T> {
 	public class SearchQueryFactory {
 		
 		@SuppressWarnings("unchecked")
-		public PaginatedSearch<T> build() {
+		public PaginatedResult<T> build() {
 			Session session = manager.unwrap(Session.class);
 			FullTextSession fullTextSession = Search.getFullTextSession(session);
 
@@ -129,7 +130,7 @@ public class SearchQuery<F, T> {
 			
 			List<T> results = listConverter.convert(query.list());
 			
-			return new PaginatedSearch<T>(results, currentPage, query.getResultSize());
+			return new PaginatedResult<T>(results, currentPage, query.getResultSize(), MAX_RESULTS_PER_PAGE);
 		}
 	}
 
