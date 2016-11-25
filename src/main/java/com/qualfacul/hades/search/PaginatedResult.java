@@ -1,6 +1,6 @@
 package com.qualfacul.hades.search;
 
-import java.util.List;
+import java.util.Collection;
 
 public class PaginatedResult<T> {
 
@@ -8,9 +8,9 @@ public class PaginatedResult<T> {
 	private Integer currentPageSize;
 	private Integer totalResults;
 	private Integer totalPages;
-	private List<T> result;
+	private Collection<T> result;
 
-	public PaginatedResult(List<T> result, Integer page, Integer totalResults, int maxResultsPerPage) {
+	public PaginatedResult(Collection<T> result, int page, int totalResults, int maxResultsPerPage) {
 		this.page = page;
 		this.currentPageSize = result.size();
 		this.result = result;
@@ -40,7 +40,7 @@ public class PaginatedResult<T> {
 		return totalPages;
 	}
 
-	public List<T> getResult() {
+	public Collection<T> getResult() {
 		return result;
 	}
 
@@ -60,7 +60,7 @@ public class PaginatedResult<T> {
 		this.totalPages = totalPages;
 	}
 
-	public void setResult(List<T> result) {
+	public void setResult(Collection<T> result) {
 		this.result = result;
 	}
 }

@@ -6,11 +6,17 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.qualfacul.hades.serialization.LocalDateSerializer;
 
 public class CollegeRankDTO {
+
 	private int position;
+	
 	private Long collegeId;
+	
 	private String collegeName;
+	
 	private int totalGrades;
+	
 	private Double grade;
+	
 	@JsonSerialize(using = LocalDateSerializer.class)
 	private LocalDate lastUpdate;
 

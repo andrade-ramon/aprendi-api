@@ -1,5 +1,8 @@
 package com.qualfacul.hades.college;
 
+import static java.util.stream.Collectors.groupingBy;
+
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,6 +23,11 @@ import com.qualfacul.hades.annotation.OnlyStudents;
 import com.qualfacul.hades.annotation.Patch;
 import com.qualfacul.hades.annotation.Post;
 import com.qualfacul.hades.annotation.PublicEndpoint;
+import com.qualfacul.hades.college.rank.CollegeRankDTO;
+import com.qualfacul.hades.college.rank.CollegeRankNotFoundException;
+import com.qualfacul.hades.college.rank.CollegeRankRepository;
+import com.qualfacul.hades.college.rank.CollegeRankToDTOConverter;
+import com.qualfacul.hades.college.rank.CollegeRankType;
 import com.qualfacul.hades.converter.ListConverter;
 import com.qualfacul.hades.course.CourseDTO;
 import com.qualfacul.hades.course.CourseToDTOConverter;
@@ -60,7 +68,11 @@ public class CollegeController {
 	@Autowired
 	private LoginInfoRepository loginInfoRepository;
 	@Autowired
-	private CollegeGradeToDTOConverter gradeConverter;
+	private CollegeGradeToStudentCollegeGradeDTOConverter gradeConverter;
+	@Autowired
+	private CollegeRankRepository collegeRankRepository;
+	@Autowired
+	private CollegeRankToDTOConverter rankingConverter;
 	
 	@PublicEndpoint
 	@Get("/colleges/{id}")
@@ -106,14 +118,14 @@ public class CollegeController {
 		userRepository.save(student);
 	}
 	
-	@OnlyStudents
+	@PublicEndpoint
 	@Get("/colleges/{collegeId}/ratings")
-	public List<CollegeGradeDTO> listRatings(@PathVariable Long collegeId) {
+	public Collection<List<StudentCollegeGradeDTO>> listRatings(@PathVariable Long collegeId) {
 		return collegeRepository.findById(collegeId).orElseThrow(CollegeNotFoundException::new)
 						.getGrades().stream()
 						.filter(college -> college.getGradeOrigin().isFromStudent())
 						.map(gradeConverter::convert)
-						.collect(Collectors.toList());
+						.collect(groupingBy(StudentCollegeGradeDTO::getStudentId)).values();
 	}
 	
 	@OnlyStudents
@@ -186,5 +198,13 @@ public class CollegeController {
 		
 		return dtos;
 	}
-
+	
+	@PublicEndpoint
+	@Get("/colleges/{collegeId}/ranking")
+	public CollegeRankDTO generalRanking(@PathVariable Long collegeId, @RequestParam CollegeRankType type) {
+		College college = collegeRepository.findById(collegeId).orElseThrow(CollegeNotFoundException::new);
+		return collegeRankRepository.findByCollegeAndRankType(college, type)
+									.map(collegeRank -> rankingConverter.convert(collegeRank))
+									.orElseThrow(CollegeRankNotFoundException::new);
+	}
 }
