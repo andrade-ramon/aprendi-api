@@ -1,5 +1,9 @@
 package com.qualfacul.hades.college;
 
+import static com.qualfacul.hades.college.CollegeGradeOrigin.MEC_CI;
+import static org.apache.commons.lang3.StringUtils.trim;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -23,6 +27,7 @@ public class CollegeToCollegeDTOConverter implements Converter<College, CollegeD
 
 	@Override
 	public CollegeDTO convert(College from) {
+		
 		CollegeDTO dto = new CollegeDTO();
 		dto.setId(from.getId());
 		dto.setName(from.getName());
@@ -30,6 +35,12 @@ public class CollegeToCollegeDTOConverter implements Converter<College, CollegeD
 		dto.setPhone(from.getPhone());
 		dto.setCnpj(from.getCnpj());
 		dto.setSite(from.getSite());
+		
+		for (CollegeGrade grade : from.getGrades()) {
+			if(MEC_CI.equals(grade.getGradeOrigin())){
+				dto.setMecGrade(grade.getValue());
+			}
+		}
 		
 		Integer collegesCount = from.getAddresses().stream()
 				.map(collegeAddress -> collegeAddress.getCourses().size())
@@ -53,7 +64,15 @@ public class CollegeToCollegeDTOConverter implements Converter<College, CollegeD
 			}
 		});
 		
+		List<String> states = new ArrayList<>();
+		from.getAddresses().forEach(c -> {
+			String state = trim(c.getState()).replaceAll("  ","");
+			if(!states.contains(state)){
+				states.add(state);
+			}
+		});
+		dto.setStates(states);
+		
 		return dto;
 	}
-
 }

@@ -69,7 +69,6 @@ public class MecCollegeService {
 		List<CollegeGrade> grades = new ArrayList<>();
 		
 		document.select("table#listar-ies-cadastro > tbody tr").forEach((tr) -> {
-			@SuppressWarnings("deprecation")
 			CollegeGrade collegeGrade = new CollegeGrade();
 
 			String elementValue = tr.select("td").get(1).text();

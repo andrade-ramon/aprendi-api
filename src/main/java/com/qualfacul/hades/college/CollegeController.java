@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
@@ -38,6 +40,7 @@ import com.qualfacul.hades.exceptions.CollegeWithoutLoginAccessException;
 import com.qualfacul.hades.exceptions.UsernameNotFoundException;
 import com.qualfacul.hades.login.LoggedUserManager;
 import com.qualfacul.hades.login.LoginInfoRepository;
+import com.qualfacul.hades.search.CollegeSearchFilter;
 import com.qualfacul.hades.search.PaginatedResult;
 import com.qualfacul.hades.search.SearchQuery;
 import com.qualfacul.hades.user.User;
@@ -73,6 +76,8 @@ public class CollegeController {
 	private CollegeRankRepository collegeRankRepository;
 	@Autowired
 	private CollegeRankToDTOConverter rankingConverter;
+	@PersistenceContext
+	private EntityManager manager;
 	
 	@PublicEndpoint
 	@Get("/colleges/{id}")
@@ -184,9 +189,15 @@ public class CollegeController {
 	
 	@PublicEndpoint
 	@Get("/colleges/search/{query}")
-	public PaginatedResult<CollegeDTO> list(@PathVariable String query, @RequestParam(required = false) Integer page) {
+	public PaginatedResult<CollegeDTO> list(@PathVariable String query, 
+			@RequestParam(required = false) Integer page,
+			@RequestParam(required = false) String state,
+			@RequestParam(required = false) Integer mecGrade) {
 		ListConverter<College, CollegeDTO> listConverter = new ListConverter<>(collegeConverter);
 		
+		CollegeSearchFilter filter = new CollegeSearchFilter(state, mecGrade); 
+		
+		SearchQuery<College, CollegeDTO> collegeSearch = new SearchQuery<>(manager);
 		PaginatedResult<CollegeDTO> dtos = collegeSearch
 			.builder()
 			.forEntity(College.class)
@@ -194,8 +205,8 @@ public class CollegeController {
 			.matching(query)
 			.forPage(page)
 			.withListConverter(listConverter)
+			.withFilter(filter)
 			.build();
-		
 		return dtos;
 	}
 	
@@ -207,4 +218,12 @@ public class CollegeController {
 									.map(collegeRank -> rankingConverter.convert(collegeRank))
 									.orElseThrow(CollegeRankNotFoundException::new);
 	}
+	
+	@Get("/colleges/current")
+	public CollegeDTO getCurrentCollege() {
+		return collegeRepository.findByLoginInfo(loggedUserManager.getLoginInfo())
+						.map(collegeConverter::convert)
+						.orElseThrow(CollegeNotFoundException::new);
+	}
+	
 }

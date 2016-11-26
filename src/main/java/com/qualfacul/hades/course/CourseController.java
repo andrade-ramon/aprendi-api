@@ -3,7 +3,9 @@ package com.qualfacul.hades.course;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,8 +30,8 @@ public class CourseController {
 
 	private static final float COURSE_THRESHOLD = 0.4f;
 
-	@Autowired
-	private SearchQuery<Course, CourseDTO> courseSearch;
+	@PersistenceContext
+	private EntityManager manager;
 	@Autowired
 	private CourseToDTOConverter courseConverter;
 	@Autowired
@@ -43,14 +45,15 @@ public class CourseController {
 	@Get("/courses/search/{query}")
 	public PaginatedResult<CourseDTO> list(@PathVariable String query, @RequestParam(required = false) Integer page) {
 		ListConverter<Course, CourseDTO> listConverter = new ListConverter<>(courseConverter);
-
+		
+		SearchQuery<Course, CourseDTO> courseSearch = new SearchQuery<>(manager);
+		
 		PaginatedResult<CourseDTO> dtos = courseSearch.builder()
 										.forEntity(Course.class)
 										.withThreshold(COURSE_THRESHOLD)
 										.matching(query)
 										.forPage(page)
 										.withListConverter(listConverter).build();
-
 		return dtos;
 	}
 
