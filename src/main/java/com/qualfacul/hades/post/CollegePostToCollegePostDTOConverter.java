@@ -13,7 +13,7 @@ public class CollegePostToCollegePostDTOConverter implements Converter<CollegePo
 		postDTO.setId(source.getId());
 		postDTO.setCreatedAt(source.getCreatedAt());
 		postDTO.setUpdatedAt(source.getUpdatedAt());
-		postDTO.setPostContent(source.getPostContent().getText());
+		postDTO.setContent(source.getPostContent().getText());
 		return postDTO;
 	}
 

@@ -42,9 +42,9 @@ public class CollegePostController {
 	}
 
 	@PublicEndpoint
-	@Get("/colleges/{id}/posts")
-	public List<CollegePostDTO> getPostsByCollegeId(@PathVariable Long id){
-		List<CollegePost> collegeList = postRepository.findAllByCollegeId(id);
+	@Get("/colleges/{collegeId}/posts")
+	public List<CollegePostDTO> getPostsByCollegeId(@PathVariable Long collegeId){
+		List<CollegePost> collegeList = postRepository.findAllByCollegeId(collegeId);
 		if (collegeList.isEmpty()){
 			throw new CollegePostNotFoundException();
 		}

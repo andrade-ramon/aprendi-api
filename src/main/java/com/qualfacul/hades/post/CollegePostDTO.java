@@ -18,7 +18,7 @@ public class CollegePostDTO {
 	@JsonInclude(Include.NON_NULL)
 	private Calendar updatedAt;
 	
-	private String postContent;
+	private String content;
 	
 	public Long getId() {
 		return id;
@@ -38,10 +38,10 @@ public class CollegePostDTO {
 	public void setUpdatedAt(Calendar updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-	public String getPostContent() {
-		return postContent;
+	public String getContent() {
+		return content;
 	}
-	public void setPostContent(String postContent) {
-		this.postContent = postContent;
+	public void setContent(String content) {
+		this.content = content;
 	}
 }

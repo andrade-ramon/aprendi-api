@@ -184,4 +184,11 @@ public class CollegeController {
 									.orElseThrow(CollegeRankNotFoundException::new);
 	}
 	
+	@Get("/colleges/current")
+	public CollegeDTO getCurrentCollege() {
+		return collegeRepository.findByLoginInfo(loggedUserManager.getLoginInfo())
+						.map(collegeConverter::convert)
+						.orElseThrow(CollegeNotFoundException::new);
+	}
+	
 }
