@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.qualfacul.hades.annotation.Delete;
-import com.qualfacul.hades.annotation.OnlyAdmin;
+import com.qualfacul.hades.annotation.OnlyAdmins;
 import com.qualfacul.hades.annotation.Post;
 import com.qualfacul.hades.configuration.security.TokenAuthenticationService;
 import com.qualfacul.hades.exceptions.AdminCannotDeleteHimselfException;
@@ -32,7 +32,7 @@ public class AdminController {
 	@Autowired
 	private LoggedUserManager loggedUserManager;
 
-	@OnlyAdmin
+	@OnlyAdmins
 	@Post(value = "/admin", responseStatus = CREATED)
 	public LoginInfoDTO createAdmin(@Valid @RequestBody AdminDTO adminDTO) {
 		LoginInfo loginInfo = new LoginInfo(adminDTO.getEmail(), adminDTO.getPassword(), LoginOrigin.ADMIN);
@@ -46,7 +46,7 @@ public class AdminController {
 		return new LoginInfoDTO().from(loginInfo);
 	}
 
-	@OnlyAdmin
+	@OnlyAdmins
 	@Delete(value = "/admin/{adminId}")
 	public void deleteAdmin(@PathVariable Long adminId) {
 		Admin admin = adminRepository.findById(adminId).orElseThrow(AdminNotFoundException::new);

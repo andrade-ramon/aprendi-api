@@ -16,11 +16,13 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.method.HandlerMethod;
 
-import com.qualfacul.hades.annotation.OnlyAdmin;
+import com.qualfacul.hades.annotation.OnlyAdmins;
+import com.qualfacul.hades.annotation.OnlyColleges;
 import com.qualfacul.hades.annotation.OnlyStudents;
 import com.qualfacul.hades.college.CollegeController;
 import com.qualfacul.hades.conversation.ConversationController;
 import com.qualfacul.hades.exceptions.OnlyAdminsCanAccessException;
+import com.qualfacul.hades.exceptions.OnlyCollegesCanAccessException;
 import com.qualfacul.hades.exceptions.OnlyStudentsCanAccessException;
 import com.qualfacul.hades.login.LoggedUserManager;
 
@@ -73,7 +75,20 @@ public class LoggedUserValidatorInterceptorTest {
 		when(loggedUserManager.getLoginInfo().isUser()).thenReturn(false);
 		
 		Method method = stream(CollegeController.class.getMethods())
-						.filter(m -> m.isAnnotationPresent(OnlyAdmin.class))
+						.filter(m -> m.isAnnotationPresent(OnlyAdmins.class))
+						.findFirst().get();
+		
+		HandlerMethod handler = new HandlerMethod(CollegeController.class, method);
+		
+		subject.preHandle(request, response, handler);
+	}
+	
+	@Test(expected = OnlyCollegesCanAccessException.class)
+	public void shouldNotAccessWhenLoggedUserIsNotACollege() throws Exception {
+		when(loggedUserManager.getLoginInfo().isUser()).thenReturn(false);
+		
+		Method method = stream(CollegeController.class.getMethods())
+						.filter(m -> m.isAnnotationPresent(OnlyColleges.class))
 						.findFirst().get();
 		
 		HandlerMethod handler = new HandlerMethod(CollegeController.class, method);
