@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 import org.apache.lucene.search.Query;
 import org.hibernate.Session;
@@ -32,9 +31,7 @@ public class SearchQuery<F, T> {
 	public static final int MAX_RESULTS_PER_PAGE = 10;
 	private final static Logger LOGGER = LoggerFactory.getLogger(SearchQuery.class);
 
-	@PersistenceContext
 	private EntityManager manager;
-
 	private String match;
 	private Class<?> clazz;
 	private Set<String> fieldNames;
@@ -42,6 +39,13 @@ public class SearchQuery<F, T> {
 	private Integer currentPage;
 	private ListConverter<F, T> listConverter;
 	private SearchFilter<T> filter;
+		
+	@Deprecated
+	SearchQuery(){}
+	
+	public SearchQuery(EntityManager manager) {
+		this.manager = manager;
+	}
 
 	public SearchQueryBuilder builder() {
 		fieldNames = new HashSet<>();

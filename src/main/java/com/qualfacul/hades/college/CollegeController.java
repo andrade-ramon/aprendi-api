@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,9 +46,6 @@ import com.qualfacul.hades.user.UserRepository;
 public class CollegeController {
 	
 	private static final float COLLEGE_THRESHOLD = 0.4f;
-	
-	@Autowired
-	private SearchQuery<College, CollegeDTO> collegeSearch;
 	@Autowired
 	private CollegeRepository collegeRepository;	
 	@Autowired
@@ -69,6 +68,8 @@ public class CollegeController {
 	private CollegeRankRepository collegeRankRepository;
 	@Autowired
 	private CollegeRankToDTOConverter rankingConverter;
+	@PersistenceContext
+	private EntityManager manager;
 	
 	@PublicEndpoint
 	@Get("/colleges/{id}")
@@ -163,6 +164,7 @@ public class CollegeController {
 		
 		CollegeSearchFilter filter = new CollegeSearchFilter(state, mecGrade); 
 		
+		SearchQuery<College, CollegeDTO> collegeSearch = new SearchQuery<>(manager);
 		PaginatedResult<CollegeDTO> dtos = collegeSearch
 			.builder()
 			.forEntity(College.class)
