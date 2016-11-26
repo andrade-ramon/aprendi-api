@@ -14,6 +14,7 @@ import java.util.Optional;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.qualfacul.hades.login.LoggedUserManager;
@@ -60,6 +61,9 @@ public class CollegeToCollegeDTOConverterTest {
 		UserCollegeAddressId anyId = new UserCollegeAddressId(collegeAddress1, someUser);
 		
 		UserCollegeAddress someUserCollegeAddress = new UserCollegeAddress(anyId, "");
+		
+		when(collegeAddress1.getState()).thenReturn("");
+		when(collegeAddress2.getState()).thenReturn("");
 		
 		from.setAddresses(asList(collegeAddress1, collegeAddress2));
 		from.setGrades(asList(grade1, grade2, grade3, grade4));
