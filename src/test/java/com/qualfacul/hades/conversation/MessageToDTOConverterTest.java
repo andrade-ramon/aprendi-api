@@ -1,7 +1,7 @@
 package com.qualfacul.hades.conversation;
 
+import static com.qualfacul.hades.conversation.ConversationDirection.COLLEGE_TO_STUDENT;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Answers.RETURNS_DEEP_STUBS;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,21 +11,22 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class MessageToDTOConverterTest {
 
-	private MessageToDTOConverter subject;
-	
-	@Mock(answer = RETURNS_DEEP_STUBS)
-	private Message message;
-	
+	@Mock
+	private Conversation conversation;
+
 	@Test
-	public void test() {
-		subject = new MessageToDTOConverter();
+	public void shouldConvertWithAllFields() {
+		MessageToDTOConverter subject = new MessageToDTOConverter();
 		
-		MessageDTO dto = subject.convert(message);
+		Message message = new Message(conversation, "some message", COLLEGE_TO_STUDENT);
+		message.setId(123l);
 		
-		assertEquals(message.getId(), dto.getId());
-		assertEquals(message.getSentAt(), dto.getSentAt());
-		assertEquals(message.getMessageContent().getText(), dto.getContent());
-		assertEquals(message.getDirection(), dto.getDirection());
+		MessageDTO converted = subject.convert(message);
+		
+		assertEquals(message.getId(), converted.getId());
+		assertEquals(message.getSentAt(), converted.getSentAt());
+		assertEquals(message.getMessageContent().getText(), converted.getContent());
+		assertEquals(message.getDirection(), converted.getDirection());
 		
 	}
 

@@ -18,42 +18,39 @@ import com.qualfacul.hades.user.UserRepository;
 @WebComponent
 public class LoggedUserManager {
 
-	@Autowired
 	private TokenAuthenticationService tokenService;
-	@Autowired
 	private HttpServletRequest request;
-	@Autowired
 	private UserRepository userRepository;
-	@Autowired
 	private CollegeRepository collegeRepository;
 
+	@Autowired
+	public LoggedUserManager(TokenAuthenticationService tokenService, HttpServletRequest request, 
+					UserRepository userRepository, CollegeRepository collegeRepository) {
+		this.tokenService = tokenService;
+		this.request = request;
+		this.userRepository = userRepository;
+		this.collegeRepository = collegeRepository;
+	}
+
 	public LoginInfo getLoginInfo() {
-		return loginInfo();
+		return getFromToken().get();
 	}
 
 	public Optional<User> getStudent() {
-		LoginInfo loginInfo = loginInfo();
-		if(loginInfo() != null) {
-			return userRepository.findByEmail(loginInfo.getLogin());
-		}
-		return Optional.empty();
+		return getFromToken()
+						.map(loginInfo -> userRepository.findByEmail(loginInfo.getLogin()))
+						.orElse(Optional.empty());
 	}
 	
-	private LoginInfo loginInfo() {
+	public Optional<College> getCollege() {
+		return getFromToken()
+						.map(loginInfo -> collegeRepository.findByLoginInfo(loginInfo))
+						.orElse(Optional.empty());
+	}
+	
+	private Optional<LoginInfo> getFromToken() {
 		String token = request.getHeader(AUTHORIZATION);
 		
-		Optional<LoginInfo> loginInfo = tokenService.getUserFromToken(token);
-		if (loginInfo.isPresent()) {
-			return loginInfo.get();
-		}
-		return null;
-	}
-
-	public Optional<College> getCollege() {
-		LoginInfo loginInfo = loginInfo();
-		if(loginInfo() != null) {
-			return collegeRepository.findByLoginInfo(loginInfo);
-		}
-		return Optional.empty();
+		return tokenService.getUserFromToken(token);
 	}
 }

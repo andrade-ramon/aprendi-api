@@ -1,4 +1,4 @@
-package com.qualfacul.hades.college;
+package com.qualfacul.hades.exceptions;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 

@@ -22,9 +22,9 @@ import com.qualfacul.hades.user.address.UserCollegeAddress;
 import com.qualfacul.hades.user.address.UserCollegeAddressId;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CollegeToCollegeDTOConverterTest {
+public class CollegeToDTOConverterTest {
 	
-	private CollegeToCollegeDTOConverter subject;
+	private CollegeToDTOConverter subject;
 	
 	@Mock(answer = RETURNS_DEEP_STUBS)
 	private CollegeAddress collegeAddress1;
@@ -47,7 +47,7 @@ public class CollegeToCollegeDTOConverterTest {
 
 	@Test
 	public void shouldConvert() {
-		subject = new CollegeToCollegeDTOConverter(loggedUserManager);
+		subject = new CollegeToDTOConverter(loggedUserManager);
 		
 		College from = new College();
 		from.setId(123L);

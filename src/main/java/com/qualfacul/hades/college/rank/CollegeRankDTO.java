@@ -13,14 +13,14 @@ public class CollegeRankDTO {
 	
 	private String collegeName;
 	
-	private int totalGrades;
+	private Integer totalGrades;
 	
 	private Double grade;
 	
 	@JsonSerialize(using = LocalDateSerializer.class)
 	private LocalDate lastUpdate;
 
-	public int getPosition() {
+	public Integer getPosition() {
 		return position;
 	}
 
@@ -32,7 +32,7 @@ public class CollegeRankDTO {
 		return collegeName;
 	}
 
-	public int getTotalGrades() {
+	public Integer getTotalGrades() {
 		return totalGrades;
 	}
 
@@ -44,7 +44,7 @@ public class CollegeRankDTO {
 		return lastUpdate;
 	}
 
-	public void setPosition(int position) {
+	public void setPosition(Integer position) {
 		this.position = position;
 	}
 
@@ -56,7 +56,7 @@ public class CollegeRankDTO {
 		this.collegeName = collegeName;
 	}
 
-	public void setTotalGrades(int totalGrades) {
+	public void setTotalGrades(Integer totalGrades) {
 		this.totalGrades = totalGrades;
 	}
 

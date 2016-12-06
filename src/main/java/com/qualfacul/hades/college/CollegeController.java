@@ -26,15 +26,16 @@ import com.qualfacul.hades.annotation.Patch;
 import com.qualfacul.hades.annotation.Post;
 import com.qualfacul.hades.annotation.PublicEndpoint;
 import com.qualfacul.hades.college.rank.CollegeRankDTO;
-import com.qualfacul.hades.college.rank.CollegeRankNotFoundException;
 import com.qualfacul.hades.college.rank.CollegeRankRepository;
 import com.qualfacul.hades.college.rank.CollegeRankToDTOConverter;
 import com.qualfacul.hades.college.rank.CollegeRankType;
 import com.qualfacul.hades.converter.ListConverter;
 import com.qualfacul.hades.course.CourseDTO;
 import com.qualfacul.hades.course.CourseToDTOConverter;
+import com.qualfacul.hades.exceptions.CollegeAddressNotFoundException;
 import com.qualfacul.hades.exceptions.CollegeAlreadyHaveLoginException;
 import com.qualfacul.hades.exceptions.CollegeNotFoundException;
+import com.qualfacul.hades.exceptions.CollegeRankNotFoundException;
 import com.qualfacul.hades.exceptions.CollegeUpdateAccessDeniedException;
 import com.qualfacul.hades.exceptions.CollegeWithoutLoginAccessException;
 import com.qualfacul.hades.exceptions.UsernameNotFoundException;
@@ -53,15 +54,13 @@ public class CollegeController {
 	private static final String REGEXP_ONLY_NUMBERS = "[^0-9]";
 	
 	@Autowired
-	private SearchQuery<College, CollegeDTO> collegeSearch;
-	@Autowired
 	private CollegeRepository collegeRepository;	
 	@Autowired
 	private CollegeAddressRepository collegeAddressRepository;
 	@Autowired
 	private CollegeAddressToDTOConverter addressConverter;
 	@Autowired
-	private CollegeToCollegeDTOConverter collegeConverter;
+	private CollegeToDTOConverter collegeConverter;
 	@Autowired
 	private CourseToDTOConverter courseConverter;
 	@Autowired
