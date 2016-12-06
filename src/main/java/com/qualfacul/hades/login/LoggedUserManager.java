@@ -33,7 +33,7 @@ public class LoggedUserManager {
 	}
 
 	public LoginInfo getLoginInfo() {
-		return getFromToken().get();
+		return getFromToken().orElse(null);
 	}
 
 	public Optional<User> getStudent() {
