@@ -10,7 +10,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.validation.Valid;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -164,25 +163,17 @@ public class CollegeController {
 	
 	@OnlyColleges
 	@Patch("/colleges/{collegeId}")
-	public void updateCollege(@PathVariable Long collegeId, @RequestBody CollegeDTO collegeDTO){
+	public void updateCollege(@PathVariable Long collegeId, @Valid @RequestBody CollegeDTO collegeDTO){
 		College college = collegeRepository.findById(collegeId).orElseThrow(CollegeNotFoundException::new);
-		if (!college.getLoginInfo().isPresent()){
-			throw new CollegeUpdateAccessDeniedException();
-		}
-		if (college.getLoginInfo().get().getId() != loggedUserManager.getLoginInfo().getId()){
-			throw new CollegeUpdateAccessDeniedException();
-		}
-		if (!StringUtils.isEmpty(collegeDTO.getName()))
-			college.setName(collegeDTO.getName());
 		
-		if (!StringUtils.isEmpty(collegeDTO.getPhone()))
-			college.setPhone(collegeDTO.getPhone().replaceAll(REGEXP_ONLY_NUMBERS, ""));
+		college.getLoginInfo()
+			.filter(loginInfo -> loginInfo.getId() == loggedUserManager.getLoginInfo().getId())
+			.orElseThrow(CollegeUpdateAccessDeniedException::new);
 		
-		if (!StringUtils.isEmpty(collegeDTO.getCnpj()))
-			college.setCnpj(collegeDTO.getCnpj().replaceAll(REGEXP_ONLY_NUMBERS, ""));
-		
-		if (!StringUtils.isEmpty(collegeDTO.getSite()))
-			college.setSite(collegeDTO.getSite());
+		college.setName(collegeDTO.getName());
+		college.setPhone(collegeDTO.getPhone().replaceAll(REGEXP_ONLY_NUMBERS, ""));
+		college.setCnpj(collegeDTO.getCnpj().replaceAll(REGEXP_ONLY_NUMBERS, ""));
+		college.setSite(collegeDTO.getSite());
 		
 		collegeRepository.save(college);
 	}

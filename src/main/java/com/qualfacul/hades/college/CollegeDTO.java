@@ -5,15 +5,22 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 public class CollegeDTO {
 
 	private Long id;
+	
+	@NotBlank
 	private String name;
 	private String initials;
+	@NotBlank
 	private String phone;
+	@NotBlank
 	private String cnpj;
+	@NotBlank
 	private String site;
 	private Integer coursesCount;
 	private Integer studentsCount;
