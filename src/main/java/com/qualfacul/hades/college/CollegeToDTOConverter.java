@@ -16,12 +16,12 @@ import com.qualfacul.hades.login.LoggedUserManager;
 import com.qualfacul.hades.user.User;
 
 @WebComponent
-public class CollegeToCollegeDTOConverter implements Converter<College, CollegeDTO>{
+public class CollegeToDTOConverter implements Converter<College, CollegeDTO>{
 	
 	private LoggedUserManager loggedUserManager;
 
 	@Autowired
-	public CollegeToCollegeDTOConverter(LoggedUserManager loggedUserManager) {
+	public CollegeToDTOConverter(LoggedUserManager loggedUserManager) {
 		this.loggedUserManager = loggedUserManager;
 	}
 

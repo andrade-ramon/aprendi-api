@@ -44,10 +44,6 @@ public class Course {
 	@OneToMany(mappedBy = "course")
 	private List<CourseGrade> courseGrades;
 
-	@Deprecated
-	public Course() { // Hibernate eyes only
-	}
-
 	public Long getId() {
 		return id;
 	}

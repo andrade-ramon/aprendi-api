@@ -8,14 +8,14 @@ import com.qualfacul.hades.annotation.WebComponent;
 public class CollegeRankToDTOConverter implements Converter<CollegeRank, CollegeRankDTO>{
 
 	@Override
-	public CollegeRankDTO convert(CollegeRank source) {
-		CollegeRankDTO collegeRankDTO = new CollegeRankDTO();
-		collegeRankDTO.setCollegeId(source.getCollege().getId());
-		collegeRankDTO.setCollegeName(source.getCollege().getName());
-		collegeRankDTO.setGrade(source.getGrade());
-		collegeRankDTO.setLastUpdate(source.getCreatedAt());
-		collegeRankDTO.setTotalGrades(source.getGradesQuantity());
-		return collegeRankDTO;
+	public CollegeRankDTO convert(CollegeRank from) {
+		CollegeRankDTO to = new CollegeRankDTO();
+		to.setCollegeId(from.getCollege().getId());
+		to.setCollegeName(from.getCollege().getName());
+		to.setGrade(from.getGrade());
+		to.setLastUpdate(from.getCreatedAt());
+		to.setTotalGrades(from.getGradesQuantity());
+		return to;
 	}
 
 }

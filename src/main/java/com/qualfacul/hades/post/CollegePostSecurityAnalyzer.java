@@ -12,10 +12,14 @@ import com.qualfacul.hades.login.LoginInfo;
 @WebComponent
 public class CollegePostSecurityAnalyzer {
 	
-	@Autowired
 	private LoggedUserManager loggedUserManager;
-	@Autowired
 	private CollegeRepository collegeRepository;
+	
+	@Autowired
+	public CollegePostSecurityAnalyzer(LoggedUserManager loggedUserManager, CollegeRepository collegeRepository) {
+		this.loggedUserManager = loggedUserManager;
+		this.collegeRepository = collegeRepository;
+	}
 	
 	public void validate(CollegePost collegePost){
 		LoginInfo loginInfo = loggedUserManager.getLoginInfo();

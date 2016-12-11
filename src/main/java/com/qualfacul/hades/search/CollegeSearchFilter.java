@@ -22,7 +22,6 @@ public class CollegeSearchFilter implements SearchFilter<CollegeDTO> {
 			boolean containsState = true;
 			boolean contaisGrade = true;
 			if (state != null) {
-				System.out.println(">>>>>>>>>" + item.getStates());
 				containsState = item.getStates().contains(state);
 			}
 			if (minMecGrade != null) {
