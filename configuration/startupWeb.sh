@@ -23,6 +23,7 @@ gcsfuse qual-facul.appspot.com /mnt/bucket
 cp /mnt/bucket/ssl/qualfacul.com.key /etc/nginx/ssl
 cp /mnt/bucket/ssl/qualfacul.com.crt /etc/nginx/ssl
 cp /mnt/bucket/hades/hades.key /opt/app/
+cp /mnt/bucket/hades/hades.jks /opt/app/
 cp /mnt/bucket/hades/production.properties /opt/app/src/main/resources/application.properties
 
 # Nginx conf
