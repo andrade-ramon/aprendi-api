@@ -32,7 +32,8 @@ public class ConversationSecurityAnalyser {
 
 	public void validate(Conversation conversation) {
 		LoginInfo loginInfo = loggedUserManager.getLoginInfo();
-		boolean validUser = conversation.getUser().getLoginInfo().equals(loginInfo);
+		boolean validUser = conversation.getUser().getLoginInfo().equals(loginInfo)
+						|| conversation.getCollege().getLoginInfo().get().equals(loginInfo);
 		
 		if (validUser) {
 			return;
