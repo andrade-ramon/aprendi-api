@@ -154,6 +154,18 @@ public class College {
 	}
 	
 	public void rate(User student, CollegeGradeOrigin origin, Double gradeValue) {
+		boolean isUpdated = false;
+		for (CollegeGrade grade : grades) {
+			if (grade.getUser() != null && grade.getUser().getId() == student.getId() && grade.getGradeOrigin() == origin) {
+				grade.setValue(gradeValue);
+				isUpdated = true;
+				break;
+			}
+		}
+		
+		if (isUpdated) {
+			return;
+		}
 		CollegeGrade collegeGrade = new CollegeGrade().builder()
 						.from(student)
 						.withOrigin(origin)

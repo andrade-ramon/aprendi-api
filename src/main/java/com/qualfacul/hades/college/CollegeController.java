@@ -130,6 +130,7 @@ public class CollegeController {
 	public void rate(@PathVariable Long collegeId, @RequestBody SimpleCollegeGradeDTO dto) {
 		User student = loggedUserManager.getStudent().orElseThrow(UsernameNotFoundException::new);
 		College college = collegeRepository.findById(collegeId).orElseThrow(CollegeNotFoundException::new);
+		
 		college.rate(student, dto.getOrigin(), dto.getValue());
 		collegeRepository.save(college);
 	}

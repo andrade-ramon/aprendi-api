@@ -20,5 +20,5 @@ public interface CollegeRepository {
 	
 	List<College> findAll();
 
-	Optional<College> findByLoginInfo(LoginInfo loginInfo);
+	Optional<College> findByLoginInfo(LoginInfo loginInfo);	
 }
